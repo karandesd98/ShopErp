@@ -6,7 +6,7 @@ function saveUser()
      var about=$("#about").val();
 
 	$.ajax({
-		url:'public/doRegister.json',
+		url:'doRegister.json',
 		type: 'GET',
 		data: {
 			name: name,
