@@ -10,5 +10,7 @@ public interface UserManager {
 
 	void saveUser(Object... userInfo);
     public User getUserByUserName(String userName);
+	void saveNewOwner(Object... userInfos);
+	List<Object[]> getAllOwners();
 
 }

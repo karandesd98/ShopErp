@@ -18,31 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	
-	
-/*	@Override  // for authantication
-	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests()
-		.antMatchers("/public/**").permitAll()
-		.antMatchers("/user/**").authenticated()
-		.and().formLogin()
-		.loginPage("/public/signin")
-		.loginProcessingUrl("/public/doLogin")
-		.defaultSuccessUrl("/public/");
-		// .and().httpBasic();
-	}
-
-	@Override  // for autherization
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		System.out.println(this.passwordEncode().encode("sachin"));
-		auth.inMemoryAuthentication()
-		.withUser("sachin").password(this.passwordEncode().encode("sachin")).roles("ADMIN").and()
-		.withUser("nilesh").password(this.passwordEncode().encode("nilesh")).roles("ADMIN").and()
-		.withUser("pratik").password(this.passwordEncode().encode("pratik")).roles("NORMAL");
-	}
-	
-	*/
-	
 	@Bean
 	public UserDetailsService getUserDetailService()
 	{
@@ -65,13 +40,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	
-	@Override  // for autherization
+	@Override  // for  authantication
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(authenticationProvider());
 		
 	}
 	
-	@Override  // for authantication
+	@Override  // for autherization
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests()
         .antMatchers("/admin/**").hasRole("ADMIN")

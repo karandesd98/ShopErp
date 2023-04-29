@@ -30,4 +30,16 @@ public class UserManagerImpl implements UserManager {
 		return userDaoObj.getUserByUserName(userName);
 	}
 
+	@Override
+	public void saveNewOwner(Object... userInfos) {
+		// TODO Auto-generated method stub
+		userDaoObj.saveNewOwner(userInfos);
+	}
+
+	@Override
+	public List<Object[]> getAllOwners() {
+		// TODO Auto-generated method stub
+		return userDaoObj.getAllOwners();
+	}
+
 }
