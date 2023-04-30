@@ -23,6 +23,7 @@
 
         <!-- Mapping files -->
         <mapping class="TechHub.ShopErp.tables.User"/>
+        <mapping class="TechHub.ShopErp.tables.Shop"/>
      
 
     </session-factory>
