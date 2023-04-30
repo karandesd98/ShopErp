@@ -22,8 +22,9 @@
 
 
         <!-- Mapping files -->
-        <mapping class="TechHub.ShopErp.tables.User"/>
+        <mapping class="TechHub.ShopErp.tables.User"/>  
         <mapping class="TechHub.ShopErp.tables.Shop"/>
+        <mapping class="TechHub.ShopErp.tables.OwnerShopDetail"/>
      
 
     </session-factory>

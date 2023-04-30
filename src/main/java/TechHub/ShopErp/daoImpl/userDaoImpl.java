@@ -39,16 +39,19 @@ public class userDaoImpl implements userDao {
 		if(con!=null)
 		{
 			
-			String query = " insert into my_user (USER_NAME,EMAIL,PASSWORD,ROLE,ABOUT)"
-			        + " values (?, ?, ?, ?, ?)";
+			String query = " insert into my_user (USER_NAME,EMAIL,PASSWORD,ROLE,ABOUT,IS_ENABLED)"
+			        + " values (?, ?, ?, ?, ?, ?)";
 			
 			// create the mysql insert preparedstatement
 		      PreparedStatement preparedStmt = con.prepareStatement(query);
 		      preparedStmt.setString (1, name);
 		      preparedStmt.setString (2, email);
 		      preparedStmt.setString   (3, password);
-		      preparedStmt.setString(4, "USER");
+		      preparedStmt.setString(4, "CUSTOMER");
 		      preparedStmt.setString(5, about);
+		      preparedStmt.setBoolean(6, false);
+
+		      
 		 
 		   // execute the preparedstatement
 		      preparedStmt.execute();
@@ -140,8 +143,8 @@ public class userDaoImpl implements userDao {
 		if(con!=null)
 		{
 			
-			String query = " insert into my_user (USER_NAME,EMAIL,PASSWORD,ROLE,ABOUT)"
-			        + " values (?, ?, ?, ?, ?)";
+			String query = " insert into my_user (USER_NAME,EMAIL,PASSWORD,ROLE,ABOUT,IS_ENABLED)"
+			        + " values (?, ?, ?, ?, ?, ?)";
 			
 			// create the mysql insert preparedstatement
 		      PreparedStatement preparedStmt = con.prepareStatement(query);
@@ -150,6 +153,7 @@ public class userDaoImpl implements userDao {
 		      preparedStmt.setString   (3, password);
 		      preparedStmt.setString(4, "ADMIN");
 		      preparedStmt.setString(5, about);
+		      preparedStmt.setBoolean(0, false);
 		 
 		   // execute the preparedstatement
 		      preparedStmt.execute();

@@ -28,7 +28,7 @@ public class ShopDaoImpl implements ShopDao{
 		if(con!=null)
 		{
 			
-			String query = " insert into shops (shop_name,shop_address,shop_type,about)"
+			String query = " insert into shop (shop_name,shop_address,shop_type,about)"
 			        + " values (?, ?, ?, ?)";
 			
 			// create the mysql insert prepared statement
@@ -60,7 +60,7 @@ public class ShopDaoImpl implements ShopDao{
 	@Override
 	public List<Object[]> getAllShops() {
 		Session session = HibernateUtility.getSessionFactory().openSession();
-		String sqlQuery = "select * from shops";
+		String sqlQuery = "select * from shop";
 		Query query = session.createSQLQuery(sqlQuery);
 		List<Object[]> results = query.list();
 
