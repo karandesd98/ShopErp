@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.com" th:replace="adminBase::layout(~{::section})">
+  <head>
+    <style>
+    </style>
+    
+  </head>
+  <body>
+   <section>
+    <!-- write your code here -->
+    <script th:src="@{/script/addShop.js}"></script>
+    
+    <div class="container">
+    
+    <div onload="showAllOwners()">
+       <button type="button"  class="btn btn-dark btn-sm m-2" onclick="addOwnerModel()">Add Shop</button>
+    </div>
+    
+    <div id="wonersTable"></div>
+
+<!-- Modal -->
+<div class="modal fade" id="addNewOwner" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Add New Shop</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <div class="modal-body">
+        <div id="newUserModel">
+			<form th:action="@{/doRegister}" method="post">
+			
+			<div class="mb-3">
+				<label for="shop_name" class="form-label">Shop Name</label>
+				<input name="SHOP_NAME"  type="text" class="form-control" id="shop_name" aria-describedby="emailHelp" requierd>
+			</div>
+			
+			<div class="mb-3">
+				<label for="shop_address" class="form-label">Shop Address</label>
+				<input name="SHOP_ADDRESS"  type="text" class="form-control" id="shop_address" aria-describedby="emailHelp" requierd>
+			</div>
+			
+			<div class="mb-3">
+				<label for="shop_type" class="form-label">Shop Type</label>
+				<input name="SHOP_TYPE"  type="text" class="form-control" id="shop_type" aria-describedby="emailHelp" required>
+			</div>
+			
+			
+			<div class="mb-3">
+			    <label for="about" class="form-label">About</label>
+				<textarea  name="ABOUT"  class="form-control" placeholder="Leave a comment here" id="about"></textarea>
+			</div>
+			
+		<!--	<div class="container text-center">
+			<button type="reset" class="btn btn-danger">Reset</button>
+			</div> -->
+			</form> 
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		<button type="button" class="btn btn-primary" onclick="saveNewShop()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+    
+  </div>     
+  </section>
+  </body>
+</html>

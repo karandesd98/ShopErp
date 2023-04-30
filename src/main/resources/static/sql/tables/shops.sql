@@ -1,0 +1,1 @@
+create table shops (id int NOT NULL AUTO_INCREMENT, shop_name varchar(40), shop_address varchar(150), shop_type varchar(100), about varchar(100), PRIMARY KEY (id));

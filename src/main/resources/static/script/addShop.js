@@ -1,13 +1,13 @@
 $(document).ready(function() {
-  showAllOwners();
+  showAllShops();
 });
 
 
-function showAllOwners()
+function showAllShops()
 {
 	
 	$.ajax({
-		url:'getAllOwners.json',
+		url:'getAllShops.json',
 		type: 'GET',
 		data: {
 			
@@ -22,17 +22,23 @@ function showAllOwners()
       <th scope="col">Owner Name</th>
       <th scope="col">Owner Email</th>
       <th scope="col">Owner Desc</th>
+      <th scope="col">Shop Name</th>
+      <th scope="col">Shop Address</th>
+      <th scope="col">Shop Type</th>
        <th scope="col">Action</th>
     </tr>
   </thead><tbody>`;
   
   data.forEach(function(ownerobj,index){
-	  const{ownerName='',ownerEmail='',ownerDesc=''}=ownerobj;
+	  const{ownerName='',ownerEmail='',ownerDesc='',shopName='',shopAddress='',shopType=''}=ownerobj;
 	  boiler +=`<tr>
 	             <td scope="row">${++index}</td>
 	             <td scope="row">${ownerName}</td>
 	             <td scope="row">${ownerEmail}</td>
 	             <td scope="row">${ownerDesc}</td>
+	             <td scope="row">${shopName}</td>
+	             <td scope="row">${shopAddress}</td>
+	             <td scope="row">${shopType}</td>
 	             <td scope="row">
 	             <div class="dropdown">
                       <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"> Action</button>
@@ -69,27 +75,27 @@ function addOwnerModel()
 	$('#addNewOwner').modal('show');
 }
 
-function saveNewOwner()
+function saveNewShop()
 {
 	
-	var name=$("#name").val();
-    var password=$("#password").val();
-    var email=$("#email").val();
+	var shopName=$("#shop_name").val();
+    var shopAddress=$("#shop_address").val();
+    var shopType=$("#shop_type").val();
      var about=$("#about").val();
 
 	$.ajax({
-		url:'saveNewOwner.json',
+		url:'saveNewShop.json',
 		type: 'GET',
 		data: {
-			name: name,
-			password: password,
-			email:email,
+			shopName: shopName,
+			shopAddress: shopAddress,
+			shopType:shopType,
 			about:about
 		},
 		dataType: 'json',
 		success: function(data) {
 		//	var boiler=`<h1>${data.msg}</h1>`
-			swal("Good job!", "Your New Owner Created!", "success");
+			swal("Good job!", "Your New Shop is Created!", "success");
 		},
 		error: function(request, error) {
 			 alert("Request 1: " + JSON.stringify(request));
@@ -97,7 +103,8 @@ function saveNewOwner()
 });
 
 $(document).ready(function() {
-  showAllOwners();
+  showAllShops();
 });
+
 	
 }
