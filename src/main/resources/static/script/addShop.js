@@ -53,9 +53,9 @@ function showAllShops()
 	             <div class="dropdown">
                       <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"> Action</button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                         <li><button class="dropdown-item" type="button">Action</button></li>
-                         <li><button class="dropdown-item" type="button">Another action</button></li>
-                         <li><button class="dropdown-item" type="button">Something else here</button></li>
+                         <li><button class="dropdown-item" type="button">Edit</button></li>
+                         <li><button class="dropdown-item" type="button" onclick="mapOwnersToShop(${shopid})">Map Owners</button></li>
+                         <li><button class="dropdown-item" type="button">Delete</button></li>
                        </ul>
                  </div>
 	             </td>
@@ -116,5 +116,63 @@ $(document).ready(function() {
   showAllShops();
 });
 
+}
+
+
+function mapOwnersToShop(shopid)
+{
+	// swal("Good job!", "Owner Mapped!", "success");
+	$('#mapOwnerToShop').modal('show');
+	$.ajax({
+		url:'getAllOwnersToMapShop.json',
+		type: 'GET',
+		data: {
+			shopid:shopid
+		},
+		dataType: 'json',
+		success: function(data) {
+			var boiler = `
+ <table class="table table-bordered border-primary">
+  <thead>
+    <tr>
+      <th scope="col">Sr. No</th>
+      <th scope="col">Owner Name</th>
+      <th scope="col">Owner Email</th>
+      <th scope="col">Mapped Status</th>
+    </tr>
+  </thead><tbody>`;
+  
+  data.forEach(function(ownerobj,index){
+	  const{ownerId='', ownerName='',ownerEmail='', mappedStatus=''}=ownerobj;
+	  
+	  var checkedValue=mappedStatus=='mapped'?'checked':'';
+	  var checkbox=`<div class="form-check">
+                       <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" ${checkedValue}>
+                       <label class="form-check-label" for="flexCheckDefault"></label>
+                       </div>`;
+	  
+	  boiler +=`<tr>
+	             <td scope="row">${++index}</td>
+	             <td scope="row">${ownerName}</td>
+	             <td scope="row">${ownerEmail}</td>
+	             <td scope="row">${checkbox}</td>
+	             </tr>`;
+	  
+  });
+  
+   boiler +=` </tbody>
+              </table>`;
+      
+      $('#mapOwnerToShopBody').html(boiler);
+  
+		},
+		error: function(request, error) {
+			 alert("Request 1: " + JSON.stringify(request));
+		}
+	});
+	
 	
 }
+
+
+	

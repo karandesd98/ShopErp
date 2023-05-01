@@ -17,6 +17,7 @@ import TechHub.ShopErp.dao.userDao;
 import TechHub.ShopErp.model.User;
 import TechHub.ShopErp.utilityAndSecurity.DataBaseConnectionUtility;
 import TechHub.ShopErp.utilityAndSecurity.HibernateUtility;
+import TechHub.ShopErp.utilityAndSecurity.MultipleResultQuery;
 
 
 @Service
@@ -188,6 +189,37 @@ public class userDaoImpl implements userDao {
 		List<Object[]> results = query.list();
 
 		return results;
+	}
+
+
+
+
+
+	@Override
+	public List<Object[]> getAllOwnersToMapShop(Integer shopid) {
+		
+		 Map<Integer, List<Object[]>> mapObj=null;
+			try {
+				Connection con=	DataBaseConnectionUtility.getDataSource().getConnection();
+				if(con!=null)
+				{
+					MultipleResultQuery	mrq =new	MultipleResultQuery(con,"CALL sp_getAllUserToMapShop(:shopid)");
+					mrq.setInt("shopid", shopid);
+					mapObj= mrq.execute();
+				}
+				else
+				{
+					System.out.println("can not connect to database");
+				}
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+				
+			
+			return mapObj.get(0);
+			
 	}
 
 }

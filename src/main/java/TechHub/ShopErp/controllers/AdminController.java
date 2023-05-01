@@ -209,5 +209,36 @@ public class AdminController {
  		
 		 return new Gson().toJson(jMainArray);
 		}
+		
+		
+		@GetMapping("/getAllOwnersToMapShop.json")
+		@ResponseBody
+		public String getAllOwnersToMapShop(HttpServletRequest req)
+		{
+		Integer shopid=req.getParameter("shopid")!=null?Integer.parseInt(req.getParameter("shopid")) :0;
+
+		List<Object[]> allOwners=userManager.getAllOwnersToMapShop(shopid);
+		
+		JsonArray jMainArray=new JsonArray();
+		for( Object[] ownerArr : allOwners)
+		{
+			
+			Integer ownerId=ownerArr[0]!=null?Integer.parseInt(ownerArr[0].toString()):0;
+			String ownerName=ownerArr[1]!=null?ownerArr[1].toString():"";
+			String ownerEmail=ownerArr[2]!=null?ownerArr[2].toString():"";
+			String mappedStatus=ownerArr[3]!=null?ownerArr[3].toString():"";
+
+			JsonObject jobj=new JsonObject();
+			jobj.addProperty("ownerId", ownerId);
+			jobj.addProperty("ownerName", ownerName);
+			jobj.addProperty("ownerEmail", ownerEmail);
+			jobj.addProperty("mappedStatus", mappedStatus);
+			
+			jMainArray.add(jobj);
+		}
+		
+		
+		 return new Gson().toJson(jMainArray);
+		}
 
 }

@@ -42,4 +42,10 @@ public class UserManagerImpl implements UserManager {
 		return userDaoObj.getAllOwners();
 	}
 
+	@Override
+	public List<Object[]> getAllOwnersToMapShop(Integer shopid) {
+		// TODO Auto-generated method stub
+		return userDaoObj.getAllOwnersToMapShop(shopid);
+	}
+
 }

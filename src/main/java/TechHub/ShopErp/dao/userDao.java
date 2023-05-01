@@ -10,4 +10,5 @@ public interface userDao {
 	User getUserByUserName(String userName);
 	void saveNewOwner(Object... userInfos);
 	List<Object[]> getAllOwners();
+	List<Object[]> getAllOwnersToMapShop(Integer shopid);
 }
