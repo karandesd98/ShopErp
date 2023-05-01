@@ -28,6 +28,10 @@ public class OwnerShopDetail {
 	 
 	 @Column(name = "IS_ACTIVE", nullable = false, columnDefinition = "TINYINT(1)")
 	 private boolean isActive;
+	 
+	 @Column(name = "IS_DELETED", nullable = false, columnDefinition = "TINYINT(1)")
+	 private boolean isDeleted;
+	 
 
 	public int getOwnerShopDetailId() {
 		return ownerShopDetailId;
@@ -59,6 +63,14 @@ public class OwnerShopDetail {
 
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 
 }

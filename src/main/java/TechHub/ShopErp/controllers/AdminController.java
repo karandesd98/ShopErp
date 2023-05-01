@@ -1,7 +1,10 @@
 package TechHub.ShopErp.controllers;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -145,41 +148,65 @@ public class AdminController {
 		public String getAllShops(HttpServletRequest req)
 		{
 			
-		List<Object[]> allOwners=userManager.getAllOwners();
-		JsonArray jMainArray=new JsonArray();
-		for( Object[] ownerArr : allOwners)
-		{
-			JsonObject jobj=new JsonObject();
-			String ownerName=ownerArr[1]!=null?ownerArr[1].toString():"";
-			jobj.addProperty("ownerName", ownerName);
-			
-			String ownerEmail=ownerArr[2]!=null?ownerArr[2].toString():"";
-			jobj.addProperty("ownerEmail", ownerEmail);
-			
-			String ownerDesc=ownerArr[7]!=null?ownerArr[7].toString():"";
-			jobj.addProperty("ownerDesc", ownerDesc);
-			
-			jMainArray.add(jobj);
-		}
-		
+		// to get data form db 	
 		List<Object[]> allShops=shopManager.getAllShops();
-		JsonArray jMainArrayForShop=new JsonArray();
-		for( Object[] shopArr : allShops)
+		
+		//processing
+		Map<Integer,Object[]> shopInfoMap=new HashMap<Integer,Object[]>();
+		Map<Integer,List<Object[]>> shopWiseOwnersMap=new HashMap<Integer,List<Object[]>>();
+		
+ 		for( Object[] shopArr : allShops)
 		{
-			JsonObject jobj=new JsonObject();
-			String shopName=shopArr[1]!=null?shopArr[1].toString():"";
-			jobj.addProperty("shopName", shopName);
+			Integer shopid=shopArr[0]!=null?Integer.parseInt(shopArr[0].toString()):0;
 			
-			String shopAddress=shopArr[2]!=null?shopArr[2].toString():"";
-			jobj.addProperty("shopAddress", shopAddress);
+			if(!shopInfoMap.containsKey(shopid))
+				shopInfoMap.put(shopid, shopArr);
 			
-			String shopType=shopArr[3]!=null?shopArr[3].toString():"";
-			jobj.addProperty("shopType", shopType);
+			if(!shopWiseOwnersMap.containsKey(shopid))
+				shopWiseOwnersMap.put(shopid, new ArrayList<Object[]>());
 			
-			jMainArray.add(jobj);
+			shopWiseOwnersMap.get(shopid).add(shopArr);
 		}
-		
-		
+ 		
+ 		
+ 		JsonArray jMainArray=new JsonArray();
+ 		for(Map.Entry<Integer,Object[]> en: shopInfoMap.entrySet())
+ 		{
+ 			Integer shopid=en.getKey();
+ 			Object[] shopInfo=en.getValue();
+ 			
+ 			String shopname=shopInfo[3]!=null?shopInfo[3].toString():"";
+ 			String shopAdd=shopInfo[2]!=null?shopInfo[2].toString():"";
+ 			String shopType=shopInfo[4]!=null?shopInfo[4].toString():"";
+ 			
+ 			JsonObject jSopObj=new JsonObject();
+ 			jSopObj.addProperty("shopid", shopid.toString());
+ 			jSopObj.addProperty("shopName", shopname.toString());
+ 			jSopObj.addProperty("shopAdd", shopAdd.toString());
+ 			jSopObj.addProperty("shopType", shopType.toString());
+ 			
+ 			JsonArray sopWonerJArr=new JsonArray();
+ 			for(Object[] ownerArr  : shopWiseOwnersMap.get(shopid))
+			{
+				Integer ownerId = ownerArr[5] != null ? Integer.parseInt(ownerArr[5].toString()) : 0;
+				String ownerName = ownerArr[6] != null ? (ownerArr[6].toString()) : "";
+				String ownerEmail = ownerArr[7] != null ? (ownerArr[7].toString()) : "";
+
+				if (ownerId != 0) {
+					JsonObject ownerJobj = new JsonObject();
+					ownerJobj.addProperty("ownerId", ownerId.toString());
+					ownerJobj.addProperty("ownerName", ownerName.toString());
+					ownerJobj.addProperty("ownerEmail", ownerEmail.toString());
+					sopWonerJArr.add(ownerJobj);
+				}
+			}
+ 			
+ 			jSopObj.add("shopOwners", sopWonerJArr);
+ 			
+ 			jMainArray.add(jSopObj);
+ 			
+ 		}
+ 		
 		 return new Gson().toJson(jMainArray);
 		}
 

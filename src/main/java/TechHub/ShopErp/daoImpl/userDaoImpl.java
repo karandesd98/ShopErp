@@ -153,7 +153,7 @@ public class userDaoImpl implements userDao {
 		      preparedStmt.setString   (3, password);
 		      preparedStmt.setString(4, "ADMIN");
 		      preparedStmt.setString(5, about);
-		      preparedStmt.setBoolean(0, false);
+		      preparedStmt.setBoolean(6, false);
 		 
 		   // execute the preparedstatement
 		      preparedStmt.execute();

@@ -5,7 +5,6 @@ $(document).ready(function() {
 
 function showAllShops()
 {
-	
 	$.ajax({
 		url:'getAllShops.json',
 		type: 'GET',
@@ -19,26 +18,37 @@ function showAllShops()
   <thead>
     <tr>
       <th scope="col">Sr. No</th>
-      <th scope="col">Owner Name</th>
-      <th scope="col">Owner Email</th>
-      <th scope="col">Owner Desc</th>
       <th scope="col">Shop Name</th>
       <th scope="col">Shop Address</th>
       <th scope="col">Shop Type</th>
+      <th scope="col">Owner Detail</th>
        <th scope="col">Action</th>
     </tr>
   </thead><tbody>`;
   
-  data.forEach(function(ownerobj,index){
-	  const{ownerName='',ownerEmail='',ownerDesc='',shopName='',shopAddress='',shopType=''}=ownerobj;
+  data.forEach(function(shop,index){
+	  const{shopid='', shopName='', shopAdd='', shopType='',  shopOwners=[]}= shop;
+	  
+	  var innerTable=`<table class="table table-bordered border-primary">
+	                  <thead></thead><tbody>`;
+	  shopOwners.forEach(function(ownerobj,index1){
+		  const{ownerId,ownerName,ownerEmail}=ownerobj;
+		  innerTable +=`<tr>
+		                <td scope="row">${++index1}</td>
+		                <td scope="row">${ownerName}</td>
+		                <td scope="row">Action</td>
+		                </tr>`
+	  });
+	  innerTable +=` </tbody>
+                     </table>`;
+	  
+	  
 	  boiler +=`<tr>
 	             <td scope="row">${++index}</td>
-	             <td scope="row">${ownerName}</td>
-	             <td scope="row">${ownerEmail}</td>
-	             <td scope="row">${ownerDesc}</td>
 	             <td scope="row">${shopName}</td>
-	             <td scope="row">${shopAddress}</td>
+	             <td scope="row">${shopAdd}</td>
 	             <td scope="row">${shopType}</td>
+	             <td scope="row">${innerTable}</td>
 	             <td scope="row">
 	             <div class="dropdown">
                       <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"> Action</button>
