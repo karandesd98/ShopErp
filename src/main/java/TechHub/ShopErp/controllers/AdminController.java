@@ -33,35 +33,6 @@ public class AdminController {
 	@Autowired 
 	public ShopManager shopManager;
 	
-	@GetMapping("/adminDashBoard")
-	public String signin(Model model,Principal principal)
-	{
-		String userName= principal.getName();
-		User user = userManager.getUserByUserName(userName);
-		
-		if (user.getROLE().equalsIgnoreCase("ADMIN")) {
-			model.addAttribute("user", user);
-			return "adminDashBoard";
-		} else {
-			model.addAttribute("title", "home page");
-			return "home";
-		}
-		
-	}
-	
-	
-	@GetMapping("/addOwner")
-	public String addOwner(Model model,Principal principal)
-	{
-		String userName= principal.getName();
-		User user = userManager.getUserByUserName(userName);
-		model.addAttribute("user", user);
-		model.addAttribute("title", "home page");
-	return "addOwner";
-	}
-	
-	
-	//=============================================handeler method started from here==========================//
 	
 	@GetMapping("/saveNewOwner.json")
 	@ResponseBody
@@ -109,19 +80,6 @@ public class AdminController {
 	 return new Gson().toJson(jMainArray);
 	}
 	
-	// Add Shop related code started from here...!!!
-	
-	@GetMapping("/addShop")
-	public String addShop(Model model,Principal principal)
-	{
-		String userName= principal.getName();
-		User user = userManager.getUserByUserName(userName);
-		model.addAttribute("user", user);
-		model.addAttribute("title", "home page");
-	return "addShop";
-	}
-	
-	//=============================================handler method started from here==========================//
 	
 		@GetMapping("/saveNewShop.json")
 		@ResponseBody
