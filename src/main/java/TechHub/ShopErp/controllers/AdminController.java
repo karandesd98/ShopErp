@@ -218,4 +218,34 @@ public class AdminController {
 		 return new Gson().toJson(jobj);
 		}
 
+		
+		@GetMapping("/checkBoxValidation.json")
+		@ResponseBody
+		public String checkBoxValidation(HttpServletRequest req)
+		{
+   
+		Integer shopid=req.getParameter("shopid")!=null?Integer.parseInt(req.getParameter("shopid")) :0;
+		Integer userId=req.getParameter("userId")!=null?Integer.parseInt(req.getParameter("userId")) :0;
+		String mappedStatus=req.getParameter("checkedValue")!=null?req.getParameter("checkedValue"):"";
+		
+		boolean isActive=true;
+		boolean isDeleted=false;
+
+		System.out.println("enter into controo.."+shopid+" "+userId+ " " +mappedStatus);
+		
+		if(mappedStatus.equals("checked")) {
+		//delete row
+//			isDeleted=true;
+			shopManager.unMapUser(shopid, userId, mappedStatus, isActive, isDeleted);
+		}else {
+		//	insert row
+			
+			shopManager.mapUser(shopid, userId, mappedStatus, isActive, isDeleted);
+		}
+		
+		JsonObject jobj=new JsonObject();
+		 jobj.addProperty("msg", "welcome sachin in software development business");
+		 return new Gson().toJson(jobj);
+
+		}
 }

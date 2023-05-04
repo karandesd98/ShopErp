@@ -23,5 +23,17 @@ public class ShopManagerImpl implements ShopManager{
 	public List<Object[]> getAllShops() {
 		return shopDaoObj.getAllShops();
 	}
+	
+	@Override
+	public void mapUser(Integer shopid, Integer userId, String mappedStatus, boolean isActive, boolean isDeleted) {
+		shopDaoObj.mapUser(shopid, userId,mappedStatus, isActive, isDeleted);
+		
+	}
+
+	@Override
+	public void unMapUser(Integer shopid, Integer userId, String mappedStatus, boolean isActive, boolean isDeleted) {
+		shopDaoObj.unMapUser(shopid, userId,mappedStatus, isActive, isDeleted);
+		
+	}
 
 }

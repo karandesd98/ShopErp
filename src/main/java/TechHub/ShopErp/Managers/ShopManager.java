@@ -9,4 +9,8 @@ public interface ShopManager {
 //    public User getUserByUserName(String userName);
 	void saveNewShop(Object... userInfos);
 	List<Object[]> getAllShops();
+	
+	void mapUser(Integer shopid, Integer userId, String mappedStatus, boolean isActive, boolean isDeleted);
+	void unMapUser(Integer shopid, Integer userId, String mappedStatus, boolean isActive, boolean isDeleted);
+
 }

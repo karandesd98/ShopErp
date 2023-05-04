@@ -85,5 +85,63 @@ public class ShopDaoImpl implements ShopDao{
 		return mapObj.get(0);
 		
 	}
+	
+	@Override
+	public void mapUser(Integer shopid, Integer userId, String mappedStatus, boolean isActive, boolean isDeleted) {
+
+		try {
+			Connection con = DataBaseConnectionUtility.getDataSource().getConnection();
+			if (con != null) {
+
+				String query = " insert into owner_shop_detail (shop_id, user_id, is_deleted, is_active)"
+						+ " values (?, ?, ?, ?)";
+
+				// create the mysql insert prepared statement
+				PreparedStatement preparedStmt = con.prepareStatement(query);
+				preparedStmt.setInt(1, shopid);
+				preparedStmt.setInt(2, userId);
+				preparedStmt.setBoolean(3, isDeleted);
+				preparedStmt.setBoolean(4, isActive);
+
+				// execute the prepared statement
+				preparedStmt.execute();
+
+				preparedStmt.close();
+				con.close();
+
+			} else {
+				System.out.println("can not connect to database");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public void unMapUser(Integer shopid, Integer userId, String mappedStatus, boolean isActive, boolean isDeleted) {
+		try {
+			Connection con = DataBaseConnectionUtility.getDataSource().getConnection();
+			if (con != null) {
+				String query = " delete from owner_shop_detail WHERE user_id=? and shop_id=? ";
+
+				// create the mysql insert prepared statement
+				PreparedStatement preparedStmt = con.prepareStatement(query);
+				preparedStmt.setInt(1, userId);
+				preparedStmt.setInt(2, shopid);
+
+				// execute the prepared statement
+				preparedStmt.execute();
+
+				preparedStmt.close();
+				con.close();
+
+			} else {
+				System.out.println("can not connect to database");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 }

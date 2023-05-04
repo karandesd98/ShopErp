@@ -2,6 +2,10 @@ $(document).ready(function() {
   showAllShops();
 });
 
+function refreshPage() {
+
+    location.reload(true);
+}
 
 function showAllShops()
 {
@@ -121,6 +125,8 @@ $(document).ready(function() {
 
 function mapOwnersToShop(shopid)
 {
+//	let shopid=shopid;
+	
 	// swal("Good job!", "Owner Mapped!", "success");
 	$('#mapOwnerToShop').modal('show');
 	$.ajax({
@@ -147,7 +153,7 @@ function mapOwnersToShop(shopid)
 	  
 	  var checkedValue=mappedStatus=='mapped'?'checked':'';
 	  var checkbox=`<div class="form-check">
-                       <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" ${checkedValue}>
+                       <input class="form-check-input" type="checkbox" onclick="checkBoxValidation(${ownerId}, ${shopid}, '${mappedStatus}' )" value="" id="flexCheckDefault" ${checkedValue}>
                        <label class="form-check-label" for="flexCheckDefault"></label>
                        </div>`;
 	  
@@ -171,6 +177,40 @@ function mapOwnersToShop(shopid)
 		}
 	});
 	
+	
+
+	
+	
+}
+
+
+// When we click on checkbox then owner shop detail table will be affected releted code here...!!!
+
+function checkBoxValidation(userId,shopid,mappedStatus)
+{
+	
+	
+	console.log(userId+' '+ shopid+' '+ mappedStatus);
+	var checkedValue=mappedStatus=='mapped'?'checked':'unChecked';
+	
+	
+	$.ajax({
+		url:'checkBoxValidation.json',
+		type: 'GET',
+		data: {
+			userId: userId,
+			checkedValue: checkedValue,
+			shopid:shopid,
+		},
+		dataType: 'json',
+		success: function(data) {
+		//	var boiler=`<h1>${data.msg}</h1>`
+//			swal("Good job!", "Your New Shop is Created!", "success");
+		},
+		error: function(request, error) {
+			 alert("Request 1: " + JSON.stringify(request));
+		}
+});
 	
 }
 
