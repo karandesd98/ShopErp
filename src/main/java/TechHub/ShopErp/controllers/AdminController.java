@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,6 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import TechHub.ShopErp.Managers.ProductTypeMasterManager;
 import TechHub.ShopErp.Managers.ShopManager;
 import TechHub.ShopErp.Managers.UserManager;
 import TechHub.ShopErp.model.User;
@@ -32,6 +32,9 @@ public class AdminController {
 	
 	@Autowired 
 	public ShopManager shopManager;
+	
+	@Autowired
+	public ProductTypeMasterManager productTypeMasterManager;
 	
 	
 	@GetMapping("/saveNewOwner.json")
@@ -197,6 +200,22 @@ public class AdminController {
 		
 		
 		 return new Gson().toJson(jMainArray);
+		}
+		
+		
+		@GetMapping("/saveNewProductTypeMaster.json")
+		@ResponseBody
+		public String saveNewProductTypeMaster(HttpServletRequest req)
+		{
+			
+		String ProductMasterName=req.getParameter("ProductMasterName")!=null?req.getParameter("ProductMasterName"):"";
+		Integer uniqueNo=req.getParameter("uniqueNo")!=null?Integer.parseInt(req.getParameter("uniqueNo")) :0;
+		
+		productTypeMasterManager.saveNewProductType(ProductMasterName,uniqueNo);
+		
+		JsonObject jobj=new JsonObject();
+		 jobj.addProperty("msg", "welcome in software development business");
+		 return new Gson().toJson(jobj);
 		}
 
 }

@@ -6,9 +6,51 @@
   <body>
    <section>
     <!-- write your code here -->
-     <script th:src="@{/script/addShop.js}"></script>
+     <script th:src="@{/script/addProductType.js}"></script>
      
-     <h1>write your code here</h1>
+    <div class="container">
+    
+    <div onload="showAllOwners()">
+       <button type="button"  class="btn btn-dark btn-sm m-2" onclick="addProductTypeMasterModel()">Add Product Type Master</button>
+    </div>
+    
+    <div id="wonersTable"></div>
+
+<!-- Modal -->
+<div class="modal fade" id="addProductTypeMaster" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Add New Product Master</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <div class="modal-body">
+        <div id="newUserModel">
+			<form th:action="@{/doRegister}" method="post">
+			
+			<div class="mb-3">
+				<label for="name" class="form-label">Product Master Name</label>
+				<input name="Product_Master_Name"  type="text" class="form-control" id="ProductMasterName" aria-describedby="emailHelp" requierd>
+			</div>
+			
+			<div class="mb-3">
+				<label for="password" class="form-label">Enter Search Code</label>
+				<input name="uniqueNo"  type="number" class="form-control" id="uniqueNo" aria-describedby="emailHelp" requierd>
+			</div>
+			
+			</form> 
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		<button type="button" class="btn btn-primary" onclick="saveNewProductTypeMaster()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+    
+  </div>
    </section>
   </body>
 </html>
