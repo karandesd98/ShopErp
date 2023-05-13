@@ -1,5 +1,8 @@
 package TechHub.ShopErp.managesImpl;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,22 @@ public class ProductTypeMasterManagerImpl implements ProductTypeMasterManager {
 	@Override
 	public void saveNewProductType(Object... objects) {
 		productTypeMasterDao.saveNewProductType(objects);
+	}
+
+	@Override
+	public List<Object[]> getAllProductTypeMasterParent(Object... objects) {
+		return productTypeMasterDao.getAllProductTypeMasterParent(objects);
+	}
+
+	@Override
+	public void saveSubProductType(Object... objects) {
+		productTypeMasterDao.saveSubProductType(objects);
+		
+	}
+
+	@Override
+	public List<Object[]> getAllSubProductTypeMaster(Integer producttypemasterid) {
+		return	productTypeMasterDao.getAllSubProductTypeMaster(producttypemasterid);
 	}
 
 }

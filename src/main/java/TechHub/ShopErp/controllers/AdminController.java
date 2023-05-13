@@ -248,4 +248,77 @@ public class AdminController {
 		 return new Gson().toJson(jobj);
 
 		}
+		
+		@GetMapping("/getAllProductTypeMasterParent.json")
+		@ResponseBody
+		public String getAllProductTypeMasterParent(HttpServletRequest req)
+		{
+			
+		List<Object[]> productTypeParents=productTypeMasterManager.getAllProductTypeMasterParent();
+		
+		JsonArray jMainArray=new JsonArray();
+		for( Object[] productTypeArr : productTypeParents)
+		{
+		   Integer productTypeMasterId=productTypeArr[0]!=null?Integer.parseInt(productTypeArr[0].toString()) :0;
+		   String productTypeMasterName=productTypeArr[6]!=null?(productTypeArr[6].toString()) :"";
+		   Integer unique_no=productTypeArr[8]!=null?Integer.parseInt(productTypeArr[8].toString()) :0;
+
+			JsonObject jobj=new JsonObject();
+			jobj.addProperty("productTypeMasterId", productTypeMasterId);
+			jobj.addProperty("productTypeMasterName", productTypeMasterName);
+			jobj.addProperty("unique_no", unique_no);
+
+			jMainArray.add(jobj);
+		}
+		
+		
+		 return new Gson().toJson(jMainArray);
+		}
+		
+		@GetMapping("/saveSubProductTypeMaster.json")
+		@ResponseBody
+		public String saveSubProductTypeMaster(HttpServletRequest req)
+		{
+			
+		String SubProductName=req.getParameter("SubProductName")!=null?req.getParameter("SubProductName"):"";
+		Integer subUniqueNo=req.getParameter("subUniqueNo")!=null?Integer.parseInt(req.getParameter("subUniqueNo")) :0;
+		Integer productTypeMasterId=req.getParameter("productTypeMasterId")!=null?Integer.parseInt(req.getParameter("productTypeMasterId")) :0;
+
+		
+		productTypeMasterManager.saveSubProductType(SubProductName,subUniqueNo,productTypeMasterId);
+		
+		JsonObject jobj=new JsonObject();
+		 jobj.addProperty("msg", "welcome in software development business");
+		 return new Gson().toJson(jobj);
+		}
+		
+		@GetMapping("/getAllSubProductTypeMaster.json")
+		@ResponseBody
+		public String getAllSubProductTypeMaster(HttpServletRequest req)
+		{
+	
+		Integer producttypemasterid=req.getParameter("producttypemasterid")!=null?Integer.parseInt(req.getParameter("producttypemasterid")) :0;
+	
+		List<Object[]> productTypeParents=productTypeMasterManager.getAllSubProductTypeMaster(producttypemasterid);
+		
+		JsonArray jMainArray=new JsonArray();
+		for( Object[] productTypeArr : productTypeParents)
+		{
+		   Integer productTypeMasterId=productTypeArr[0]!=null?Integer.parseInt(productTypeArr[0].toString()) :0;
+		   String productTypeMasterName=productTypeArr[6]!=null?(productTypeArr[6].toString()) :"";
+		   Integer unique_no=productTypeArr[8]!=null?Integer.parseInt(productTypeArr[8].toString()) :0;
+		   Integer productTypeMasterID=productTypeArr[7]!=null?Integer.parseInt(productTypeArr[7].toString()) :0;
+
+		   
+			JsonObject jobj=new JsonObject();
+			jobj.addProperty("productTypeMasterId", productTypeMasterId);
+			jobj.addProperty("productTypeMasterName", productTypeMasterName);
+			jobj.addProperty("unique_no", unique_no);
+
+			jMainArray.add(jobj); 
+		}
+		  return new Gson().toJson(jMainArray);
+		
+		}
+		
 }

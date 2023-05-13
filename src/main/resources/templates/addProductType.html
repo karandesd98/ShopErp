@@ -8,13 +8,13 @@
     <!-- write your code here -->
      <script th:src="@{/script/addProductType.js}"></script>
      
-    <div class="container">
     
-    <div onload="showAllOwners()">
+    
+    <div>
        <button type="button"  class="btn btn-dark btn-sm m-2" onclick="addProductTypeMasterModel()">Add Product Type Master</button>
     </div>
     
-    <div id="wonersTable"></div>
+    <div id="productTypeMasterTable"></div>
 
 <!-- Modal -->
 <div class="modal fade" id="addProductTypeMaster" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -49,8 +49,43 @@
     </div>
   </div>
 </div>
-    
+
+
+
+<div class="modal fade" id="addSubProductTypeMaster" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Add Sub Product Master</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <div class="modal-body">
+        <div id="newUserModel">
+			<form id="subProductTypeForm">
+			
+			<div class="mb-3">
+				<label for="name" class="form-label">Sub Product Name</label>
+				<input name="Product_Master_Name"  type="text" class="form-control" id="SubProductName" aria-describedby="emailHelp" requierd>
+			</div>
+			
+			<div class="mb-3">
+				<label for="password" class="form-label">Enter Search Code</label>
+				<input name="uniqueNo"  type="number" class="form-control" id="subUniqueNo" aria-describedby="emailHelp" requierd>
+			</div>
+			
+			</form> 
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		<button type="button" class="btn btn-primary" onclick="saveSubProductTypeMaster()">Save</button>
+      </div>
+    </div>
   </div>
+</div>
+    
+  
    </section>
   </body>
 </html>

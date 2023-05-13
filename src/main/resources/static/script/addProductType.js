@@ -1,3 +1,86 @@
+$(document).ready(function() {
+  showAllProductTypeMaster();
+});
+
+
+var level=0;
+function showAllProductTypeMaster()
+{
+	$.ajax({
+		url:'getAllProductTypeMasterParent.json',
+		type: 'GET',
+		data: {
+			
+		},
+		dataType: 'json',
+		success: function(data) {
+			var boiler = `
+ <table class="table table-responsive table-bordered border-primary" id="productTypeMaster">
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">Sr. No</th>
+      <th scope="col">Type Name</th>
+      <th scope="col">Priority</th>
+       <th scope="col">Action</th>
+    </tr>
+  </thead><tbody>`;
+  
+  data.forEach(function(ownerobj,index){
+	  const{productTypeMasterId='',productTypeMasterName='',unique_no=''}=ownerobj;
+	  boiler +=`<tr productTypeMasterId="${productTypeMasterId}">
+	             <td scope="row"><span class="material-icons">add_circle_outline</span></td>
+	             <td scope="row">${++index}</td>
+	             <td scope="row">${productTypeMasterName}</td>
+	             <td scope="row">${unique_no}</td>
+	             <td scope="row">
+	            action
+	             </td>
+	             </tr>`;
+	  
+  });
+  
+   boiler +=` </tbody>
+              </table>`;
+              
+         $('#productTypeMasterTable').html(boiler);  
+		 var table=	$('#productTypeMaster').DataTable();    
+     
+
+            var previousExpandedRow = null;
+			$('#productTypeMaster tbody tr').on('click', 'span', function() {
+				level=0;
+				var row = table.row(this.parentNode.parentNode);
+		        var	producttypemasterid=	$(this.parentNode.parentNode).attr('producttypemasterid');
+				
+				if (row.child.isShown()) {
+					row.child.hide();
+					$(this).text('add_circle_outline');
+				} else {
+					
+					if (previousExpandedRow && previousExpandedRow.child.isShown()) {
+						previousExpandedRow.child.hide();
+						previousExpandedRow.node().querySelector('td').innerHTML='<span class="material-icons">add_circle_outline</span>' ; // Update the icon to "+"
+					}
+					
+	                 getSubTypeMasters(row,producttypemasterid,++level);
+					// row.child(boiler).show();
+					
+					$(this).text('remove_circle_outline');
+					previousExpandedRow = row;
+				}
+			});
+			
+			
+  
+		},
+		error: function(request, error) {
+			 alert("Request 1: " + JSON.stringify(request));
+		}
+	});
+}
+
+
 function addProductTypeMasterModel()
 {
 	$('#addProductTypeMaster').modal('show');
@@ -23,4 +106,115 @@ function saveNewProductTypeMaster()
 			 alert("Request 1: " + JSON.stringify(request));
 		}
 });
+}
+
+
+function getSubTypeMasters(row,producttypemasterid,level)
+{
+	var boiler=`<div style="text-align: left;"><button type="button" class="btn btn-primary btn-sm" onclick="addSubProductTypeMasterModel('${producttypemasterid}')">Add</button></div>`;
+	boiler += `<table class="table table-responsive table-bordered border-primary" id="productTypeSubMaster_${level}">
+  <thead>
+    <tr>
+        <th scope="col"></th>
+      <th scope="col">Sr. No</th>
+      <th scope="col">Type Name</th>
+      <th scope="col">Priority</th>
+       <th scope="col">Action</th>
+    </tr>
+  </thead><tbody>`;
+	
+	$.ajax({
+		url: 'getAllSubProductTypeMaster.json',
+		type: 'GET',
+		data: {
+			producttypemasterid: producttypemasterid	
+		},
+		dataType: 'json',
+		success: function(data) {
+			
+			data.forEach(function(ownerobj, index) {
+				const { productTypeMasterId = '', productTypeMasterName = '', unique_no = '' } = ownerobj;
+				boiler += `<tr productTypeMasterId="${productTypeMasterId}">
+	             <td scope="row"><span class="material-icons">add_circle_outline</span></td>
+	             <td scope="row">${++index}</td>
+	             <td scope="row">${productTypeMasterName}</td>
+	             <td scope="row">${unique_no}</td>
+	             <td scope="row">
+	            action
+	             </td>
+	             </tr>`;
+
+			});
+  
+   boiler +=`</tbody>
+              </table>`;
+ 
+    row.child(boiler).show();
+    var tableName='#productTypeSubMaster_'+level;
+    var table=	$(tableName).DataTable({
+   "searching": false, // Disable search/filtering
+   "paging": false // Disable pagination
+     }); 
+    
+           var previousExpandedRow = null;
+			$(tableName+' tbody tr').on('click', 'span', function() {
+				var row = table.row(this.parentNode.parentNode);
+				var producttypemasterid = $(this.parentNode.parentNode).attr('producttypemasterid');
+
+				if (row.child.isShown()) {
+					row.child.hide();
+					$(this).text('add_circle_outline');
+				} else {
+
+					if (previousExpandedRow && previousExpandedRow.child.isShown()) {
+						previousExpandedRow.child.hide();
+						previousExpandedRow.node().querySelector('td').innerHTML = '<span class="material-icons">add_circle_outline</span>'; // Update the icon to "+"
+					}
+
+					getSubTypeMasters(row, producttypemasterid,++level);
+
+					$(this).text('remove_circle_outline');
+					previousExpandedRow = row;
+				}
+			});
+    
+		},
+		error: function(request, error) {
+			alert("Request 1: " + JSON.stringify(request));
+		}
+	});
+	
+	
+}
+
+function addSubProductTypeMasterModel(addSubProductTypeMaster)
+{
+	$('#subProductTypeForm').data('addSubProductTypeMaster',addSubProductTypeMaster);
+	$('#addSubProductTypeMaster').modal('show');
+}
+
+function saveSubProductTypeMaster()
+{
+	var productTypeMasterId = $('#subProductTypeForm').data('addSubProductTypeMaster');
+	var SubProductName = $("#SubProductName").val();
+	var subUniqueNo = $("#subUniqueNo").val();
+ 
+	$.ajax({
+		url: 'saveSubProductTypeMaster.json',
+		type: 'GET',
+		data: {
+			productTypeMasterId: productTypeMasterId,
+			SubProductName: SubProductName,
+			subUniqueNo:subUniqueNo
+		},
+		dataType: 'json',
+		success: function(data) {
+			swal("Good job!", "Your New Owner Created!", "success");
+			$('#addSubProductTypeMaster').modal('hide');
+		},
+		error: function(request, error) {
+			alert("Request 1: " + JSON.stringify(request));
+		}
+	});
+
 }

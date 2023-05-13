@@ -43,7 +43,7 @@ public class ProductTypeMaster {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
-	@Column(name = "IS_DELETED", nullable = false, columnDefinition = "boolean default true") //columnDefinition = "TINYINT(1)"
+	@Column(name = "IS_DELETED", nullable = false, columnDefinition = "boolean default false") //columnDefinition = "TINYINT(1)"
 	private boolean isDeleted;
 
 	public int getProductTypeMasterId() {
