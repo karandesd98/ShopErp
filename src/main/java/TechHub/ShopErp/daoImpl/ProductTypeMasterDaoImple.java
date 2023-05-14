@@ -20,7 +20,7 @@ public class ProductTypeMasterDaoImple implements ProductTypeMasterDao {
 	public void saveNewProductType(Object... userInfo) {
 
 		String productTypeMasterName=userInfo[0]!=null?userInfo[0].toString():"";
-		Integer uniqueNo=userInfo[1]!=null?Integer.parseInt(userInfo[1].toString()) :0;
+		String uniqueNo=userInfo[1]!=null?(userInfo[1].toString()) :"";
 		
 		try {
 		Connection con=	DataBaseConnectionUtility.getDataSource().getConnection();
@@ -32,7 +32,7 @@ public class ProductTypeMasterDaoImple implements ProductTypeMasterDao {
 			// create the mysql insert prepared statement
 		      PreparedStatement preparedStmt = con.prepareStatement(query);
 		      preparedStmt.setString (1, productTypeMasterName);
-		      preparedStmt.setInt(2, uniqueNo);
+		      preparedStmt.setString(2, uniqueNo);
 		 
 		   // execute the prepared statement
 		      preparedStmt.execute();
@@ -69,8 +69,8 @@ public class ProductTypeMasterDaoImple implements ProductTypeMasterDao {
 	public void saveSubProductType(Object... objects) {
 
 		String SubProductName=objects[0]!=null?objects[0].toString():"";
-		Integer subUniqueNo=objects[1]!=null?Integer.parseInt(objects[1].toString()) :0;
-		Integer productTypeMasterId=objects[2]!=null?Integer.parseInt(objects[2].toString()) :0;
+		 String subUniqueNo=objects[1]!=null?(objects[1].toString()) :"";
+		 Integer productTypeMasterId=objects[2]!=null?Integer.parseInt(objects[2].toString()) :0;
 
 		
 		try {
@@ -83,7 +83,7 @@ public class ProductTypeMasterDaoImple implements ProductTypeMasterDao {
 			// create the mysql insert prepared statement
 		      PreparedStatement preparedStmt = con.prepareStatement(query);
 		      preparedStmt.setString (1, SubProductName);
-		      preparedStmt.setInt(2, subUniqueNo);
+		      preparedStmt.setString(2, subUniqueNo);
 		      preparedStmt.setInt(3, productTypeMasterId);
 		 
 		   // execute the prepared statement

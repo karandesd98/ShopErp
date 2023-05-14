@@ -209,7 +209,7 @@ public class AdminController {
 		{
 			
 		String ProductMasterName=req.getParameter("ProductMasterName")!=null?req.getParameter("ProductMasterName"):"";
-		Integer uniqueNo=req.getParameter("uniqueNo")!=null?Integer.parseInt(req.getParameter("uniqueNo")) :0;
+		String uniqueNo=req.getParameter("uniqueNo")!=null?(req.getParameter("uniqueNo")) :"";
 		
 		productTypeMasterManager.saveNewProductType(ProductMasterName,uniqueNo);
 		
@@ -261,7 +261,7 @@ public class AdminController {
 		{
 		   Integer productTypeMasterId=productTypeArr[0]!=null?Integer.parseInt(productTypeArr[0].toString()) :0;
 		   String productTypeMasterName=productTypeArr[6]!=null?(productTypeArr[6].toString()) :"";
-		   Integer unique_no=productTypeArr[8]!=null?Integer.parseInt(productTypeArr[8].toString()) :0;
+		   String unique_no=productTypeArr[8]!=null?(productTypeArr[8].toString()) :"";
 
 			JsonObject jobj=new JsonObject();
 			jobj.addProperty("productTypeMasterId", productTypeMasterId);
@@ -281,8 +281,8 @@ public class AdminController {
 		{
 			
 		String SubProductName=req.getParameter("SubProductName")!=null?req.getParameter("SubProductName"):"";
-		Integer subUniqueNo=req.getParameter("subUniqueNo")!=null?Integer.parseInt(req.getParameter("subUniqueNo")) :0;
-		Integer productTypeMasterId=req.getParameter("productTypeMasterId")!=null?Integer.parseInt(req.getParameter("productTypeMasterId")) :0;
+		 String subUniqueNo=req.getParameter("subUniqueNo")!=null?(req.getParameter("subUniqueNo")) :"";
+		 Integer productTypeMasterId=req.getParameter("productTypeMasterId")!=null?Integer.parseInt(req.getParameter("productTypeMasterId").toString()) :0;
 
 		
 		productTypeMasterManager.saveSubProductType(SubProductName,subUniqueNo,productTypeMasterId);
@@ -306,7 +306,7 @@ public class AdminController {
 		{
 		   Integer productTypeMasterId=productTypeArr[0]!=null?Integer.parseInt(productTypeArr[0].toString()) :0;
 		   String productTypeMasterName=productTypeArr[6]!=null?(productTypeArr[6].toString()) :"";
-		   Integer unique_no=productTypeArr[8]!=null?Integer.parseInt(productTypeArr[8].toString()) :0;
+		   String unique_no=productTypeArr[8]!=null?(productTypeArr[8].toString()) :"";
 		   Integer productTypeMasterID=productTypeArr[7]!=null?Integer.parseInt(productTypeArr[7].toString()) :0;
 
 		   

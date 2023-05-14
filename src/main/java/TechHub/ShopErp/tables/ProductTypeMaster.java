@@ -24,7 +24,7 @@ public class ProductTypeMaster {
 	private String productTypeMasterName;
 	
 	@Column(name="UNIQUE_NO")
-    private int  unique_no;
+    private String  unique_no;
 	
 	@Column(name="PRODUCT_TYPE_MASTER_PARENT_ID")
     private int  productTypeMasterParentId;
@@ -62,11 +62,11 @@ public class ProductTypeMaster {
 		this.productTypeMasterName = productTypeMasterName;
 	}
 
-	public int getUnique_no() {
+	public String getUnique_no() {
 		return unique_no;
 	}
 
-	public void setUnique_no(int unique_no) {
+	public void setUnique_no(String unique_no) {
 		this.unique_no = unique_no;
 	}
 
