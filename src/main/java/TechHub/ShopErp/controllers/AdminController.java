@@ -321,4 +321,36 @@ public class AdminController {
 		
 		}
 		
+		@GetMapping("/getAllMyShopToAddPurchaseOrder.json")
+		@ResponseBody
+		public String getAllMyShopToAddPurchaseOrder(HttpServletRequest req,Principal principal)
+		{
+			
+		List<Object[]> myAllShop=shopManager.getAllShops();
+		JsonArray jMainArray=new JsonArray();
+	
+        Map<Integer,Object[]> myMap=new HashMap<>();
+		for( Object[] shopArr : myAllShop)
+		{
+		   Integer shopId=shopArr[0]!=null?Integer.parseInt(shopArr[0].toString()) :0;
+		   String shopName=shopArr[3]!=null?(shopArr[3].toString()) :"";
+
+		   if(!myMap.containsKey(shopId))
+		   {
+			myMap.put(shopId, shopArr);
+			
+			JsonObject jobj=new JsonObject();
+			jobj.addProperty("shopId", shopId);
+			jobj.addProperty("shopName", shopName);
+
+			jMainArray.add(jobj);
+			
+			
+		   }
+		}
+		
+		
+		 return new Gson().toJson(jMainArray);
+		}
+		
 }

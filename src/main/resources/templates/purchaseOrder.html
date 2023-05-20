@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.com" th:replace="adminBase::layout(~{::section})">
+  <head>
+    
+  </head>
+  <body>
+   <section class="content">
+    <!-- write your code here -->
+    <script th:src="@{/script/purchaseOrder.js}"></script>
+    <style>
+    .nav-tabs .nav-link {
+      background-color: rgb(192, 192, 192);
+    }
+    
+    
+     .nav-tabs .nav-link.active,
+    .nav-tabs .nav-link:focus,
+    .nav-tabs .nav-link:active {
+      background-color: #337ab7;
+      color: #fff;
+    }
+  </style>
+  
+    <div class="container-fluid">
+    <table class="table table-responsive table-bordered border-primary">
+  <thead>
+  </thead>
+  <tbody>
+    <tr>
+      <th style="width: 30%;">Select Shop :</th>
+      <td>
+      <select style="width: 50%;" id="myShop">
+      <option lue="option1">Option 1</option>
+      </select> 
+</td>
+    </tr>
+  </tbody>
+</table>
+
+     <nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Home</button>
+    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Profile</button>
+    <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</button>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">firat</div>
+  <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">second</div>
+  <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">third</div>
+</div>
+
+
+    
+    </div>
+    
+   </section>
+  </body>
+</html>

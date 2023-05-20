@@ -68,5 +68,15 @@ public class AdminUIMappingController {
 		model.addAttribute("title", "home page");
 	return "addProductType";
 	}
+	
+	@GetMapping("/purchaseOrder")
+	public String purchaseOrder(Model model,Principal principal)
+	{
+		String userName= principal.getName();
+		User user = userManager.getUserByUserName(userName);
+		model.addAttribute("user", user);
+		model.addAttribute("title", "home page");
+	return "purchaseOrder";
+	}
 
 }
