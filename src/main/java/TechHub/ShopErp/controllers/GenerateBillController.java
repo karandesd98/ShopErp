@@ -1,24 +1,158 @@
 package TechHub.ShopErp.controllers;
 
 import java.security.Principal;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import TechHub.ShopErp.Managers.InvoiceService;
+import TechHub.ShopErp.Managers.UserManager;
+import TechHub.ShopErp.exception.InvoiceNotFoundException;
 import TechHub.ShopErp.model.User;
+import TechHub.ShopErp.pdf.InvoiceDataPdfExport;
+import TechHub.ShopErp.tables.Invoice;
 
 @Controller
 public class GenerateBillController {
 
+	@Autowired
+	private InvoiceService service;
+
+	@Autowired
+	private UserManager userManager;
+
 	@GetMapping("/GenerateInvoice")
-	public String purchaseOrder(Model model,Principal principal)
-	{
-		/*
-		 * String userName= principal.getName(); User user =
-		 * userManager.getUserByUserName(userName); model.addAttribute("user", user);
-		 * model.addAttribute("title", "home page");
-		 */
-	return "GenerateInvoice";
+	public String purchaseOrder(Model model, Principal principal) {
+
+		// String userName= principal.getName();
+		String userName = "pratik@satarkar";
+		User user = userManager.getUserByUserName(userName);
+		model.addAttribute("user", user);
+		model.addAttribute("title", "home page");
+		return "GenerateInvoice";
+	}
+
+//	    @GetMapping("/")
+//	    public String showHomePage() {
+//	       return "homePage";
+//	    }
+
+	@GetMapping("/registerInvoice")
+	public String showRegistration(Model model, Principal principal) {
+		// String userName= principal.getName();
+		String userName = "pratik@satarkar";
+		User user = userManager.getUserByUserName(userName);
+		model.addAttribute("user", user);
+		model.addAttribute("title", "home page");
+		return "registerInvoicePage";
+	}
+
+	@PostMapping("/saveInvoice")
+	public String saveInvoice(@ModelAttribute Invoice invoice, Model model, Principal principal) {
+		
+		//String userName= principal.getName();
+				String userName= "pratik@satarkar";
+				User user = userManager.getUserByUserName(userName);
+				model.addAttribute("user", user);
+				model.addAttribute("title", "home page");	
+		
+		service.saveInvice(invoice);
+		Long id = service.saveInvice(invoice).getId();
+		String message = "Record with id : '" + id + "' is saved successfully !";
+		model.addAttribute("message", message);
+		return "registerInvoicePage";
+	}
+
+	@GetMapping("/getAllInvoices")
+	public String getAllInvoices(@RequestParam(value = "message", required = false) String message, Model model) {
+		
+		//String userName= principal.getName();
+				String userName= "pratik@satarkar";
+				User user = userManager.getUserByUserName(userName);
+				model.addAttribute("user", user);
+				model.addAttribute("title", "home page");	
+		
+		List<Invoice> invoices = service.getAllInvoices();
+		model.addAttribute("list", invoices);
+		model.addAttribute("message", message);
+		return "allInvoicesPage";
+	}
+
+	@GetMapping("/editInvoice")
+	public String getEditPage(Model model, Principal principal, RedirectAttributes attributes, @RequestParam Long id) {
+		
+		//String userName= principal.getName();
+				String userName= "pratik@satarkar";
+				User user = userManager.getUserByUserName(userName);
+				model.addAttribute("user", user);
+				model.addAttribute("title", "home page");	
+		
+		String page = null;
+		try {
+			Invoice invoice = service.getInvoiceById(id);
+			model.addAttribute("invoice", invoice);
+			page = "editInvoicePage";
+		} catch (InvoiceNotFoundException e) {
+			e.printStackTrace();
+			attributes.addAttribute("message", e.getMessage());
+			page = "redirect:getAllInvoices";
+		}
+		return page;
+	}
+
+	@PostMapping("/updateInvoice")
+	public String updateInvoice(@ModelAttribute Invoice invoice, RedirectAttributes attributes, Model model, Principal principal) {
+		
+		//String userName= principal.getName();
+				String userName= "pratik@satarkar";
+				User user = userManager.getUserByUserName(userName);
+				model.addAttribute("user", user);
+				model.addAttribute("title", "home page");	
+		
+		service.updateInvoice(invoice);
+		Long id = invoice.getId();
+		attributes.addAttribute("message", "Invoice with id: '" + id + "' is updated successfully !");
+		return "redirect:getAllInvoices";
+	}
+
+	@GetMapping("/deleteInvoice")
+	public String deleteInvoice(@RequestParam Long id, RedirectAttributes attributes, Model model, Principal principal) {
+		
+		//String userName= principal.getName();
+				String userName= "pratik@satarkar";
+				User user = userManager.getUserByUserName(userName);
+				model.addAttribute("user", user);
+				model.addAttribute("title", "home page");	
+		
+		try {
+			service.deleteInvoiceById(id);
+			attributes.addAttribute("message", "Invoice with Id : '" + id + "' is removed successfully!");
+		} catch (InvoiceNotFoundException e) {
+			e.printStackTrace();
+			attributes.addAttribute("message", e.getMessage());
+		}
+		return "redirect:getAllInvoices";
+	}
+
+	/***
+	 * Export data to pdf file
+	 */
+	@GetMapping("/pdf")
+	public ModelAndView exportToPdf() {
+		ModelAndView mav = new ModelAndView();
+		mav.setView(new InvoiceDataPdfExport());
+		// read data from DB
+		List<Invoice> list = service.getAllInvoices();
+		// send to pdfImpl class
+		mav.addObject("list", list);
+		return mav;
 	}
 }

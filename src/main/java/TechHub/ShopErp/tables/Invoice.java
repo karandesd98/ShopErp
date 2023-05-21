@@ -8,7 +8,8 @@ import javax.persistence.Id;
 @Entity
 public class Invoice {
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
     private Long id;
     private String name;
     private String location;
@@ -21,6 +22,15 @@ public class Invoice {
 		this.location = location;
 		this.amount = amount;
 	}
+	
+	
+
+	public Invoice() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+
 
 	public Long getId() {
 		return id;
