@@ -9,7 +9,7 @@ import javax.persistence.Id;
 public class Invoice {
 	@Id
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String name;
     private String location;
