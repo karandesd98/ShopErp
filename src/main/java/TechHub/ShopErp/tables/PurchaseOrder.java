@@ -32,7 +32,7 @@ public class PurchaseOrder {
 	@Column(name = "PURCHASE_FROM_MOBILE_NO")
 	private String purchaseFromMobileNo;
 	
-	@Column(name = "UPLOADED_BILL_PATH")
+	@Column(name = "UPLOADED_BILL_PATH", length=4000)
 	private String uploadedBillPath;
 	
 	@Column(name="CREATED_BY")
@@ -138,6 +138,15 @@ public class PurchaseOrder {
 
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+
+	@Override
+	public String toString() {
+		return "PurchaseOrder [purchaseOrderId=" + purchaseOrderId + ", purchaseOrderName=" + purchaseOrderName
+				+ ", purchaseOrderTotalAmount=" + purchaseOrderTotalAmount + ", purchaseFrom=" + purchaseFrom
+				+ ", purchaseFromMobileNo=" + purchaseFromMobileNo + ", uploadedBillPath=" + uploadedBillPath
+				+ ", createdBy=" + createdBy + ", deletedBy=" + deletedBy + ", deletedAt=" + deletedAt + ", createdAt="
+				+ createdAt + ", isDeleted=" + isDeleted + "]";
 	}
 	
 	

@@ -92,7 +92,7 @@ function addOwnerModel()
 function saveNewShop()
 {
 	
-	var shopName=$("#shop_name").val();
+	var shopName=$("#shop_name1").val();
     var shopAddress=$("#shop_address").val();
     var shopType=$("#shop_type").val();
      var about=$("#about").val();
