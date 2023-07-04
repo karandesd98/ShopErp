@@ -19,6 +19,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import TechHub.ShopErp.Managers.ProductTypeMasterManager;
+import TechHub.ShopErp.Managers.PurchaseOrderManager;
 import TechHub.ShopErp.Managers.ShopManager;
 import TechHub.ShopErp.Managers.UserManager;
 import TechHub.ShopErp.model.User;
@@ -35,6 +36,9 @@ public class AdminController {
 	
 	@Autowired
 	public ProductTypeMasterManager productTypeMasterManager;
+	
+	@Autowired 
+	public PurchaseOrderManager purchaseOrderManager;
 	
 	
 	@GetMapping("/saveNewOwner.json")
@@ -352,5 +356,59 @@ public class AdminController {
 		
 		 return new Gson().toJson(jMainArray);
 		}
+		
+		
+		@GetMapping("/getAllPurchaseOrderOfShop.json")
+		@ResponseBody
+		public String getAllPurchaseOrderOfShop(HttpServletRequest req,Principal principal)
+		{
+		Integer shopId=req.getParameter("shopId")!=null?Integer.parseInt(req.getParameter("shopId")) :0;
+		List<Object[]> appPurchaseOrder=purchaseOrderManager.getAllPurchaseOrderOfShop(shopId);
+		JsonArray jMainArray=new JsonArray();
+	
+       
+		for( Object[] purchaseOrd : appPurchaseOrder)
+		{
+		   Integer purchaseOrderId=purchaseOrd[0]!=null?Integer.parseInt(purchaseOrd[0].toString()) :0;
+		   String purchaseOrderName=purchaseOrd[8]!=null?(purchaseOrd[8].toString()) :"";
+		   Integer purchaseOrderTotalAmount=purchaseOrd[9]!=null?Integer.parseInt(purchaseOrd[9].toString()) :0;
+
+         JsonObject jObje=new JsonObject();
+         jObje.addProperty("purchaseOrderId", purchaseOrderId.toString());
+         jObje.addProperty("purchaseOrderName", purchaseOrderName.toString());
+         jObje.addProperty("purchaseOrderTotalAmount", purchaseOrderTotalAmount.toString());
+		  
+         jMainArray.add(jObje);
+		} 
+		
+		
+		 return new Gson().toJson(jMainArray);
+		}
+		
+
+		
+		
+		@GetMapping("/saveNewPurchaseOrder.json")
+		@ResponseBody
+		public String saveNewPurchaseOrder(HttpServletRequest req)
+		{
+			
+		String pName=req.getParameter("pName")!=null?req.getParameter("pName"):"";
+		String PurchaseBy=req.getParameter("PurchaseBy")!=null?req.getParameter("PurchaseBy"):"";
+		String DateOfPurchaseOrder=req.getParameter("DateOfPurchaseOrder")!=null?req.getParameter("DateOfPurchaseOrder"):"";
+		String 	GoodsAmount=req.getParameter("GoodsAmount")!=null?req.getParameter("GoodsAmount"):"";
+		String otherAmount=req.getParameter("otherAmount")!=null?req.getParameter("otherAmount"):"";
+		String totalAmount=req.getParameter("totalAmount")!=null?req.getParameter("totalAmount"):"";
+		String 	notForPurchaseOrder=req.getParameter("notForPurchaseOrder")!=null?req.getParameter("notForPurchaseOrder"):"";
+        Integer shopId=req.getParameter("shopId")!=null?Integer.parseInt(req.getParameter("shopId")) :0;
+		
+		purchaseOrderManager.saveNewPurchaseOrder(pName,PurchaseBy,DateOfPurchaseOrder,GoodsAmount,otherAmount,totalAmount,notForPurchaseOrder,shopId);
+		
+	// 	System.out.println(name);
+		JsonObject jobj=new JsonObject();
+		 jobj.addProperty("msg", "welcome sachin in software development business");
+		 return new Gson().toJson(jobj);
+		}
+		
 		
 }

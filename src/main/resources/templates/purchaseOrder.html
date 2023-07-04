@@ -1,112 +1,126 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.com" th:replace="adminBase::layout(~{::section})">
+  <head>
+    
+  </head>
+  <body>
+   <section class="content">
+    <!-- write your code here -->
+    <script th:src="@{/script/purchaseOrder.js}"></script>
+    <style>
+    .nav-tabs .nav-link {
+      background-color: rgb(192, 192, 192);
+    }
+    
+    
+     .nav-tabs .nav-link.active,
+    .nav-tabs .nav-link:focus,
+    .nav-tabs .nav-link:active {
+      background-color: #337ab7;
+      color: #fff;
+    }
+  </style>
+  
+    <div class="container-fluid">
+    <table class="table table-responsive table-bordered border-primary">
+  <thead>
+  </thead>
+  <tbody>
+    <tr>
+      <th style="width: 30%;">Select Shop :</th>
+      <td>
+      <select style="width: 50%;" id="myShop" onchange="getAllpurchase()">
+      <option lue="option1">select</option>
+      </select> 
+</td>
+    </tr>
+  </tbody>
+</table>
 
-<head>
-
-</head>
-
-<body>
-	<section class="content">
-		<!-- write your code here -->
-		<script th:src="@{/script/purchaseOrder.js}"></script>
-		<style>
-			.nav-tabs .nav-link {
-				background-color: rgb(192, 192, 192);
-			}
-
-
-			.nav-tabs .nav-link.active,
-			.nav-tabs .nav-link:focus,
-			.nav-tabs .nav-link:active {
-				background-color: #337ab7;
-				color: #fff;
-			}
-		</style>
-
-		<div class="container-fluid">
-			<table class="table table-responsive table-bordered border-primary">
-				<thead>
-				</thead>
-				<tbody>
-					<tr>
-						<th style="width: 30%;">Select Shop :</th>
-						<td>
-							<select style="width: 50%;" id="myShop">
-								<option lue="option1">Option 1</option>
-							</select>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-
-			<nav>
-				<div class="nav nav-tabs" id="nav-tab" role="tablist">
-					<button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
-						type="button" role="tab" aria-controls="nav-home" aria-selected="true">Home</button>
-					<button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
-						type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Profile</button>
-					<button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
-						type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</button>
-				</div>
-			</nav><br>
-			<div class="tab-content" id="nav-tabContent">
-				<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-					<div class="card-header bg-info text-center text-white">
-						<h3>Add Purchase Order</h3>
-					</div>
-					<form  action="#" th:action="@{/upload}" th:object="${fileForm}" method="post" enctype="multipart/form-data">
-						<div class="row">
-							<div class="col">
-								<input type="text" class="form-control" id="purchase_order_name" name="purchase_order_name" placeholder="Purchase Order Name" >
-							</div>
-							<div class="col">
-								<input type="text" class="form-control" id="purchase_from" name="purchase_from" placeholder="Purchase From">
-							</div>
-							<div class="col">
-								<input type="number" class="form-control" id="purchase_from_mobile_no" name="purchase_from_mobile_no" placeholder="Purchase From Mobile No.">
-							</div>
-							<div class="col">
-								<input type="number" class="form-control" id="total_amount" name="total_amount" placeholder="Purchase Order Total Amount">
-							</div>
-						</div>
-						<br>
-						<div class="row">
-							<div class="col">
-								<input type="text" class="form-control" placeholder="Purchase Order Name">
-							</div>
-							<div class="col">
-								<input type="text" class="form-control" placeholder="Purchase From">
-							</div>
-						</div>
-						<br>
-						
-							
-						<div class="mb-3">
-							<!--<label for="formFileMultiple" class="form-label">Upload Bill</label>
-							<input class="form-control" type="file" id="formFileMultiple" multiple>-->
-							
-							<form >
-							
-							<div>
-							<input type="file" name="file" id="file" />
-							</div>
-							<br>
-							<div class="d-grid gap-2">
-							<input class="btn btn-success" type="submit"  value="Upload Bill & Save Data" />
-							</div>
-						</form>
-						</div>
-						
-					</form>
-					
-				</div>
-				<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">second
-				</div>
-				<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">third
-				</div>
-			</div>
+	<nav>
+		<div class="nav nav-tabs" id="nav-tab" role="tablist" style="background-color:rgb(192, 192, 192);">
+			<button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button"
+				role="tab" aria-controls="nav-home" aria-selected="true">Current</button>
+			<button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button"
+				role="tab" aria-controls="nav-profile" aria-selected="false">History</button>
+			<button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button"
+				role="tab" aria-controls="nav-contact" aria-selected="false">Contact</button>
 		</div>
+	</nav>
+	
+<div class="tab-content" id="nav-tabContent">
+	<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+	<div id="purchaseTable"></div>
+	</div>
+	<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">History</div>
+	<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">third</div>
+</div>
 
-	</section>
-</body>
+
+<div class="modal fade" id="PurchaseOrderModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Add New Purchase Order</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <div class="modal-body">
+        <div id="newPurchaseOrderModel">
+			<form  method="post"> <!-- th:action="@{/doRegister}" -->
+			
+			<div class="mb-3">
+				<label for="name" class="form-label">Purchase Name</label>
+				<input name="USER_NAME"  type="text" class="form-control" id="pName" aria-describedby="emailHelp" requierd>
+			</div>
+			
+			<div class="mb-3">
+				<label for="email" class="form-label">Purchased By</label>
+				<input name="EMAIL"  type="text" class="form-control" id="PurchaseBy" aria-describedby="emailHelp" requierd>
+			</div>
+			
+			<div class="mb-3">
+				<label for="password" class="form-label">Date</label>
+				<input name="PASSWORD"  type="text" class="form-control" id="DateOfPurchaseOrder" aria-describedby="emailHelp" requierd>
+			</div>
+			
+			<div class="mb-3">
+				<label for="password" class="form-label">Goods Amount</label>
+				<input name="PASSWORD"  type="text" class="form-control" id="GoodsAmount" aria-describedby="emailHelp" requierd>
+			</div>
+			
+			<div class="mb-3">
+				<label for="password" class="form-label">Other Amount</label>
+				<input name="text"  type="text" class="form-control" id="otherAmount" aria-describedby="emailHelp" requierd>
+			</div>
+			
+			<div class="mb-3">
+				<label for="password" class="form-label">Total Amount</label>
+				<input name="text"  type="text" class="form-control" id="totalAmount" aria-describedby="emailHelp" requierd>
+			</div>
+			
+			
+			<div class="mb-3">
+			    <label for="about" class="form-label">Note of purchase Order</label>
+				<textarea  name="ABOUT"  class="form-control" placeholder="Leave a comment here" id="notForPurchaseOrder"></textarea>
+			</div>
+			
+		<!--	<div class="container text-center">
+			<button type="reset" class="btn btn-danger">Reset</button>
+			</div> -->
+			</form> 
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		<button type="button" class="btn btn-primary" onclick="saveNewPurchaseOrder()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div>
+    
+   </section>
+  </body>
 </html>
