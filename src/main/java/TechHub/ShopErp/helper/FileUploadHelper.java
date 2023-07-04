@@ -14,7 +14,6 @@ public class FileUploadHelper {
 	//public final... String UPLOAD_DIR="C:\\Users\\Pratik\\Desktop\\SHOPERP\\ShopErpNewFolder\\ShopErp\\src\\main\\resources\\static\\uploadedFiles";
 	public final String UPLOAD_DIR= new ClassPathResource("static/uploadedFiles/").getFile().getAbsolutePath();
 	public FileUploadHelper()throws Exception{
-		System.out.println("FileUploadHelper Constructor....!");
 	}
 	
 	public boolean uploadFile(MultipartFile file) {
