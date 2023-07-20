@@ -10,7 +10,7 @@ import TechHub.ShopErp.utilityAndSecurity.HibernateUtility;
 //		"TechHub.ShopErp.controllers.AdminController", "TechHub.ShopErp.Managers.UserManager"})
 
 @SpringBootApplication
-@Import(HibernateUtility.class)
+// @Import(HibernateUtility.class)
 public class ShopErpApplication {
 
 	public static void main(String[] args) {

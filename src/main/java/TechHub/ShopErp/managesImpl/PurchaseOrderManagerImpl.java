@@ -8,12 +8,17 @@ import org.springframework.stereotype.Service;
 
 import TechHub.ShopErp.Managers.PurchaseOrderManager;
 import TechHub.ShopErp.dao.PurchaseOrderDao;
+import TechHub.ShopErp.repository.purchaseOrderRepo;
+import TechHub.ShopErp.tables.PurchaseOrder;
 
 @Service
 public class PurchaseOrderManagerImpl implements PurchaseOrderManager {
 
 	@Autowired
 	PurchaseOrderDao purchaseOrderDao;
+	
+	@Autowired
+	purchaseOrderRepo purchaseOrderRepoObj;
 	
 	@Override
 	public List<Object[]> getAllPurchaseOrderOfShop(Integer shopId) {
@@ -24,6 +29,17 @@ public class PurchaseOrderManagerImpl implements PurchaseOrderManager {
 	@Override
 	public void saveNewPurchaseOrder(Object... objects) {
 		purchaseOrderDao.saveNewPurchaseOrder(objects);
+	}
+	
+	@Override
+	public void deletePurchaseOrder(Integer purchaseOrderId) {
+		purchaseOrderRepoObj.deleteById(purchaseOrderId);
+	}
+
+	@Override
+	public void save(PurchaseOrder purchaseOrder) {
+		purchaseOrderRepoObj.save(purchaseOrder);
+		
 	}
 
 }

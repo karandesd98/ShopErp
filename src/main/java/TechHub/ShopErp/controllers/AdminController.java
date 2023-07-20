@@ -2,6 +2,7 @@ package TechHub.ShopErp.controllers;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import TechHub.ShopErp.Managers.PurchaseOrderManager;
 import TechHub.ShopErp.Managers.ShopManager;
 import TechHub.ShopErp.Managers.UserManager;
 import TechHub.ShopErp.model.User;
+import TechHub.ShopErp.tables.PurchaseOrder;
 
 @Controller
 @RequestMapping("/admin")
@@ -372,12 +374,23 @@ public class AdminController {
 		   Integer purchaseOrderId=purchaseOrd[0]!=null?Integer.parseInt(purchaseOrd[0].toString()) :0;
 		   String purchaseOrderName=purchaseOrd[8]!=null?(purchaseOrd[8].toString()) :"";
 		   Integer purchaseOrderTotalAmount=purchaseOrd[9]!=null?Integer.parseInt(purchaseOrd[9].toString()) :0;
-
+		   String PurchaseBy=purchaseOrd[12]!=null?(purchaseOrd[12].toString()) :"";
+           String date=purchaseOrd[13]!=null?(purchaseOrd[13].toString()) :"";
+           String goodsAmount=purchaseOrd[15]!=null?(purchaseOrd[15].toString()) :"";
+           String otherAmount=purchaseOrd[16]!=null?(purchaseOrd[16].toString()) :"";
+		   
+		   
          JsonObject jObje=new JsonObject();
          jObje.addProperty("purchaseOrderId", purchaseOrderId.toString());
          jObje.addProperty("purchaseOrderName", purchaseOrderName.toString());
          jObje.addProperty("purchaseOrderTotalAmount", purchaseOrderTotalAmount.toString());
-		  
+         jObje.addProperty("PurchaseBy", PurchaseBy.toString());
+         jObje.addProperty("date", date.toString());
+         jObje.addProperty("goodsAmount", goodsAmount.toString());
+         jObje.addProperty("otherAmount", otherAmount.toString());
+ 
+         
+         
          jMainArray.add(jObje);
 		} 
 		
@@ -401,8 +414,37 @@ public class AdminController {
 		String totalAmount=req.getParameter("totalAmount")!=null?req.getParameter("totalAmount"):"";
 		String 	notForPurchaseOrder=req.getParameter("notForPurchaseOrder")!=null?req.getParameter("notForPurchaseOrder"):"";
         Integer shopId=req.getParameter("shopId")!=null?Integer.parseInt(req.getParameter("shopId")) :0;
+        Date currentDate = new Date();
+        
+        PurchaseOrder purchaseOrder=new PurchaseOrder();
+        purchaseOrder.setPurchaseOrderName(pName);
+        purchaseOrder.setPurchaseBy(PurchaseBy);
+        purchaseOrder.setPurchaseAt(currentDate);
+        purchaseOrder.setPurchaseOrderAmount(Integer.parseInt(GoodsAmount));
+        purchaseOrder.setPurchaseOrderOtherAmount(Integer.parseInt(otherAmount));
+        purchaseOrder.setPurchaseOrderTotalAmount(Integer.parseInt(totalAmount));
+        purchaseOrder.setNote(notForPurchaseOrder);
+        purchaseOrder.setShop_id(shopId);
+        
+        purchaseOrderManager.save(purchaseOrder);
+        
+	//	purchaseOrderManager.saveNewPurchaseOrder(pName,PurchaseBy,DateOfPurchaseOrder,GoodsAmount,otherAmount,totalAmount,notForPurchaseOrder,shopId);
 		
-		purchaseOrderManager.saveNewPurchaseOrder(pName,PurchaseBy,DateOfPurchaseOrder,GoodsAmount,otherAmount,totalAmount,notForPurchaseOrder,shopId);
+	// 	System.out.println(name);
+		JsonObject jobj=new JsonObject();
+		 jobj.addProperty("msg", "welcome sachin in software development business");
+		 return new Gson().toJson(jobj);
+		}
+		
+		
+		@GetMapping("/deletePurchaseOrder.json")
+		@ResponseBody
+		public String deletePurchaseOrder(HttpServletRequest req)
+		{
+			
+		Integer purchaseOrderId=req.getParameter("purchaseOrderId")!=null?Integer.parseInt(req.getParameter("purchaseOrderId")):0;
+	
+		purchaseOrderManager.deletePurchaseOrder(purchaseOrderId);
 		
 	// 	System.out.println(name);
 		JsonObject jobj=new JsonObject();

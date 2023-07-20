@@ -18,16 +18,31 @@ public class PurchaseOrder {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="PURCHASE_ORDER_ID")
-    private int  purchaseOrderId;
+    private Integer  purchaseOrderId;
 	
 	@Column(name = "PURCHASE_ORDER_NAME")
 	private String purchaseOrderName;
 	
+	@Column(name = "PURCHASE_BY")
+	private String purchaseBy;
+	
 	@Column(name="PURCHASE_ORDER_TOTAL_AMOUNT")
     private int  purchaseOrderTotalAmount;
 	
+	@Column(name="PURCHASE_ORDER_AMOUNT")
+    private int  purchaseOrderAmount;
+	
+	@Column(name="PURCHASE_OTHER_AMOUNT")
+    private int  purchaseOrderOtherAmount;
+	
 	@Column(name = "PURCHASE_FROM")
 	private String purchaseFrom;
+	
+	@Column(name = "NOTE" , length = 4000)
+	private String note;
+	
+	@Column(name = "PURCHASE_AT")
+	private Date purchaseAt;
 	
 	@Column(name = "PURCHASE_FROM_MOBILE_NO")
 	private String purchaseFromMobileNo;
@@ -49,16 +64,13 @@ public class PurchaseOrder {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 	
-	@Column(name = "IS_DELETED", nullable = false, columnDefinition = "TINYINT(1)")
+	@Column(name = "IS_DELETED", nullable = true, columnDefinition = "boolean default false")
 	private boolean isDeleted;
+	
+	@Column(name = "SHOP_ID")
+	private int shop_id;
 
-	public int getPurchaseOrderId() {
-		return purchaseOrderId;
-	}
 
-	public void setPurchaseOrderId(int purchaseOrderId) {
-		this.purchaseOrderId = purchaseOrderId;
-	}
 
 	public String getPurchaseOrderName() {
 		return purchaseOrderName;
@@ -147,6 +159,62 @@ public class PurchaseOrder {
 				+ ", purchaseFromMobileNo=" + purchaseFromMobileNo + ", uploadedBillPath=" + uploadedBillPath
 				+ ", createdBy=" + createdBy + ", deletedBy=" + deletedBy + ", deletedAt=" + deletedAt + ", createdAt="
 				+ createdAt + ", isDeleted=" + isDeleted + "]";
+	}
+
+	public int getShop_id() {
+		return shop_id;
+	}
+
+	public void setShop_id(int shop_id) {
+		this.shop_id = shop_id;
+	}
+
+	public void setPurchaseOrderId(Integer purchaseOrderId) {
+		this.purchaseOrderId = purchaseOrderId;
+	}
+
+	public String getPurchaseBy() {
+		return purchaseBy;
+	}
+
+	public void setPurchaseBy(String purchaseBy) {
+		this.purchaseBy = purchaseBy;
+	}
+
+	public Date getPurchaseAt() {
+		return purchaseAt;
+	}
+
+	public void setPurchaseAt(Date purchaseAt) {
+		this.purchaseAt = purchaseAt;
+	}
+
+	public int getPurchaseOrderAmount() {
+		return purchaseOrderAmount;
+	}
+
+	public void setPurchaseOrderAmount(int purchaseOrderAmount) {
+		this.purchaseOrderAmount = purchaseOrderAmount;
+	}
+
+	public int getPurchaseOrderOtherAmount() {
+		return purchaseOrderOtherAmount;
+	}
+
+	public void setPurchaseOrderOtherAmount(int purchaseOrderOtherAmount) {
+		this.purchaseOrderOtherAmount = purchaseOrderOtherAmount;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	public Integer getPurchaseOrderId() {
+		return purchaseOrderId;
 	}
 	
 	

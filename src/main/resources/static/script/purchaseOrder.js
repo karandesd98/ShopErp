@@ -31,6 +31,9 @@
 function getAllpurchase()
 {
 var shopId=	$('#myShop option:selected').val();
+
+if(shopId==0)
+return false;
 	
 	$.ajax({
 		url:'getAllPurchaseOrderOfShop.json',
@@ -61,23 +64,23 @@ var shopId=	$('#myShop option:selected').val();
   </thead><tbody>`;
   
   data.forEach(function(purchaseOrder,index){
-	  const{purchaseOrderId='',purchaseOrderName='',purchaseOrderTotalAmount=''}=purchaseOrder;
+	  const{purchaseOrderId='',purchaseOrderName='',purchaseOrderTotalAmount='', PurchaseBy='',date='',goodsAmount='',otherAmount=''}=purchaseOrder;
 	   boiler +=`<tr>
 	             <td scope="row">${++index}</td>
 	             <td scope="row">${purchaseOrderName}</td>
-	             <td scope="row">-</td>
-	             <td scope="row">-</td>
-	               <td scope="row">-</td>
-	             <td scope="row">-</td>
+	             <td scope="row">${PurchaseBy}</td>
+	             <td scope="row">${date}</td>
+	               <td scope="row">${goodsAmount}</td>
+	             <td scope="row">${otherAmount}</td>
 	             <td scope="row">${purchaseOrderTotalAmount}</td>
 	             <td scope="row">-</td>
 	             <td scope="row">
 	             <div class="dropdown">
                       <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"> Action</button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                         <li><button class="dropdown-item" type="button">Action</button></li>
-                         <li><button class="dropdown-item" type="button">Another action</button></li>
-                         <li><button class="dropdown-item" type="button">Something else here</button></li>
+                         <li><button class="dropdown-item" type="button">Edit</button></li>
+                         <li><button class="dropdown-item" type="button" onclick="deletePurchaseOrder(${purchaseOrderId})">Delete</button></li>
+                         <li><button class="dropdown-item" type="button" onclick="addProductToPurchaseOrder(${purchaseOrderId})">Add Product</button></li>
                        </ul>
                  </div>
 	             </td>
@@ -131,8 +134,10 @@ function saveNewPurchaseOrder()
 		},
 		dataType: 'json',
 		success: function(data) {
-		//	var boiler=`<h1>${data.msg}</h1>`
 			swal("Good job!", "Your New Purchase Order Created!", "success");
+			getAllpurchase();
+			$('#PurchaseOrderModel').modal('hide');
+			
 		},
 		error: function(request, error) {
 			 alert("Request 1: " + JSON.stringify(request));
@@ -143,4 +148,46 @@ function saveNewPurchaseOrder()
   // showAllOwners();
 
 	
+}
+
+
+function deletePurchaseOrder(purchaseOrderId)
+{
+	
+	$.ajax({
+		url:'deletePurchaseOrder.json',
+		type: 'GET',
+		data: {
+			purchaseOrderId : purchaseOrderId,
+		},
+		dataType: 'json',
+		success: function(data) {
+		getAllpurchase();
+			swal("Good job!", "Purchase Order Deleted Successfully...!", "success");
+		},
+		error: function(request, error) {
+			 alert("Request 1: " + JSON.stringify(request));
+		}
+});
+
+}
+
+function addProductToPurchaseOrder(purchaseOrderId)
+{
+	$('#AddProductTab').removeClass("hiddenClass");
+	$('#AddProductTab').tab('show');
+	
+	var boiler=`
+	        <input type="hidden" id="hdpurchaseOrderId" value="${purchaseOrderId}"/>
+	         `;   
+	  $('#hiddenDiv').html(boiler); 
+	  
+	 var bakcButton=`<button type="button" class="btn btn-secondary btn-sm" id="backBtn" onclick="backOnPurchase()">Back</button>`;       
+     $('#AddProductDiveBackButton').html(bakcButton); 
+}
+
+function backOnPurchase()
+{
+	$('#AddProductTab').addClass("hiddenClass");
+	$('#nav-home-tab').tab('show');
 }
