@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import TechHub.ShopErp.Managers.PurchaseOrderManager;
 import TechHub.ShopErp.dao.PurchaseOrderDao;
+import TechHub.ShopErp.helper.ResorcenotFoundException;
 import TechHub.ShopErp.repository.purchaseOrderRepo;
 import TechHub.ShopErp.tables.PurchaseOrder;
 
@@ -40,6 +41,12 @@ public class PurchaseOrderManagerImpl implements PurchaseOrderManager {
 	public void save(PurchaseOrder purchaseOrder) {
 		purchaseOrderRepoObj.save(purchaseOrder);
 		
+	}
+
+	@Override
+	public PurchaseOrder findById(Integer purchaseOrderId) {
+		// TODO Auto-generated method stub
+		return purchaseOrderRepoObj.findById(purchaseOrderId).orElseThrow(()-> new ResorcenotFoundException("User with given id is not found on server"));
 	}
 
 }

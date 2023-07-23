@@ -12,8 +12,7 @@
       background-color: rgb(192, 192, 192);
     }
     
-    
-     .nav-tabs .nav-link.active,
+    .nav-tabs .nav-link.active,
     .nav-tabs .nav-link:focus,
     .nav-tabs .nav-link:active {
       background-color: #337ab7;
@@ -23,6 +22,29 @@
     .hiddenClass{
 		display:none;
 	}
+	
+	.myProfile
+    {
+	width: 61px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+   text-align: center;
+    }
+    
+    /* Example CSS to customize Dropzone.js upload button */
+.dropzone .dz-clickable {
+      padding: 1px 1px; /* Adjust the padding to make the button smaller */
+      font-size: 12px; /* Adjust the font size to make the button text smaller */
+      width: 100px; /* Adjust the width of the button */
+      height: 30px; /* Adjust the height of the button */
+    }
+
+    .dropzone .dz-clickable:before {
+      line-height: 30px; /* Adjust the line-height to vertically center the text */
+    }
+    
+    
     
   </style>
   
@@ -129,6 +151,31 @@
     </div>
   </div>
 </div>
+
+
+<!-- Modal for uploadBill -->
+<div class="modal fade" id="uploadBill" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Upload Bill Here</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+	<form id="myForm" action="your-upload-handler.php" method="post" enctype="multipart/form-data">
+		<input type="file" name="fileToUpload" id="fileToUpload" />
+		<input type="submit" class="btn btn-primary" value="Save" />
+	</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+     <!--   <button type="button" class="btn btn-primary">Save changes</button>  -->
+      </div> 
+    </div>
+  </div>
+</div>
+
+
 
     </div>
     

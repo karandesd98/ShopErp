@@ -1,5 +1,8 @@
+ 
+ Dropzone.autoDiscover = false;
  $(document).ready(function() {
     getAllMyShopToAddPurchaseOrder();
+     
   });
   
   function getAllMyShopToAddPurchaseOrder()
@@ -58,13 +61,14 @@ return false;
       <th scope="col">Goods Amount</th>
       <th scope="col">Other Amount</th>
       <th scope="col">Total Amount</th>
-      <th scope="col">Purchase Bill</th>
+      <th scope="col">Upload Bill</th>
+      <th scope="col">View Bill</th>
       <th scope="col">Action</th>
     </tr>
   </thead><tbody>`;
   
   data.forEach(function(purchaseOrder,index){
-	  const{purchaseOrderId='',purchaseOrderName='',purchaseOrderTotalAmount='', PurchaseBy='',date='',goodsAmount='',otherAmount=''}=purchaseOrder;
+	  const{purchaseOrderId='',purchaseOrderName='',purchaseOrderTotalAmount='', PurchaseBy='',date='',goodsAmount='',otherAmount='',billUploadPath=''}=purchaseOrder;
 	   boiler +=`<tr>
 	             <td scope="row">${++index}</td>
 	             <td scope="row">${purchaseOrderName}</td>
@@ -73,7 +77,19 @@ return false;
 	               <td scope="row">${goodsAmount}</td>
 	             <td scope="row">${otherAmount}</td>
 	             <td scope="row">${purchaseOrderTotalAmount}</td>
-	             <td scope="row">-</td>
+	             <td scope="row">
+	             <div id="uploadBill_${purchaseOrderId}" class="dropzone"></div>
+                 </td>
+                <td>
+                
+                <div class="my-gallery">
+                  <a href="/uploadedFiles/${billUploadPath}" data-lightbox="gallery">
+                  <img class="myProfile" src="/uploadedFiles/${billUploadPath}" alt="Image 1">
+                 </a>
+                </div>
+                
+                </td>
+                
 	             <td scope="row">
 	             <div class="dropdown">
                       <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"> Action</button>
@@ -85,6 +101,8 @@ return false;
                  </div>
 	             </td>
 	             </tr>`;
+	             
+             // <img class="myProfile"  src="/uploadedFiles/${billUploadPath}" />
 	  
   });
   
@@ -92,6 +110,13 @@ return false;
               </table>`;
               
          $('#purchaseTable').html(boiler);
+         
+         data.forEach(function(purchaseOrder,index){
+			  const{purchaseOrderId='',purchaseOrderName='',purchaseOrderTotalAmount='', PurchaseBy='',date='',goodsAmount='',otherAmount=''}=purchaseOrder;
+                var buttonId=`uploadBill_${purchaseOrderId}`;
+                uploadBill(buttonId,purchaseOrderId);
+			 
+			 });
   
 		},
 		error: function(request, error) {
@@ -190,4 +215,33 @@ function backOnPurchase()
 {
 	$('#AddProductTab').addClass("hiddenClass");
 	$('#nav-home-tab').tab('show');
+}
+
+
+function uploadBill(buttonId,purchaseOrderId)
+{
+	 // Initialize Dropzone
+    var myDropzone = new Dropzone(`#${buttonId}`, {
+      url: "/upload", 
+      acceptedFiles: "image/*", 
+      maxFiles: 2, // 
+      init: function() {
+        this.on("success", function(file, response) {
+         swal("Good job!", "Purchase Order Bill Uploaded Successfully...!", "success");
+         getAllpurchase();
+        });
+
+        this.on("error", function(file, errorMessage, xhr) {
+          console.error(errorMessage);
+        });
+      },
+      
+       params: {
+        purchaseOrderId: purchaseOrderId,
+        description: "Image Description",
+      },
+       dictDefaultMessage: "Upload Bill",
+    });
+    
+    $(`#${buttonId}`).removeClass('dropzone');
 }

@@ -11,7 +11,7 @@ public interface PurchaseOrderManager {
 
 	void saveNewPurchaseOrder(Object... objects);
 	void deletePurchaseOrder(Integer purchaseOrderId);
-
+	PurchaseOrder  findById(Integer purchaseOrderId);
 	void save(PurchaseOrder purchaseOrder);
 
 }

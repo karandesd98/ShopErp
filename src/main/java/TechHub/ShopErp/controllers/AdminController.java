@@ -378,6 +378,7 @@ public class AdminController {
            String date=purchaseOrd[13]!=null?(purchaseOrd[13].toString()) :"";
            String goodsAmount=purchaseOrd[15]!=null?(purchaseOrd[15].toString()) :"";
            String otherAmount=purchaseOrd[16]!=null?(purchaseOrd[16].toString()) :"";
+           String billUploadPath=purchaseOrd[10]!=null?(purchaseOrd[10].toString()) :"";
 		   
 		   
          JsonObject jObje=new JsonObject();
@@ -388,6 +389,7 @@ public class AdminController {
          jObje.addProperty("date", date.toString());
          jObje.addProperty("goodsAmount", goodsAmount.toString());
          jObje.addProperty("otherAmount", otherAmount.toString());
+         jObje.addProperty("billUploadPath", billUploadPath.toString());
  
          
          

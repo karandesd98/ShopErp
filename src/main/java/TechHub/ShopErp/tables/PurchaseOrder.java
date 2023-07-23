@@ -1,12 +1,14 @@
 package TechHub.ShopErp.tables;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -69,8 +71,21 @@ public class PurchaseOrder {
 	
 	@Column(name = "SHOP_ID")
 	private int shop_id;
+	
+	/*
+	// one to many relationSheep
+    @OneToMany(mappedBy="purchaseOrderObj")
+	private List<PurchaseOrderDetail> purchaseOrderDetailList; 
 
+    public List<PurchaseOrderDetail> getPurchaseOrderDetailList() {
+		return purchaseOrderDetailList;
+	}
 
+	public void setPurchaseOrderDetailList(List<PurchaseOrderDetail> purchaseOrderDetailList) {
+		this.purchaseOrderDetailList = purchaseOrderDetailList;
+	}
+	*/
+	
 
 	public String getPurchaseOrderName() {
 		return purchaseOrderName;
@@ -216,7 +231,6 @@ public class PurchaseOrder {
 	public Integer getPurchaseOrderId() {
 		return purchaseOrderId;
 	}
-	
-	
+
 
 }

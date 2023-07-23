@@ -1,12 +1,15 @@
 package TechHub.ShopErp.tables;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -18,7 +21,7 @@ public class ProductTypeMaster {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="PRODUCT_TYPE_MASTER_ID")
-    private int  productTypeMasterId;
+    private Integer  productTypeMasterId;
 	
 	@Column(name = "PRODUCT_TYPE_MASTER_NAME")
 	private String productTypeMasterName;
@@ -45,6 +48,20 @@ public class ProductTypeMaster {
 
 	@Column(name = "IS_DELETED", nullable = false, columnDefinition = "boolean default false") //columnDefinition = "TINYINT(1)"
 	private boolean isDeleted;
+	
+	/*
+	// one to many relationSheep
+	@OneToMany(mappedBy = "productTypeMasterObj")
+	private List<PurchaseOrderDetail> purchaseOrderDetailList;
+
+	public List<PurchaseOrderDetail> getPurchaseOrderDetailList() {
+		return purchaseOrderDetailList;
+	}
+
+	public void setPurchaseOrderDetailList(List<PurchaseOrderDetail> purchaseOrderDetailList) {
+		this.purchaseOrderDetailList = purchaseOrderDetailList;
+	}
+	 */
 
 	public int getProductTypeMasterId() {
 		return productTypeMasterId;
@@ -118,7 +135,5 @@ public class ProductTypeMaster {
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
-	
-	
 
 }

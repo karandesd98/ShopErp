@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import TechHub.ShopErp.Managers.PurchaseOrderManager;
 import TechHub.ShopErp.helper.FileUploadHelper;
 import TechHub.ShopErp.repository.FilePathRepository;
 import TechHub.ShopErp.tables.PurchaseOrder;
@@ -27,39 +28,39 @@ public class PurchaseOrderController {
 
 	@Autowired
 	FileUploadHelper fileUploadHelper;
+	
+	@Autowired
+	PurchaseOrderManager purchaseOrderManager;
 
-	String path = "";
+
 
 	@PostMapping("/upload")
-	public String uploadFile(@RequestParam("file") MultipartFile file,@RequestParam("purchase_order_name") String purchaseOrderName,@RequestParam("purchase_from") String purchaseFrom,
-			@RequestParam("purchase_from_mobile_no") String purchaseFromMobileNo,@RequestParam("total_amount") int totalAmount) {
+	@ResponseBody
+	public String uploadFile(@RequestParam("file") MultipartFile file,@RequestParam("purchaseOrderId") Integer purchaseOrderId) {
 		try {
 			// String originalFilename = file.getOriginalFilename();
 			// ServletUriComponentsBuilder.fromCurrentContextPath()
 
 			boolean result = fileUploadHelper.uploadFile(file);
-			PurchaseOrder order = new PurchaseOrder();
+			PurchaseOrder order = purchaseOrderManager.findById(purchaseOrderId);
 			
+			String fileName = "";
 			if (result) {
-				path = Paths.get(fileUploadHelper.UPLOAD_DIR + "\\" + file.getOriginalFilename()).toString();
+				fileName=file.getOriginalFilename();
 			} else {
 				System.out.println("Fail");
 			}
-			order.setPurchaseOrderName(purchaseOrderName);
-			order.setPurchaseFrom(purchaseFrom);
-			order.setPurchaseFromMobileNo(purchaseFromMobileNo);
-			order.setPurchaseOrderTotalAmount(totalAmount);
-			order.setUploadedBillPath(path);
-			filePathRepository.save(order);
+
+			order.setUploadedBillPath(fileName);
+			purchaseOrderManager.save(order);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "redirect:/admin/purchaseOrder";
-		/*
-		 * JsonObject jobj = new JsonObject(); jobj.addProperty("msg",
-		 * "welcome sachin in software development business"); return new
-		 * Gson().toJson(jobj);
-		 */
+		 
+		
+		  JsonObject jobj = new JsonObject(); jobj.addProperty("msg","File Uploaded Successfully...sa!"); 
+		  return new Gson().toJson(jobj);
+		
 	}
 
 }
