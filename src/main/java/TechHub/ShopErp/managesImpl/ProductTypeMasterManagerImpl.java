@@ -36,4 +36,10 @@ public class ProductTypeMasterManagerImpl implements ProductTypeMasterManager {
 		return	productTypeMasterDao.getAllSubProductTypeMaster(producttypemasterid);
 	}
 
+	@Override
+	public List<Object[]> getAllProductMasterType() {
+		// TODO Auto-generated method stub
+		return productTypeMasterDao.getAllProductMasterType();
+	}
+
 }

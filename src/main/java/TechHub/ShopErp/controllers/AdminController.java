@@ -4,8 +4,10 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -453,6 +455,112 @@ public class AdminController {
 		 jobj.addProperty("msg", "welcome sachin in software development business");
 		 return new Gson().toJson(jobj);
 		}
+		
+		Map<Integer,Object[]> productIdWiseProductInfo=null;
+		Map<Integer,List<Integer>> parentProductTypeWiseDirectChild=null;
+		Integer colSpan=0;
+		
+		@GetMapping("/getAllProductMasterToAddProductToPurchaseOrder.json")
+		@ResponseBody
+		public String getAllProductMasterToAddProductToPurchaseOrder(HttpServletRequest req)
+		{
+			
+	
+		List<Object[]> allProductTypeMaster=	productTypeMasterManager.getAllProductMasterType();
+		
+		// to store only parent
+		Set<Integer> onlyParentProductTypeSet=new HashSet<Integer>();
+		parentProductTypeWiseDirectChild=new HashMap<Integer,List<Integer>>();
+		
+		for(Object[] objArr : allProductTypeMaster)
+		{
+			Integer productTypeMasterId=objArr[0]!=null?Integer.parseInt(objArr[0].toString()):0;
+			Integer productTypeMasterParentId=objArr[2]!=null?Integer.parseInt(objArr[2].toString()):0;
+
+			if(productTypeMasterParentId!=0)
+			{
+				parentProductTypeWiseDirectChild.put(productTypeMasterParentId, new ArrayList<Integer>());
+			}
+			
+			if(productTypeMasterParentId==0)
+			{
+				onlyParentProductTypeSet.add(productTypeMasterId);
+			}
+			
+		}
+		
+		
+		//code to store overAll info
+		 productIdWiseProductInfo=new HashMap<Integer,Object[]>();
+
+		for(Object[] objArr : allProductTypeMaster)
+		{
+			Integer productTypeMasterId=objArr[0]!=null?Integer.parseInt(objArr[0].toString()):0;
+			Integer productTypeMasterParentId=objArr[2]!=null?Integer.parseInt(objArr[2].toString()):0;
+
+			if(!productIdWiseProductInfo.containsKey(productTypeMasterId))
+				productIdWiseProductInfo.put(productTypeMasterId, objArr);
+			
+			if(parentProductTypeWiseDirectChild.containsKey(productTypeMasterParentId))
+			{
+				parentProductTypeWiseDirectChild.get(productTypeMasterParentId).add(productTypeMasterId);
+			}
+			
+		}
+		
+		JsonArray jArray=new JsonArray();
+		for(Integer baseTypeId : onlyParentProductTypeSet)
+		{
+			JsonObject jobj=getSubTypeJsonObject(baseTypeId);
+			jArray.add(jobj);
+			colSpan=0;
+		}
+		
+		
+	     
+		 return new Gson().toJson(jArray);
+		}
+		
+		
+		JsonObject getSubTypeJsonObject(Integer baseTypeId)
+		{
+		Object[] productInfo=	productIdWiseProductInfo.get(baseTypeId);
+		// parentProductTypeWiseDirectChild=
+			JsonObject productTypeJbj=new JsonObject();
+			
+			String productTypename=productInfo[1]!=null?productInfo[1].toString():"";
+			productTypeJbj.addProperty("productTypeName", productTypename);
+			productTypeJbj.addProperty("productTypeId", baseTypeId);
+			
+			if(parentProductTypeWiseDirectChild.containsKey(baseTypeId))
+			{
+			JsonArray subTypeArr=new JsonArray();
+			List<Integer> subTypeIds=	parentProductTypeWiseDirectChild.get(baseTypeId);
+			for(Integer subTypePId : subTypeIds)
+			{
+				JsonObject subTypeJobj=getSubTypeJsonObject(subTypePId);
+				subTypeArr.add(subTypeJobj);
+			}
+			productTypeJbj.add("subTypeArr", subTypeArr);
+			
+			// to take colspan
+			colSpan = colSpan + subTypeArr.size();
+			productTypeJbj.addProperty("colspan", colSpan);
+			
+			return productTypeJbj;
+			}
+			else
+			{
+				JsonArray subTypeArr=new JsonArray();
+				productTypeJbj.add("subTypeArr", subTypeArr);
+				productTypeJbj.addProperty("colspan", 0);
+				return productTypeJbj;
+			}
+			
+			
+			//return productTypeJbj;	
+		}
+		
 		
 		
 }

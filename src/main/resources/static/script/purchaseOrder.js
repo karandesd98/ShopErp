@@ -209,6 +209,9 @@ function addProductToPurchaseOrder(purchaseOrderId)
 	  
 	 var bakcButton=`<button type="button" class="btn btn-secondary btn-sm" id="backBtn" onclick="backOnPurchase()">Back</button>`;       
      $('#AddProductDiveBackButton').html(bakcButton); 
+     
+     getAllProductMasterToAddProductToPurchaseOrder();
+     
 }
 
 function backOnPurchase()
@@ -244,4 +247,26 @@ function uploadBill(buttonId,purchaseOrderId)
     });
     
     $(`#${buttonId}`).removeClass('dropzone');
+}
+
+function getAllProductMasterToAddProductToPurchaseOrder()
+{
+	var shopId=	$('#myShop option:selected').val();
+	
+	$.ajax({
+		url: 'getAllProductMasterToAddProductToPurchaseOrder.json',
+		type: 'GET',
+		data: {
+			shopId: shopId,
+		},
+		dataType: 'json',
+		success: function(data) {
+			
+			swal("Good job!", "Purchase Order Deleted Successfully...!", "success");
+		},
+		error: function(request, error) {
+			alert("Request 1: " + JSON.stringify(request));
+		}
+	});
+	
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import TechHub.ShopErp.dao.ProductTypeMasterDao;
 import TechHub.ShopErp.utilityAndSecurity.DataBaseConnectionUtility;
 import TechHub.ShopErp.utilityAndSecurity.HibernateUtility;
+import TechHub.ShopErp.utilityAndSecurity.MultipleResultQuery;
 
 @Service
 public class ProductTypeMasterDaoImple implements ProductTypeMasterDao {
@@ -116,6 +117,26 @@ public class ProductTypeMasterDaoImple implements ProductTypeMasterDao {
 		List<Object[]> results = query.list();
 
 		return results;
+	}
+
+	@Override
+	public List<Object[]> getAllProductMasterType() {
+
+		Map<Integer, List<Object[]>> mapObj = null;
+		try {
+			Connection con = DataBaseConnectionUtility.getDataSource().getConnection();
+			if (con != null) {
+				MultipleResultQuery mrq = new MultipleResultQuery(con, "CALL sp_getAppProductTypeMaster()");
+				mapObj = mrq.execute();
+			} else {
+				System.out.println("can not connect to database");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return mapObj.get(0);
+
 	}
 
 }

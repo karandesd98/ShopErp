@@ -8,4 +8,5 @@ public interface ProductTypeMasterManager {
     List<Object[]> getAllProductTypeMasterParent(Object...  objects);
 	void saveSubProductType(Object...  objects);
 	List<Object[]> getAllSubProductTypeMaster(Integer producttypemasterid);
+	List<Object[]> getAllProductMasterType();
 }
