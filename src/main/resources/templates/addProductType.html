@@ -8,11 +8,22 @@
     <!-- write your code here -->
      <script th:src="@{/script/addProductType.js}"></script>
      
+     <div class="container-fluid">
+	<table class="table table-responsive table-bordered border-primary" style="margin-top: 20px;">
+		<thead>
+		</thead>
+		<tbody>
+			<tr>
+				<th style="width: 30%;">Select Shop :</th>
+				<td>
+					<select style="width: 50%;" id="myShop" onchange="showAllProductTypeMasterNew()">
+						<option lue="option1">select</option>
+					</select>
+				</td>
+			</tr>
+		</tbody>
+	</table>
     
-    
-    <div>
-       <button type="button"  class="btn btn-dark btn-sm m-2" onclick="addProductTypeMasterModel()">Add Product Type Master</button>
-    </div>
     
     <div id="productTypeMasterTable"></div>
 
@@ -30,12 +41,21 @@
 			<form th:action="@{/doRegister}" method="post">
 			
 			<div class="mb-3">
-				<label for="name" class="form-label">Product Master Name</label>
+				<label for="name" class="form-label">Product Master Name :-</label>
 				<input name="Product_Master_Name"  type="text" class="form-control" id="ProductMasterName" aria-describedby="emailHelp" requierd>
 			</div>
 			
 			<div class="mb-3">
-				<label for="password" class="form-label">Enter Search Code</label>
+			<label for="soldType" class="form-label">Select Sold Type :-</label>
+				<select class="form-select" aria-label="Default select example" id="soldType">
+					<option selected value="PER_ITOM">Per Itom</option>
+					<option value="PER_KG">Per Kg</option>
+					<option value="PER_LITER">Per Liter</option>
+				</select>
+			</div>
+			
+			<div class="mb-3">
+				<label for="password" class="form-label">Enter Search Code :-</label>
 				<input name="uniqueNo"  type="number" class="form-control" id="uniqueNo" aria-describedby="emailHelp" requierd>
 			</div>
 			
@@ -85,7 +105,7 @@
   </div>
 </div>
     
-  
+  </div>
    </section>
   </body>
 </html>

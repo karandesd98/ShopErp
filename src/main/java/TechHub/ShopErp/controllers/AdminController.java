@@ -22,11 +22,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import TechHub.ShopErp.Managers.ProductTypeMasterManager;
+import TechHub.ShopErp.Managers.PurchaseOrderDetaiManager;
 import TechHub.ShopErp.Managers.PurchaseOrderManager;
 import TechHub.ShopErp.Managers.ShopManager;
 import TechHub.ShopErp.Managers.UserManager;
 import TechHub.ShopErp.model.User;
 import TechHub.ShopErp.tables.PurchaseOrder;
+import TechHub.ShopErp.tables.PurchaseOrderDetail;
 
 @Controller
 @RequestMapping("/admin")
@@ -43,6 +45,9 @@ public class AdminController {
 	
 	@Autowired 
 	public PurchaseOrderManager purchaseOrderManager;
+	
+	@Autowired 
+	PurchaseOrderDetaiManager purchaseOrderDetaiManager;
 	
 	
 	@GetMapping("/saveNewOwner.json")
@@ -218,8 +223,11 @@ public class AdminController {
 			
 		String ProductMasterName=req.getParameter("ProductMasterName")!=null?req.getParameter("ProductMasterName"):"";
 		String uniqueNo=req.getParameter("uniqueNo")!=null?(req.getParameter("uniqueNo")) :"";
+		String soldType=req.getParameter("soldType")!=null?(req.getParameter("soldType")) :"";
+		Integer shopId=req.getParameter("shopId")!=null? Integer.parseInt((req.getParameter("shopId"))):0;
 		
-		productTypeMasterManager.saveNewProductType(ProductMasterName,uniqueNo);
+		
+		productTypeMasterManager.saveNewProductType(ProductMasterName,uniqueNo,soldType,shopId);
 		
 		JsonObject jobj=new JsonObject();
 		 jobj.addProperty("msg", "welcome in software development business");
@@ -562,5 +570,94 @@ public class AdminController {
 		}
 		
 		
+		@GetMapping("/getAllProductTypeOfShop.json")
+		@ResponseBody
+		public String getAllProductTypeOfShop(HttpServletRequest req)
+		{
+			
+		Integer shopId=req.getParameter("shopId")!=null?Integer.parseInt(req.getParameter("shopId")):0;
 		
+		List<Object[]> productTypeParents=productTypeMasterManager.getAllProductofShop(shopId);
+		
+		JsonArray jMainArray=new JsonArray();
+		for( Object[] productTypeArr : productTypeParents)
+		{
+		   Integer productTypeMasterId=productTypeArr[0]!=null?Integer.parseInt(productTypeArr[0].toString()) :0;
+		   String productTypeMasterName=productTypeArr[6]!=null?(productTypeArr[6].toString()) :"";
+		   String unique_no=productTypeArr[8]!=null?(productTypeArr[8].toString()) :"";
+		   String soldType=productTypeArr[9]!=null?(productTypeArr[9].toString()) :"";
+
+			JsonObject jobj=new JsonObject();
+			jobj.addProperty("productTypeMasterId", productTypeMasterId);
+			jobj.addProperty("productTypeMasterName", productTypeMasterName);
+			jobj.addProperty("unique_no", unique_no);
+			jobj.addProperty("soldType", soldType);
+
+			jMainArray.add(jobj);
+		}
+		
+		 return new Gson().toJson(jMainArray);
+		}
+		
+		
+		@GetMapping("/savePurchaseOrderDeail.json")
+		@ResponseBody
+		public String savePurchaseOrderDeail(HttpServletRequest req)
+		{
+			
+			Integer producttypemasterid=req.getParameter("producttypemasterid")!=null?Integer.parseInt(req.getParameter("producttypemasterid")) :0;
+			Integer purchaseOrderId=req.getParameter("purchsaeOrderId")!=null? Integer.parseInt(req.getParameter("purchsaeOrderId")):0;
+			Integer shopId=req.getParameter("shopId")!=null? Integer.parseInt(req.getParameter("shopId")):0;
+			
+			Double 	totalItomCount=req.getParameter("totalItomCount")!=null? Double.parseDouble(req.getParameter("totalItomCount")) :0.0;
+			
+			Double perItomPurchasedPriceId=req.getParameter("perItomPurchasedPriceId")!=null?Double.parseDouble(req.getParameter("perItomPurchasedPriceId")):0.0;	
+			Double totalPrice=req.getParameter("totalPrice")!=null?Double.parseDouble(req.getParameter("totalPrice")):0.0;	
+			
+			Double soldPrice=req.getParameter("soldPrice")!=null? Double.parseDouble(req.getParameter("soldPrice")):0.0;
+			Double 	totalSoldPrice=req.getParameter("totalSoldPrice")!=null?Double.parseDouble(req.getParameter("totalSoldPrice")):0.0;
+			
+			Double 	NegotiableSoldPrice=req.getParameter("NegotiableSoldPrice")!=null?Double.parseDouble(req.getParameter("NegotiableSoldPrice")):0.0;
+			Double 	totalNigotiablePrice=req.getParameter("totalNigotiablePrice")!=null?Double.parseDouble(req.getParameter("totalNigotiablePrice")):0.0;
+
+			// PurchaseOrderDetail purchaseOrderDetail=purchaseOrderDetaiManager.findById(0);
+	
+			 StringBuilder productTypeMaseterDetailStr=new StringBuilder();
+			 productTypeMaseterDetailStr.append("<productMaters>");
+			   productTypeMaseterDetailStr.append("<productMater>");
+			      productTypeMaseterDetailStr.append("<producttypemasterid>"+ producttypemasterid +"</producttypemasterid>");
+			      productTypeMaseterDetailStr.append("<purchaseOrderId>"+ purchaseOrderId +"</purchaseOrderId>");
+			      productTypeMaseterDetailStr.append("<shopId>"+ shopId +"</shopId>");
+			     
+			      productTypeMaseterDetailStr.append("<totalItomCount>"+ totalItomCount +"</totalItomCount>");
+			      
+			      productTypeMaseterDetailStr.append("<perItomPurchasedPrice>"+ perItomPurchasedPriceId +"</perItomPurchasedPrice>");
+			      productTypeMaseterDetailStr.append("<totalPrice>"+ totalPrice +"</totalPrice>");
+			      
+			      productTypeMaseterDetailStr.append("<soldPrice>"+ soldPrice +"</soldPrice>");
+			      productTypeMaseterDetailStr.append("<totalSoldPrice>"+ totalSoldPrice +"</totalSoldPrice>");
+			     
+			      productTypeMaseterDetailStr.append("<NegotiableSoldPrice>"+ NegotiableSoldPrice +"</NegotiableSoldPrice>");
+			      productTypeMaseterDetailStr.append("<totalNigotiablePrice>"+ totalNigotiablePrice +"</totalNigotiablePrice>");
+			   
+			      productTypeMaseterDetailStr.append("</productMater>");
+			 productTypeMaseterDetailStr.append("</productMaters>");
+
+			System.out.println(productTypeMaseterDetailStr);
+			 
+			
+			List<Object[]> msg = purchaseOrderDetaiManager.savePurchaseOrderDetail(productTypeMaseterDetailStr);
+
+			String respo = "";
+			if (msg.size() > 0)
+				respo = "purchase order saved successfully...!";
+			else
+				respo = "purchase order not saved successfully...!";
+
+			JsonObject jobj = new JsonObject();
+			jobj.addProperty("msg", respo);
+			return new Gson().toJson(jobj);
+		}
+		
+			
 }

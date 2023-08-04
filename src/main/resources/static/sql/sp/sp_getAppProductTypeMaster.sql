@@ -13,4 +13,4 @@ from product_type_master ptm;
 
 END;
 
-call sp_getAppProductTypeMaster();
+-- call sp_getAppProductTypeMaster();

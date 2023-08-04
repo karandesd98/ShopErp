@@ -9,5 +9,6 @@ public interface ProductTypeMasterDao {
 	void saveSubProductType(Object... objects);
 	List<Object[]> getAllSubProductTypeMaster(Integer producttypemasterid);
 	List<Object[]> getAllProductMasterType();
+	List<Object[]> getAllProductofShop(Integer shopId);
 	
 }

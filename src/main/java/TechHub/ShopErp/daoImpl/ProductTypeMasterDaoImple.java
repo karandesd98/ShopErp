@@ -22,18 +22,23 @@ public class ProductTypeMasterDaoImple implements ProductTypeMasterDao {
 
 		String productTypeMasterName=userInfo[0]!=null?userInfo[0].toString():"";
 		String uniqueNo=userInfo[1]!=null?(userInfo[1].toString()) :"";
+		String soldType=userInfo[2]!=null?(userInfo[2].toString()) :"";
+		Integer shopId=userInfo[3]!=null?Integer.parseInt(userInfo[3].toString()) :0;
+		
 		
 		try {
 		Connection con=	DataBaseConnectionUtility.getDataSource().getConnection();
 		if(con!=null)
 		{
-			String query = " insert into product_type_master (PRODUCT_TYPE_MASTER_NAME,UNIQUE_NO)"
-			        + " values (?, ?)";
+			String query = " insert into product_type_master (PRODUCT_TYPE_MASTER_NAME,UNIQUE_NO,SOLD_TYPE,shop_id)"
+			        + " values (?, ?, ?, ?)";
 			
 			// create the mysql insert prepared statement
 		      PreparedStatement preparedStmt = con.prepareStatement(query);
 		      preparedStmt.setString (1, productTypeMasterName);
 		      preparedStmt.setString(2, uniqueNo);
+		      preparedStmt.setString(3, soldType);
+		      preparedStmt.setInt(4, shopId);
 		 
 		   // execute the prepared statement
 		      preparedStmt.execute();
@@ -137,6 +142,18 @@ public class ProductTypeMasterDaoImple implements ProductTypeMasterDao {
 
 		return mapObj.get(0);
 
+	}
+
+	@Override
+	public List<Object[]> getAllProductofShop(Integer shopId) {
+	
+		Session session = HibernateUtility.getSessionFactory().openSession();
+		String sqlQuery = "select * from product_type_master where shop_id= :shopId";
+		Query query = session.createSQLQuery(sqlQuery);
+		query.setParameter("shopId", shopId);
+		List<Object[]> results = query.list();
+
+		return results;
 	}
 
 }

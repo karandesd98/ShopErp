@@ -55,6 +55,10 @@ public class PurchaseOrderDetail {
 	 @JoinColumn(name = "PURCHASE_ORDER_ID")
 	 private PurchaseOrder purchaseOrderObj;
 	 
+	 @ManyToOne
+	 @JoinColumn(name = "SHOP_ID")
+	 private Shop shopObj;
+	 
 	 
 	 
 	 

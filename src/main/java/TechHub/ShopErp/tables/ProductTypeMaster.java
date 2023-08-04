@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -29,6 +31,9 @@ public class ProductTypeMaster {
 	@Column(name="UNIQUE_NO")
     private String  unique_no;
 	
+	@Column(name="SOLD_TYPE")
+    private String  soldType;
+	
 	@Column(name="PRODUCT_TYPE_MASTER_PARENT_ID")
     private int  productTypeMasterParentId;
 	
@@ -48,6 +53,11 @@ public class ProductTypeMaster {
 
 	@Column(name = "IS_DELETED", nullable = false, columnDefinition = "boolean default false") //columnDefinition = "TINYINT(1)"
 	private boolean isDeleted;
+	
+	// many to one relationsheep
+	@ManyToOne
+	@JoinColumn(name = "SHOP_ID")
+	private Shop shopObj;
 	
 	/*
 	// one to many relationSheep
@@ -134,6 +144,26 @@ public class ProductTypeMaster {
 
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public String getSoldType() {
+		return soldType;
+	}
+
+	public void setSoldType(String soldType) {
+		this.soldType = soldType;
+	}
+
+	public Shop getShopObj() {
+		return shopObj;
+	}
+
+	public void setShopObj(Shop shopObj) {
+		this.shopObj = shopObj;
+	}
+
+	public void setProductTypeMasterId(Integer productTypeMasterId) {
+		this.productTypeMasterId = productTypeMasterId;
 	}
 
 }

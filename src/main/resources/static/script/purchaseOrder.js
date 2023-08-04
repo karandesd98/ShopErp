@@ -201,9 +201,12 @@ function addProductToPurchaseOrder(purchaseOrderId)
 {
 	$('#AddProductTab').removeClass("hiddenClass");
 	$('#AddProductTab').tab('show');
+	var shopId=	$('#myShop option:selected').val();
 	
 	var boiler=`
 	        <input type="hidden" id="hdpurchaseOrderId" value="${purchaseOrderId}"/>
+	        <input type="hidden" id="hdshopId" value="${shopId}"/>
+	        
 	         `;   
 	  $('#hiddenDiv').html(boiler); 
 	  
@@ -254,7 +257,7 @@ function getAllProductMasterToAddProductToPurchaseOrder()
 	var shopId=	$('#myShop option:selected').val();
 	
 	$.ajax({
-		url: 'getAllProductMasterToAddProductToPurchaseOrder.json',
+		url: 'getAllProductTypeOfShop.json',
 		type: 'GET',
 		data: {
 			shopId: shopId,
@@ -262,11 +265,177 @@ function getAllProductMasterToAddProductToPurchaseOrder()
 		dataType: 'json',
 		success: function(data) {
 			
-			swal("Good job!", "Purchase Order Deleted Successfully...!", "success");
+		var boiler =`
+ <table class="table table-responsive table-bordered border-primary" id="productTypeMaster">
+  <thead>
+    <tr>
+      <th scope="col">Sr. No</th>
+      <th scope="col">Product Name</th>
+      <th scope="col">Search Key</th>
+      <th scope="col">Sold Type</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead><tbody>`;
+  
+  data.forEach(function(ownerobj,index){
+	  const{productTypeMasterId='',productTypeMasterName='',unique_no='',soldType=''}=ownerobj;
+	  boiler +=`<tr productTypeMasterId="${productTypeMasterId}">
+	             <td scope="row">${++index}</td>
+	             <td scope="row">${productTypeMasterName}</td>
+	             <td scope="row">${unique_no}</td>
+	             <td scope="row">${soldType}</td>
+	             <td scope="row"><button type="button" productTypeMasterName="${productTypeMasterName}"  class="btn btn-info" onclick="addProductAddModel(this)">Add</button></td>
+	             </tr>`;
+	  
+  });
+  
+   boiler +=` </tbody>
+              </table>`;
+              
+         $('#AddProductDive').html(boiler);  
+		 var table=	$('#productTypeMaster').DataTable();    
+			
+       
 		},
 		error: function(request, error) {
 			alert("Request 1: " + JSON.stringify(request));
 		}
 	});
 	
+}
+
+
+function addProductAddModel(src)
+{
+	var productTypeMasterName = $(src).attr('productTypeMasterName');
+	var parentTR = $(src).closest("tr");
+    var producttypemasterid=$(parentTR).attr('producttypemasterid');
+	
+	
+	$('#addProductModel').modal('show');
+
+	var boiler=`
+	<form  method="post"> 
+			
+			<table class="table">
+               <thead>
+               </thead>
+              <tbody>
+				    <tr>
+				      <th scope="row" style="text-align: left;">Total Itom :-</th>
+				      <td colspan="3"><input type="number" class="form-control" id="totalItomCountId" style="width: 35%;"></td>
+				    </tr>
+				    
+				     <tr>
+				      <th scope="row" style="text-align: left;">Per Itom Price :-</th>
+				      <td ><input type="number" onblur="getTotalPurchasePrice()" class="form-control" id="perItomPriceId" style="width:  75%;"></td>
+				     
+				       <th scope="row" style="text-align: left;width: 26%;">Total Price :-</th>
+				      <td ><input type="number" class="form-control" id="totalPriceId" style="width:  75%;"></td>
+				    </tr>
+				    
+				     <tr>
+				      <th scope="row" style="text-align: left;">Sold Price :-</th>
+				      <td ><input type="number" onblur="getTotalSoldPrice()" class="form-control" id="soldPriceId" style="width:  75%;"></td>
+				     
+				       <th scope="row" style="text-align: left;width: 26%;">Total Sold Price :-</th>
+				      <td ><input type="number" class="form-control" id="totalSoldPriceId" style="width:  75%;"></td>
+				    </tr>
+				    
+				     <tr>
+				      <th scope="row" style="text-align: left;width: 21%;">Negotiable Price :-</th>
+				      <td ><input type="number" onblur="getTotalNegotiableSoldPrice()" class="form-control" id="NegotiableSoldPriceId" style="width:  75%;"></td>
+				     
+				       <th scope="row" style="text-align: left;width: 26%;">Total Negotiable Price :-</th>
+				      <td ><input type="number" class="form-control" id="totalNigotiablePrice" style="width:  75%;"></td>
+				    </tr>
+					 
+				  </tbody>
+				</table>
+		
+			</form> 
+	`;
+	
+	var footerButton=`
+	  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		<button type="button" class="btn btn-primary" onclick="saveProductMasterDetail(${producttypemasterid})">Save</button>
+	`;
+	
+	$('#addProductLabel').html(`<h4>${productTypeMasterName}</h4>`);
+	$('#addProductBody').html(boiler);
+	$('#addProductFooter').html(footerButton);
+	
+}
+
+function getTotalPurchasePrice()
+{
+var totalItomCount=	$('#totalItomCountId').val();
+var perItomPrice =	$('#perItomPriceId').val();
+var totaoPurchasePrice=totalItomCount * perItomPrice;
+$('#totalPriceId').val(totaoPurchasePrice);
+}
+
+function getTotalSoldPrice()
+{
+	var totalItomCount = $('#totalItomCountId').val();
+	var perItomSoldPrice = $('#soldPriceId').val();
+	
+	var totalSoldPrice = totalItomCount * perItomSoldPrice;
+	$('#totalSoldPriceId').val(totalSoldPrice);
+}
+
+
+function getTotalNegotiableSoldPrice()
+{
+	var totalItomCount = $('#totalItomCountId').val();
+	var NegotiableSoldPrice = $('#NegotiableSoldPriceId').val();
+
+	var totalNigotiablePrice = totalItomCount * NegotiableSoldPrice;
+	$('#totalNigotiablePrice').val(totalNigotiablePrice);
+}
+
+
+function saveProductMasterDetail(producttypemasterid)
+{
+var purchaseOrderId=$('#hdpurchaseOrderId').val();
+var shopId=$('#hdshopId').val();
+var totalItomCount=$('#totalItomCountId').val();
+
+ var perItomPurchasedPriceId=$('#perItomPriceId').val();
+var totalPrice=$('#totalPriceId').val();
+
+var soldPrice=$('#soldPriceId').val();
+var totalSoldPrice=$('#totalSoldPriceId').val();
+
+var NegotiableSoldPrice=$('#NegotiableSoldPriceId').val();
+var totalNigotiablePrice=$('#totalNigotiablePrice').val();
+
+
+$.ajax({
+		url:'savePurchaseOrderDeail.json',
+		type: 'GET',
+		data: {
+			producttypemasterid: producttypemasterid,
+			purchsaeOrderId:purchaseOrderId,
+			shopId: shopId,
+			totalItomCount: totalItomCount,
+			
+			perItomPurchasedPriceId :perItomPurchasedPriceId,
+			totalPrice: totalPrice,
+			
+			soldPrice: soldPrice,
+			totalSoldPrice:totalSoldPrice,
+			
+			NegotiableSoldPrice: NegotiableSoldPrice,
+			totalNigotiablePrice: totalNigotiablePrice
+		},
+		dataType: 'json',
+		success: function(data) {
+			swal("Good job!", "Purchase Order Detail Saved Successfully...!", "success");	
+		},
+		error: function(request, error) {
+			 alert("Request 1: " + JSON.stringify(request));
+		}
+});
+
 }

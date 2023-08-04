@@ -8,6 +8,10 @@
     <!-- write your code here -->
     <script th:src="@{/script/purchaseOrder.js}"></script>
     <style>
+    .custom-modal-width {
+    max-width: 800px; /* Set your desired width here */
+  }
+    
     .nav-tabs .nav-link {
       background-color: rgb(192, 192, 192);
     }
@@ -175,6 +179,27 @@
     </div>
   </div>
 </div>
+
+<!-- Modal for addProduct -->
+<div class="modal fade" id="addProductModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog custom-modal-width">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addProductLabel">Add Product</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <div class="modal-body">
+        <div id="addProductBody"></div>
+      </div>
+      <div class="modal-footer" id="addProductFooter">
+      
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 
 
