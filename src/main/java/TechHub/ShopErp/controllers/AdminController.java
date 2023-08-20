@@ -1,6 +1,7 @@
 package TechHub.ShopErp.controllers;
 
 import java.security.Principal;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,11 +26,14 @@ import com.google.gson.JsonObject;
 import TechHub.ShopErp.Managers.ProductTypeMasterManager;
 import TechHub.ShopErp.Managers.PurchaseOrderDetaiManager;
 import TechHub.ShopErp.Managers.PurchaseOrderManager;
+import TechHub.ShopErp.Managers.ShopCustomerManager;
 import TechHub.ShopErp.Managers.ShopManager;
 import TechHub.ShopErp.Managers.UserManager;
 import TechHub.ShopErp.model.User;
 import TechHub.ShopErp.tables.PurchaseOrder;
 import TechHub.ShopErp.tables.PurchaseOrderDetail;
+import TechHub.ShopErp.tables.Shop;
+import TechHub.ShopErp.tables.ShopCustomer;
 
 @Controller
 @RequestMapping("/admin")
@@ -49,6 +54,11 @@ public class AdminController {
 	@Autowired 
 	PurchaseOrderDetaiManager purchaseOrderDetaiManager;
 	
+	@Autowired 
+	ShopCustomerManager shopCustomerManager;
+	
+	@Autowired
+	private BCryptPasswordEncoder passWordEncoder;
 	
 	@GetMapping("/saveNewOwner.json")
 	@ResponseBody
@@ -619,6 +629,9 @@ public class AdminController {
 			
 			Double 	NegotiableSoldPrice=req.getParameter("NegotiableSoldPrice")!=null?Double.parseDouble(req.getParameter("NegotiableSoldPrice")):0.0;
 			Double 	totalNigotiablePrice=req.getParameter("totalNigotiablePrice")!=null?Double.parseDouble(req.getParameter("totalNigotiablePrice")):0.0;
+			
+			String 	productTypeMasterName=req.getParameter("productTypeMasterName")!=null?(req.getParameter("productTypeMasterName")):"";
+			String 	soldType=req.getParameter("soldType")!=null?(req.getParameter("soldType")):"";
 
 			// PurchaseOrderDetail purchaseOrderDetail=purchaseOrderDetaiManager.findById(0);
 	
@@ -640,6 +653,9 @@ public class AdminController {
 			      productTypeMaseterDetailStr.append("<NegotiableSoldPrice>"+ NegotiableSoldPrice +"</NegotiableSoldPrice>");
 			      productTypeMaseterDetailStr.append("<totalNigotiablePrice>"+ totalNigotiablePrice +"</totalNigotiablePrice>");
 			   
+			      productTypeMaseterDetailStr.append("<productTypeMasterName>"+ productTypeMasterName +"</productTypeMasterName>");
+			      productTypeMaseterDetailStr.append("<soldType>"+ soldType +"</soldType>");
+			      
 			      productTypeMaseterDetailStr.append("</productMater>");
 			 productTypeMaseterDetailStr.append("</productMaters>");
 
@@ -657,6 +673,108 @@ public class AdminController {
 			JsonObject jobj = new JsonObject();
 			jobj.addProperty("msg", respo);
 			return new Gson().toJson(jobj);
+		}
+		
+		
+		
+		@GetMapping("/getAllProductOfPurchaseOrder.json")
+		@ResponseBody
+		public String getAllProductOfPurchaseOrder(HttpServletRequest req)
+		{
+			
+		Integer shopId=req.getParameter("shopId")!=null?Integer.parseInt(req.getParameter("shopId")):0;
+		Integer purchaseOrderId=req.getParameter("purchaseOrderId")!=null?Integer.parseInt(req.getParameter("purchaseOrderId")):0;
+
+		
+		List<Object[]> purchaseOrderDetailList=purchaseOrderDetaiManager.getPurchaseOrderDetail(purchaseOrderId,shopId);
+		
+		JsonArray jMainArray=new JsonArray();
+		for( Object[] purchaseOrderDArr : purchaseOrderDetailList)
+		{
+		   Integer purchaseOrderDetailId=purchaseOrderDArr[0]!=null?Integer.parseInt(purchaseOrderDArr[0].toString()) :0;
+		   String productName=purchaseOrderDArr[5]!=null?(purchaseOrderDArr[5].toString()) :"";
+		   String soldType=purchaseOrderDArr[6]!=null?(purchaseOrderDArr[6].toString()) :"";
+
+		   
+		   Double itomQuantity=purchaseOrderDArr[1]!=null?Double.parseDouble(purchaseOrderDArr[1].toString()) :0.0;
+		
+		   Double perItomPurchasedPrice=purchaseOrderDArr[3]!=null?Double.parseDouble(purchaseOrderDArr[3].toString()) :0.0;
+		   Double perItomSoldPrice=purchaseOrderDArr[4]!=null?Double.parseDouble(purchaseOrderDArr[4].toString()) :0.0;
+		   Double perItomNegotiablePrice=purchaseOrderDArr[2]!=null?Double.parseDouble(purchaseOrderDArr[2].toString()) :0.0;
+
+		   Double totalItomPurchasedPrice=purchaseOrderDArr[7]!=null?Double.parseDouble(purchaseOrderDArr[7].toString()) :0.0;
+		   Double totalSoldPrice=purchaseOrderDArr[9]!=null?Double.parseDouble(purchaseOrderDArr[9].toString()) :0.0;
+		   Double total_negotiable_price=purchaseOrderDArr[8]!=null?Double.parseDouble(purchaseOrderDArr[8].toString()) :0.0;
+		 
+		   
+			JsonObject jobj=new JsonObject();
+			jobj.addProperty("purchaseOrderDetailId", purchaseOrderDetailId);
+			jobj.addProperty("productName", productName);
+			jobj.addProperty("soldType", soldType);
+			jobj.addProperty("itomQuantity", itomQuantity);
+			
+			jobj.addProperty("perItomPurchasedPrice", perItomPurchasedPrice);
+			jobj.addProperty("perItomSoldPrice", perItomSoldPrice);
+			jobj.addProperty("perItomNegotiablePrice", perItomNegotiablePrice);
+			
+			jobj.addProperty("totalItomPurchasedPrice", totalItomPurchasedPrice);
+			jobj.addProperty("totalSoldPrice", totalSoldPrice);
+			jobj.addProperty("total_negotiable_price", total_negotiable_price);
+
+			jMainArray.add(jobj);
+		}
+		
+		 return new Gson().toJson(jMainArray);
+		}
+		
+		@GetMapping("/saveNewCustomer.json")
+		@ResponseBody
+		public String saveNewCustomer(HttpServletRequest req)
+		{
+			
+		String name=req.getParameter("name")!=null?req.getParameter("name"):"";
+		String mobileNo=req.getParameter("mobileNo")!=null?req.getParameter("mobileNo"):"";
+		String email=req.getParameter("email")!=null?req.getParameter("email"):"";
+		String password=req.getParameter("password")!=null?req.getParameter("password"):"";
+		String 	address=req.getParameter("address")!=null?req.getParameter("address"):"";
+		Integer shopId=req.getParameter("shopId")!=null?Integer.parseInt(req.getParameter("shopId")):0;
+		
+		password=passWordEncoder.encode(password);
+		
+		TechHub.ShopErp.tables.User u=new TechHub.ShopErp.tables.User();
+		u.setUserName(name);
+		u.setEmail(email);
+		u.setPassword(password);
+		u.setRole("CUSTOMER");
+		u.setIsEnabled(true);
+		u=userManager.save(u); 
+	
+		ShopCustomer shopCustomer=new ShopCustomer();
+		shopCustomer.setCustomerName(name);
+		shopCustomer.setMobileNo(mobileNo);
+		shopCustomer.setEmail(email);
+		shopCustomer.setAddress(address);
+		
+		Shop s = shopManager.getShopById(shopId);
+		if (s.getShop_id() == null)
+			shopCustomer.setShopObj(null);
+		else
+			shopCustomer.setShopObj(s);
+
+		if (u.getUserId() == null)
+			shopCustomer.setUserObj(null);
+		else
+			shopCustomer.setUserObj(u);
+		 
+		 
+		 ShopCustomer sc=  shopCustomerManager.save(shopCustomer);
+		 
+		// userManager.saveNewOwner(name,password,email,about);
+		
+		System.out.println(name);
+		JsonObject jobj=new JsonObject();
+		 jobj.addProperty("msg", "welcome sachin in software development business");
+		 return new Gson().toJson(jobj);
 		}
 		
 			

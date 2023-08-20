@@ -17,6 +17,8 @@ DECLARE xpath7 TEXT;
 DECLARE xpath8 TEXT;
 DECLARE xpath9 TEXT;
 DECLARE xpath10 TEXT;
+DECLARE xpath11 TEXT;
+DECLARE xpath12 TEXT;
 
 DROP TEMPORARY TABLE IF EXISTS tempPurchaseOrderDetail;
 CREATE TEMPORARY TABLE tempPurchaseOrderDetail(product_type_master_id int,  purchase_order_id int, shop_id int ,
@@ -43,6 +45,9 @@ SET xpath8 := concat('/productMaters/productMater/totalSoldPrice[', k, ']');
 SET xpath9 := concat('/productMaters/productMater/NegotiableSoldPrice[', k, ']');
 SET xpath10 := concat('/productMaters/productMater/totalNigotiablePrice[', k, ']');
 
+SET xpath11 := concat('/productMaters/productMater/productTypeMasterName[', k, ']');
+SET xpath12 := concat('/productMaters/productMater/soldType[', k, ']');
+
 INSERT INTO  tempPurchaseOrderDetail(product_type_master_id ,  purchase_order_id , shop_id  ,
  itom_quantity  , per_itom_purchased_price , total_itom_purchased_price , per_itom_sold_price , total_sold_price , per_itom_negotiable_price , total_negotiable_price ,        
  product_name , sold_type ) VALUES (
@@ -60,7 +65,9 @@ INSERT INTO  tempPurchaseOrderDetail(product_type_master_id ,  purchase_order_id
             
             ExtractValue(productTypeMasterData, xpath9),
 			ExtractValue(productTypeMasterData, xpath10),
-            'abc','pqe'
+            
+            ExtractValue(productTypeMasterData, xpath11),
+            ExtractValue(productTypeMasterData, xpath12)
 	);
     
 END WHILE;
@@ -86,4 +93,4 @@ sold_type
 
 END;
 
- --     call sp_saveProductTypeMasterDetail('<productMaters><productMater><producttypemasterid>11</producttypemasterid><purchaseOrderId>1</purchaseOrderId><shopId>1</shopId><totalItomCount>50.0</totalItomCount><perItomPurchasedPrice>500.0</perItomPurchasedPrice><totalPrice>25000.0</totalPrice><soldPrice>600.0</soldPrice><totalSoldPrice>30000.0</totalSoldPrice><NegotiableSoldPrice>550.0</NegotiableSoldPrice><totalNigotiablePrice>27500.0</totalNigotiablePrice></productMater></productMaters>');
+ --     call sp_saveProductTypeMasterDetail('<productMaters><productMater><producttypemasterid>11</producttypemasterid><purchaseOrderId>1</purchaseOrderId><shopId>1</shopId><totalItomCount>50.0</totalItomCount><perItomPurchasedPrice>500.0</perItomPurchasedPrice><totalPrice>25000.0</totalPrice><soldPrice>550.0</soldPrice><totalSoldPrice>27500.0</totalSoldPrice><NegotiableSoldPrice>525.0</NegotiableSoldPrice><totalNigotiablePrice>26250.0</totalNigotiablePrice><productTypeMasterName>khat 26-26(10kg)</productTypeMasterName><soldType>PER_ITOM</soldType></productMater></productMaters>');

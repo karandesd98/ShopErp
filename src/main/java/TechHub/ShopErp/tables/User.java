@@ -14,7 +14,7 @@ public class User {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="USER_ID")
-    private int userId;
+    private Integer userId;
 
     @Column(name = "USER_NAME")
     private String userName;
@@ -37,13 +37,7 @@ public class User {
     @Column(name = "ABOUT")
     private String about;
 
-	public int getUserId() {
-		return userId;
-	}
-
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
+	
 
 	public String getUserName() {
 		return userName;
@@ -99,6 +93,18 @@ public class User {
 
 	public void setAbout(String about) {
 		this.about = about;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
 	}
     
    

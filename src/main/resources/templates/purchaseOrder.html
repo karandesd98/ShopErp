@@ -7,6 +7,13 @@
    <section class="content">
     <!-- write your code here -->
     <script th:src="@{/script/purchaseOrder.js}"></script>
+    <script> 
+   function hideShow(){
+		$('#AddProductTab').addClass('hiddenClass'); 
+		$('#ViewProductTab').addClass('hiddenClass');       
+		 getAllpurchase();
+	}
+    </script>
     <style>
     .custom-modal-width {
     max-width: 800px; /* Set your desired width here */
@@ -73,11 +80,15 @@
 	<nav>
 		<div class="nav nav-tabs" id="nav-tab" role="tablist" style="background-color:rgb(192, 192, 192);">
 			<button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button"
-				role="tab" aria-controls="nav-home" aria-selected="true" onclick="$('#AddProductTab').addClass('hiddenClass');getAllpurchase();">Current</button>
+				role="tab" aria-controls="nav-home" aria-selected="true" onclick="hideShow()">Current</button>
 			<button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button"
 				role="tab" aria-controls="nav-profile" aria-selected="false">History</button>
+			
 			<button class="nav-link hiddenClass" id="AddProductTab" data-bs-toggle="tab" data-bs-target="#AddProduct-contact" type="button"
 				role="tab" aria-controls="nav-contact" aria-selected="false">Add Product</button>
+				
+	        <button class="nav-link hiddenClass" id="ViewProductTab" data-bs-toggle="tab" data-bs-target="#ViewProduct-content" type="button"
+				role="tab" aria-controls="nav-contact" aria-selected="false">View Product</button>
 		</div>
 	</nav>
 	
@@ -91,6 +102,12 @@
 	<div id="AddProductDiveBackButton" style="margin: 10px;"> </div>
 	<div id="AddProductDiveInfo"> </div>
 	<div id="AddProductDive"> </div>
+	</div>
+	
+	<div class="tab-pane fade" id="ViewProduct-content" role="tabpanel" aria-labelledby="nav-contact-tab">
+	<div id="ViewProductDiveBackButton" style="margin: 10px;"> </div>
+	<div id="ViewProductDiveInfo"> </div>
+	<div id="ViewProductDive"> </div>
 	</div>
 </div>
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import TechHub.ShopErp.Managers.UserManager;
 import TechHub.ShopErp.dao.userDao;
 import TechHub.ShopErp.model.User;
+import TechHub.ShopErp.repository.UserRepository;
 
 
 
@@ -17,6 +18,9 @@ public class UserManagerImpl implements UserManager {
 
 	@Autowired
 	public userDao userDaoObj;
+	
+	@Autowired
+	UserRepository userRepository;
 	
 	@Override
 	public void saveUser(Object... userInfo) {
@@ -46,6 +50,11 @@ public class UserManagerImpl implements UserManager {
 	public List<Object[]> getAllOwnersToMapShop(Integer shopid) {
 		// TODO Auto-generated method stub
 		return userDaoObj.getAllOwnersToMapShop(shopid);
+	}
+
+	@Override
+	public TechHub.ShopErp.tables.User save(TechHub.ShopErp.tables.User u) {
+		return userRepository.save(u);
 	}
 
 }

@@ -16,7 +16,7 @@ public class OwnerShopDetail {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="OWNER_SHOP_DETAIL_ID")
-    private int  ownerShopDetailId;
+    private Integer  ownerShopDetailId;
 	
 	 @ManyToOne
 	 @JoinColumn(name = "USER_ID")
@@ -33,13 +33,7 @@ public class OwnerShopDetail {
 	 private boolean isDeleted;
 	 
 
-	public int getOwnerShopDetailId() {
-		return ownerShopDetailId;
-	}
 
-	public void setOwnerShopDetailId(int ownerShopDetailId) {
-		this.ownerShopDetailId = ownerShopDetailId;
-	}
 
 	public User getUser() {
 		return user;
@@ -71,6 +65,14 @@ public class OwnerShopDetail {
 
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+
+	public Integer getOwnerShopDetailId() {
+		return ownerShopDetailId;
+	}
+
+	public void setOwnerShopDetailId(Integer ownerShopDetailId) {
+		this.ownerShopDetailId = ownerShopDetailId;
 	}
 
 }

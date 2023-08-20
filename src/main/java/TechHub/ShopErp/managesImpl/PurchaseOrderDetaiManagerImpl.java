@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.StoredProcedureQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,22 @@ public class PurchaseOrderDetaiManagerImpl implements PurchaseOrderDetaiManager 
 	        return results;
 	    }
 
+	@Override
+	public List<Object[]> getPurchaseOrderDetail(Integer purchaseOrderId, Integer shopId) {
+		
+	    String nativeQuery="select * from purchase_order_detail pod where pod.purchase_order_id= ? and pod.shop_id= ?";
+        Query query = entityManager.createNativeQuery(nativeQuery);
+        query.setParameter(1, purchaseOrderId);
+        query.setParameter(2, shopId);
+
+        @SuppressWarnings("unchecked")
+        List<Object[]> resultList = query.getResultList();
+        return resultList;
+        
+        }
+	 
+	 
+	
 
 
 }

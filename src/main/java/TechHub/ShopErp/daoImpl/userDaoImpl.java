@@ -50,7 +50,7 @@ public class userDaoImpl implements userDao {
 		      preparedStmt.setString   (3, password);
 		      preparedStmt.setString(4, "CUSTOMER");
 		      preparedStmt.setString(5, about);
-		      preparedStmt.setBoolean(6, false);
+		      preparedStmt.setBoolean(6, true);
 
 		      
 		 

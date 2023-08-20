@@ -97,7 +97,8 @@ return false;
                          <li><button class="dropdown-item" type="button">Edit</button></li>
                          <li><button class="dropdown-item" type="button" onclick="deletePurchaseOrder(${purchaseOrderId})">Delete</button></li>
                          <li><button class="dropdown-item" type="button" onclick="addProductToPurchaseOrder(${purchaseOrderId})">Add Product</button></li>
-                       </ul>
+                         <li><button class="dropdown-item" type="button" onclick="viewProductToPurchaseOrder(${purchaseOrderId})">View Product</button></li>
+                  </ul>
                  </div>
 	             </td>
 	             </tr>`;
@@ -220,6 +221,7 @@ function addProductToPurchaseOrder(purchaseOrderId)
 function backOnPurchase()
 {
 	$('#AddProductTab').addClass("hiddenClass");
+	$('#ViewProductTab').addClass("hiddenClass");
 	$('#nav-home-tab').tab('show');
 }
 
@@ -279,7 +281,7 @@ function getAllProductMasterToAddProductToPurchaseOrder()
   
   data.forEach(function(ownerobj,index){
 	  const{productTypeMasterId='',productTypeMasterName='',unique_no='',soldType=''}=ownerobj;
-	  boiler +=`<tr productTypeMasterId="${productTypeMasterId}">
+	  boiler +=`<tr productTypeMasterId="${productTypeMasterId}"  soldType="${soldType}">
 	             <td scope="row">${++index}</td>
 	             <td scope="row">${productTypeMasterName}</td>
 	             <td scope="row">${unique_no}</td>
@@ -310,7 +312,9 @@ function addProductAddModel(src)
 	var productTypeMasterName = $(src).attr('productTypeMasterName');
 	var parentTR = $(src).closest("tr");
     var producttypemasterid=$(parentTR).attr('producttypemasterid');
-	
+    var soldType=$(parentTR).attr('soldType');
+    
+   
 	
 	$('#addProductModel').modal('show');
 
@@ -357,8 +361,8 @@ function addProductAddModel(src)
 	`;
 	
 	var footerButton=`
-	  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-		<button type="button" class="btn btn-primary" onclick="saveProductMasterDetail(${producttypemasterid})">Save</button>
+	    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		<button type="button" class="btn btn-primary" productTypeMasterName="${productTypeMasterName}"  soldType="${soldType}"  onclick="saveProductMasterDetail(this,${producttypemasterid})">Save</button>
 	`;
 	
 	$('#addProductLabel').html(`<h4>${productTypeMasterName}</h4>`);
@@ -395,10 +399,14 @@ function getTotalNegotiableSoldPrice()
 }
 
 
-function saveProductMasterDetail(producttypemasterid)
+function saveProductMasterDetail(src, producttypemasterid)
 {
 var purchaseOrderId=$('#hdpurchaseOrderId').val();
 var shopId=$('#hdshopId').val();
+
+var productTypeMasterName=$(src).attr('productTypeMasterName');
+var soldType=$(src).attr('soldType');
+
 var totalItomCount=$('#totalItomCountId').val();
 
  var perItomPurchasedPriceId=$('#perItomPriceId').val();
@@ -427,7 +435,10 @@ $.ajax({
 			totalSoldPrice:totalSoldPrice,
 			
 			NegotiableSoldPrice: NegotiableSoldPrice,
-			totalNigotiablePrice: totalNigotiablePrice
+			totalNigotiablePrice: totalNigotiablePrice,
+			
+			productTypeMasterName: productTypeMasterName,
+			soldType: soldType
 		},
 		dataType: 'json',
 		success: function(data) {
@@ -439,3 +450,102 @@ $.ajax({
 });
 
 }
+
+
+
+
+function viewProductToPurchaseOrder(purchaseOrderId)
+{
+	$('#ViewProductTab').removeClass("hiddenClass");
+	$('#ViewProductTab').tab('show');
+	var shopId=	$('#myShop option:selected').val();
+	
+	var boiler=`
+	        <input type="hidden" id="hdpurchaseOrderId" value="${purchaseOrderId}"/>
+	        <input type="hidden" id="hdshopId" value="${shopId}"/>
+	        
+	         `;   
+	  $('#hiddenDiv').html(boiler); 
+	  
+	 var bakcButton=`<button type="button" class="btn btn-secondary btn-sm" id="backBtn" onclick="backOnPurchase()">Back</button>`;       
+     $('#ViewProductDiveBackButton').html(bakcButton); 
+     
+     getAllProductMasterToViewProductToPurchaseOrder();
+     
+}
+
+
+function getAllProductMasterToViewProductToPurchaseOrder()
+{
+	var shopId=	$('#myShop option:selected').val();
+	var purchaseOrderId=$('#hdpurchaseOrderId').val();
+	
+	$.ajax({
+		url: 'getAllProductOfPurchaseOrder.json',
+		type: 'GET',
+		data: {
+			shopId: shopId,
+			purchaseOrderId: purchaseOrderId
+		},
+		dataType: 'json',
+		success: function(data) {
+			
+		var boiler =`
+ <table class="table table-responsive table-bordered border-primary" id="purchaseOrderDetail">
+  <thead>
+    <tr>
+      <th scope="col">Sr. No</th>
+      <th scope="col">Product Name</th>
+      <th scope="col">Search Key</th>
+      <th scope="col">Sold Type</th>
+      <th scope="col">Quantity</th>
+      
+      <th scope="col">P. Price</th>
+      <th scope="col">Sold Price</th>
+      <th scope="col">N. Price</th>
+      
+      <th scope="col">T.P. Price</th>
+      <th scope="col">T. Sold Price</th>
+      <th scope="col">T.N. Price</th>
+      
+    </tr>
+  </thead><tbody>`;
+  
+  
+  data.forEach(function(ownerobj,index){
+	  const{purchaseOrderDetailId='',productName='',soldType='',itomQuantity='',
+	        perItomPurchasedPrice=0,perItomSoldPrice=0,perItomNegotiablePrice=0,
+	        totalItomPurchasedPrice=0,totalSoldPrice=0,total_negotiable_price=0  }=ownerobj;
+	  boiler +=`<tr purchaseOrderDetailId="${purchaseOrderDetailId}"  soldType="${soldType}">
+	             <td scope="row">${++index}</td>
+	             <td scope="row">${productName}</td>
+	             <td scope="row">-</td>
+	             <td scope="row">${soldType}</td>
+	             <td scope="row">${itomQuantity}</td>
+	             
+	             <td scope="row">${perItomPurchasedPrice}</td>
+	             <td scope="row">${perItomSoldPrice}</td>
+	             <td scope="row">${perItomNegotiablePrice}</td>
+	             
+	             <td scope="row">${totalItomPurchasedPrice}</td>
+	             <td scope="row">${totalSoldPrice}</td>
+	             <td scope="row">${total_negotiable_price}</td>
+	             </tr>`;
+	  
+  });
+  
+   boiler +=` </tbody>
+              </table>`;
+              
+         $('#ViewProductDive').html(boiler);  
+		 var table=	$('#purchaseOrderDetail').DataTable();    
+			
+       
+		},
+		error: function(request, error) {
+			alert("Request 1: " + JSON.stringify(request));
+		}
+	});
+	
+}
+

@@ -14,7 +14,7 @@ public class Shop {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="SHOP_ID")
-    private int  shop_id;
+    private Integer  shop_id;
 
     @Column(name = "SHOP_NAME")
     private String shopName;
@@ -28,13 +28,7 @@ public class Shop {
     @Column(name = "ABOUT")
     private String about;
 
-	public int getShop_id() {
-		return shop_id;
-	}
-
-	public void setShop_id(int shop_id) {
-		this.shop_id = shop_id;
-	}
+	
 
 	public String getShopName() {
 		return shopName;
@@ -66,6 +60,14 @@ public class Shop {
 
 	public void setAbout(String about) {
 		this.about = about;
+	}
+
+	public Integer getShop_id() {
+		return shop_id;
+	}
+
+	public void setShop_id(Integer shop_id) {
+		this.shop_id = shop_id;
 	}
 
 }

@@ -12,4 +12,5 @@ public interface PurchaseOrderDetaiManager {
 	 PurchaseOrderDetail update(PurchaseOrderDetail purchaseOrderDetail);
 	 void deleteById(Integer purchaseOrderDetailId);
 	 List<Object[]> savePurchaseOrderDetail(StringBuilder productTypeMaseterDetailStr);	
+	 List<Object[]> getPurchaseOrderDetail(Integer purchaseOrderId,Integer shopId);
 }
