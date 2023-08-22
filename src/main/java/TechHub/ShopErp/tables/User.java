@@ -1,10 +1,12 @@
 package TechHub.ShopErp.tables;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -37,6 +39,9 @@ public class User {
     @Column(name = "ABOUT")
     private String about;
 
+    //one to one relationsheep
+    @OneToOne(mappedBy = "userObj", cascade = CascadeType.ALL)
+    private Customer customerObje;
 	
 
 	public String getUserName() {
@@ -105,6 +110,14 @@ public class User {
 
 	public void setEnabled(boolean isEnabled) {
 		this.isEnabled = isEnabled;
+	}
+
+	public Customer getCustomerObje() {
+		return customerObje;
+	}
+
+	public void setCustomerObje(Customer customerObje) {
+		this.customerObje = customerObje;
 	}
     
    

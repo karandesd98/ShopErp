@@ -23,17 +23,20 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import TechHub.ShopErp.Managers.CustomerManager;
+import TechHub.ShopErp.Managers.CustomerShopDetailManager;
 import TechHub.ShopErp.Managers.ProductTypeMasterManager;
 import TechHub.ShopErp.Managers.PurchaseOrderDetaiManager;
 import TechHub.ShopErp.Managers.PurchaseOrderManager;
-import TechHub.ShopErp.Managers.ShopCustomerManager;
 import TechHub.ShopErp.Managers.ShopManager;
 import TechHub.ShopErp.Managers.UserManager;
 import TechHub.ShopErp.model.User;
+import TechHub.ShopErp.tables.Customer;
+import TechHub.ShopErp.tables.CustomerShopDetail;
 import TechHub.ShopErp.tables.PurchaseOrder;
 import TechHub.ShopErp.tables.PurchaseOrderDetail;
 import TechHub.ShopErp.tables.Shop;
-import TechHub.ShopErp.tables.ShopCustomer;
+
 
 @Controller
 @RequestMapping("/admin")
@@ -55,10 +58,13 @@ public class AdminController {
 	PurchaseOrderDetaiManager purchaseOrderDetaiManager;
 	
 	@Autowired 
-	ShopCustomerManager shopCustomerManager;
+	CustomerManager customerManager;
 	
 	@Autowired
 	private BCryptPasswordEncoder passWordEncoder;
+	
+	@Autowired
+	private CustomerShopDetailManager customerShopDetailManager;
 	
 	@GetMapping("/saveNewOwner.json")
 	@ResponseBody
@@ -741,36 +747,33 @@ public class AdminController {
 		
 		password=passWordEncoder.encode(password);
 		
+		Customer customer=new Customer();
+		customer.setCustomerName(name);
+		customer.setMobileNo(mobileNo);
+		customer.setEmail(email);
+		customer.setAddress(address);
+		
 		TechHub.ShopErp.tables.User u=new TechHub.ShopErp.tables.User();
 		u.setUserName(name);
 		u.setEmail(email);
 		u.setPassword(password);
 		u.setRole("CUSTOMER");
 		u.setIsEnabled(true);
+		
+		u.setCustomerObje(customer);
+		customer.setUserObj(u);
+		
 		u=userManager.save(u); 
+		
+		// to save in customer shop detail
+		CustomerShopDetail customerShopDetail=new CustomerShopDetail();
+		customerShopDetail.setCustomerObj(customer);
+		customerShopDetail.setShopObj(shopManager.getShopById(shopId));
+		
+		customerShopDetailManager.sava(customerShopDetail);
+		
 	
-		ShopCustomer shopCustomer=new ShopCustomer();
-		shopCustomer.setCustomerName(name);
-		shopCustomer.setMobileNo(mobileNo);
-		shopCustomer.setEmail(email);
-		shopCustomer.setAddress(address);
-		
-		Shop s = shopManager.getShopById(shopId);
-		if (s.getShop_id() == null)
-			shopCustomer.setShopObj(null);
-		else
-			shopCustomer.setShopObj(s);
-
-		if (u.getUserId() == null)
-			shopCustomer.setUserObj(null);
-		else
-			shopCustomer.setUserObj(u);
-		 
-		 
-		 ShopCustomer sc=  shopCustomerManager.save(shopCustomer);
-		 
-		// userManager.saveNewOwner(name,password,email,about);
-		
+	
 		System.out.println(name);
 		JsonObject jobj=new JsonObject();
 		 jobj.addProperty("msg", "welcome sachin in software development business");

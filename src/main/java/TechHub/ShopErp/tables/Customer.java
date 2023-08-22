@@ -8,20 +8,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-@Table(name = "SHOP_CUSTOMER")
-public class ShopCustomer {
-
+@Table(name = "CUSTOMER")
+public class Customer {
+	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="SHOP_CUSTOMER_ID")
-    private Integer shopCustomerId;
+	@Column(name="CUSTOMER_ID")
+    private Integer customerId;
 	
 	@Column(name = "CUSTOMER_NAME")
 	private String customerName;
@@ -47,95 +47,102 @@ public class ShopCustomer {
 	private LocalDateTime updateDate;
 	
 	
-	// many to one relationsheep
-	@ManyToOne
-	@JoinColumn(name ="SHOP_ID")
-	private Shop shopObj;
-	
-	@ManyToOne
+	// one to one relationsheep
+	@OneToOne
 	@JoinColumn(name = "USER_ID")
 	private User userObj;
+
+
 	
 	
-	// setters and getter
-	public Integer getShopCustomerId() {
-		return shopCustomerId;
+	public Integer getCustomerId() {
+		return customerId;
 	}
 
-	public void setShopCustomerId(Integer shopCustomerId) {
-		this.shopCustomerId = shopCustomerId;
+
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
 	}
+
 
 	public String getCustomerName() {
 		return customerName;
 	}
 
+
 	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
 	}
+
 
 	public String getEmail() {
 		return email;
 	}
 
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 
 	public String getMobileNo() {
 		return mobileNo;
 	}
 
+
 	public void setMobileNo(String mobileNo) {
 		this.mobileNo = mobileNo;
 	}
+
 
 	public String getAddress() {
 		return address;
 	}
 
+
 	public void setAddress(String address) {
 		this.address = address;
 	}
+
 
 	public Boolean getIsDeleted() {
 		return isDeleted;
 	}
 
+
 	public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
+
 
 	public LocalDateTime getCreateDate() {
 		return createDate;
 	}
 
+
 	public void setCreateDate(LocalDateTime createDate) {
 		this.createDate = createDate;
 	}
+
 
 	public LocalDateTime getUpdateDate() {
 		return updateDate;
 	}
 
+
 	public void setUpdateDate(LocalDateTime updateDate) {
 		this.updateDate = updateDate;
 	}
 
-	public Shop getShopObj() {
-		return shopObj;
-	}
-
-	public void setShopObj(Shop shopObj) {
-		this.shopObj = shopObj;
-	}
 
 	public User getUserObj() {
 		return userObj;
 	}
 
+
 	public void setUserObj(User userObj) {
 		this.userObj = userObj;
 	}
 	
+
 }
