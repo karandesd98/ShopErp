@@ -22,12 +22,12 @@
 
 
         <!-- Mapping files -->
-        <mapping class="TechHub.ShopErp.tables.User"/>  
+       <!-- <mapping class="TechHub.ShopErp.tables.User"/>  
         <mapping class="TechHub.ShopErp.tables.Shop"/>
         <mapping class="TechHub.ShopErp.tables.OwnerShopDetail"/>
         <mapping class="TechHub.ShopErp.tables.ProductTypeMaster"/>
         <mapping class="TechHub.ShopErp.tables.PurchaseOrder"/>
-        <mapping class="TechHub.ShopErp.tables.Invoice"/>
+        <mapping class="TechHub.ShopErp.tables.Invoice"/>-->
 
     </session-factory>
 </hibernate-configuration>

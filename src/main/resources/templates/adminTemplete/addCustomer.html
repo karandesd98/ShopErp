@@ -1,87 +1,123 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.com" th:replace="adminBase::layout(~{::section})">
-  <head>
-    <style>
-    </style>
-    
-  </head>
-  <body>
-   <section>
-    <!-- write your code here -->
-    <script th:src="@{/script/addCustomer.js}"></script>
-    
-    <div class="container-fluid">
 
-     <table class="table table-responsive table-bordered border-primary" style="margin-top: 20px;">
-		<thead>
-		</thead>
-		<tbody>
-			<tr>
-				<th style="width: 30%;">Select Shop :</th>
-				<td>
-					<select style="width: 50%;" id="myShop" onchange="getAllCustomersOfShop()">
-						<option value="0">select</option>
-					</select>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-	
+<head>
+	<style>
+	</style>
 
-    <div id="addCustomerButn"></div>
-    
-    <div id="wonersTable"></div>
+</head>
 
-<!-- Modal -->
-<div class="modal fade" id="addNewCustomer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Add New Customer</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      
-      <div class="modal-body">
-        <div id="newUserModel">
-			<form  method="post">
-			
-			<div class="mb-3">
-				<label for="name" class="form-label">Name</label>
-				<input name="USER_NAME"  type="text" class="form-control" id="name" aria-describedby="emailHelp" requierd>
+<body>
+	<section>
+		<!-- write your code here -->
+		<script th:src="@{/script/addCustomer.js}"></script>
+
+		<script>
+			function hideShow() {
+				$('#showAllUsersOfThisShop').removeClass('d-lg-none');
+				$('#addCustomerButn').removeClass('d-lg-none');
+				$('#aTab').addClass('d-lg-none');
+				$('#bTab').addClass('d-lg-none');
+				$('#hiddenDiv').addClass('d-lg-none');
+			}
+		</script>
+
+		<div class="container-fluid">
+
+			<table class="table table-responsive table-bordered border-primary" style="margin-top: 20px;">
+				<thead>
+				</thead>
+				<tbody>
+					<tr>
+						<th style="width: 30%;">Select Shop :</th>
+						<td>
+							<select style="width: 50%;" id="myShop" onchange="getAllCustomersOfShop()">
+								<option value="0">select</option>
+							</select>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+
+
+			<nav>
+				<div class="nav nav-tabs" id="nav-tab" role="tablist" style="background-color:rgb(192, 192, 192);">
+
+					<button class="btn btn-primary" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
+						type="button" role="tab" aria-controls="nav-home" aria-selected="true"
+						onclick="hideShow()">Current</button>
+
+					<button class="d-lg-none btn btn-success" id="aTab" data-bs-toggle="tab" data-bs-target="#AddProduct-contact"
+						type="button" role="tab" aria-controls="nav-contact" aria-selected="false">A Tab</button>
+
+					<button class="d-lg-none btn btn-info" id="bTab" data-bs-toggle="tab" data-bs-target="#ViewProduct-content"
+						type="button" role="tab" aria-controls="nav-contact" aria-selected="false">B Tab</button>
+				</div>
+			</nav>
+
+			<div id="addCustomerButn"></div>
+			<div id="showAllUsersOfThisShop"></div>
+			<div id="hiddenDiv"></div>
+			<div id="wonersTable"></div>
+
+			<!-- Modal -->
+			<div class="modal fade" id="addNewCustomer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+				aria-labelledby="staticBackdropLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="staticBackdropLabel">Add New Customer</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+
+						<div class="modal-body">
+							<div id="newUserModel">
+								<form method="post">
+
+									<div class="mb-3">
+										<label for="name" class="form-label">Name</label>
+										<input name="USER_NAME" type="text" class="form-control" id="name"
+											aria-describedby="emailHelp" requierd>
+									</div>
+
+									<div class="mb-3">
+										<label for="mobileNo" class="form-label">Mobile No.</label>
+										<input name="MOBILE_NO" type="text" class="form-control" id="mobileNo"
+											aria-describedby="emailHelp" requierd>
+									</div>
+
+									<div class="mb-3" >
+										<label for="email" class="form-label">Email</label>
+										<input name="EMAIL" type="email" class="form-control" id="email"
+											aria-describedby="emailHelp" requierd>
+									</div>
+
+									<div class="mb-3">
+										<label for="password" class="form-label">Password</label>
+										<input name="PASSWORD" type="password" class="form-control" id="password"
+											aria-describedby="emailHelp" requierd>
+									</div>
+
+
+									<div class="mb-3">
+										<label for="about" class="form-label">Address</label>
+										<textarea name="ADDRESS" class="form-control" placeholder="Enter Address"
+											id="address"></textarea>
+									</div>
+								</form>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							<button type="button" class="btn btn-primary" onclick="saveNewCustomer()">Save</button>
+						</div>
+					</div>
+				</div>
 			</div>
-			
-			<div class="mb-3">
-				<label for="mobileNo" class="form-label">Mobile No.</label>
-				<input name="MOBILE_NO"  type="text" class="form-control" id="mobileNo" aria-describedby="emailHelp" requierd>
-			</div>
-			
-			<div class="mb-3">
-				<label for="email" class="form-label">Email</label>
-				<input name="EMAIL"  type="email" class="form-control" id="email" aria-describedby="emailHelp" requierd>
-			</div>
-			
-			<div class="mb-3">
-				<label for="password" class="form-label">Password</label>
-				<input name="PASSWORD"  type="password" class="form-control" id="password" aria-describedby="emailHelp" requierd>
-			</div>
-			
-			
-			<div class="mb-3">
-			    <label for="about" class="form-label">Address</label>
-				<textarea  name="ADDRESS"  class="form-control" placeholder="Enter Address" id="address"></textarea>
-			</div>
-			</form> 
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-		<button type="button" class="btn btn-primary" onclick="saveNewCustomer()">Save</button>
-      </div>
-    </div>
-  </div>
-</div>
-    
-  </div>     
-  </section>
-  </body>
+
+		</div>
+	</section>
+</body>
+
 </html>
