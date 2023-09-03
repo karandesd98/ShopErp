@@ -1,13 +1,17 @@
 package TechHub.ShopErp.tables;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -52,7 +56,9 @@ public class Customer {
 	@JoinColumn(name = "USER_ID")
 	private User userObj;
 
-
+	//one to many  relationsheep
+	@OneToMany(mappedBy = "customerObj", cascade = CascadeType.ALL)
+    private List<CustomerOrder> customerOrders;
 	
 	
 	public Integer getCustomerId() {
@@ -142,6 +148,16 @@ public class Customer {
 
 	public void setUserObj(User userObj) {
 		this.userObj = userObj;
+	}
+
+
+	public List<CustomerOrder> getCustomerOrders() {
+		return customerOrders;
+	}
+
+
+	public void setCustomerOrders(List<CustomerOrder> customerOrders) {
+		customerOrders = customerOrders;
 	}
 	
 
