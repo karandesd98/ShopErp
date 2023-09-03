@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import TechHub.ShopErp.Managers.CustomerOrderManager;
 import TechHub.ShopErp.helper.ResorcenotFoundException;
 import TechHub.ShopErp.repository.CustomerOrderRepository;
 import TechHub.ShopErp.tables.CustomerOrder;
 
+@Service
 public class CustomerOrderManagerImpl implements CustomerOrderManager {
 	
 	 @Autowired
