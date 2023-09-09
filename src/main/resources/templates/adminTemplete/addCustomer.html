@@ -2,18 +2,33 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.com" th:replace="adminBase::layout(~{::section})">
 
 <head>
-	<style>
-	</style>
+	
 
 </head>
 
 <body>
 	<section>
 		<!-- write your code here -->
+		<style>
+.center-input {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%; 
+    }
+    .stickyTop{
+        position: sticky;
+        top: 0px;
+	}
+   
+	</style>
+		
 		<script th:src="@{/script/addCustomer.js}"></script>
+		<script src="https://cdn.lordicon.com/bhenfmcm.js"></script>
 
 		<script>
 			function hideShow() {
+				    itomCount=0;
 					$('#addOrderTab').addClass('d-lg-none');
 					getAllCustomersOfShop();
 				}

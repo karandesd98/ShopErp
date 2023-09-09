@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	 itomCount=0;
 	getAllMyShopToAddPurchaseOrder();
 
 
@@ -148,15 +149,15 @@ function addOrder(cutomerShopDetailId,custName) {
     // for search 
     
     
-  var serachBoiler=`<div class="card">
+  var serachBoiler=`<div class="card stickyTop">
                     <div class="card-body">
                       <form class="d-flex">
                        <span style="width: 37%;display: inherit;">
                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                       <button class="btn btn-outline-success" type="submit">Search</button>
+                       <button class="btn btn-outline-success" type="button">Search</button>
                        </span>
                        <span>
-                       <button style="margin-left: 20px;" class="btn btn-outline-success" type="submit">Add Manually</button>
+                       <button style="margin-left: 20px;" class="btn btn-outline-success" type="button" onclick="addEmptyItomRow()">Add Manually</button>
                        </span>
                        </form>
                     </div>
@@ -166,29 +167,15 @@ var productTable=`<table class="table">
   <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
+      <th scope="col">Itom Name</th>
+      <th scope="col">Sold Type</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Price</th>
+      <th scope="col">Action</th>
     </tr>
   </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td colspan="2">Larry the Bird</td>
-      <td>@twitter</td>
-    </tr>
+  <tbody id="itomBody">
+
   </tbody>
 </table>`;
     
@@ -207,6 +194,35 @@ var boiler=   `<div class="card border-secondary text-secondary mt-2">
  $('#orderDetail').html(boiler);
 	
 	
+}
+
+var itomCount=0;
+function addEmptyItomRow()
+{
+	itomCount =itomCount +1;
+	var boiler=`<tr id="${itomCount}_trId">
+      <td scope="col">${itomCount}</td>
+      <td scope="col"><input style="width: 161px;" type="text" class="form-control" id="${itomCount}_itomName" aria-describedby="emailHelp"></td>
+     <td scope="col">
+      <select class="form-select" aria-label="Default select example" id="${itomCount}_soldType" style="width: 161px;">
+					<option selected value="PER_ITOM">Per Itom</option>
+					<option value="PER_KG">Per Kg</option>
+					<option value="PER_LITER">Per Liter</option>
+	 </select>
+	 </td>
+      <td scope="col"><input style="width: 161px;" type="text" class="form-control" id="${itomCount}_quantity" aria-describedby="emailHelp"></td>
+      <td scope="col"><input style="width: 161px;" type="text" class="form-control" id="${itomCount}_Price" aria-describedby="emailHelp"></td>
+      <td scope="col">
+      <lord-icon src="https://cdn.lordicon.com/kfzfxczd.json" onclick="removeTR(${itomCount})" trigger="hover" colors="primary:#c76f16"  style="width:37;height:37px"></lord-icon>
+      </td>
+    </tr>`;
+    
+	$('#itomBody').append(boiler)
+}
+
+function removeTR(itomCount)
+{
+	$(`#${itomCount}_trId`).remove();
 }
 
 function bTab() {
@@ -361,6 +377,7 @@ function deleteCustomer(email) {
 
 function backOnAddOrder()
 {
+	itomCount=0;
 	$('#addOrderTab').addClass('d-lg-none');
 	$('#nav-home-tab').tab('show');
 	// getAllCustomersOfShop();	
