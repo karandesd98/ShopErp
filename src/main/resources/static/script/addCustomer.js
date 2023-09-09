@@ -64,7 +64,7 @@ function getAllCustomersOfShop() {
   </thead><tbody>`;
 
 			data.forEach(function(purchaseOrder, index) {
-				const { Name = '', image = '', role = '', mobileNo = '', email = '', address = '' } = purchaseOrder;
+				const { Name = '', image = '', role = '', mobileNo = '', email = '', address = '',customerId='',customerShpDetailId='0' } = purchaseOrder;
 				boiler += `<tr>
 	             <td scope="row">${++index}</td>
 	             <td scope="row">${Name}</td>
@@ -81,7 +81,7 @@ function getAllCustomersOfShop() {
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                          <li><button class="dropdown-item" type="button">Edit</button></li>
                          <li><button class="dropdown-item" type="button" onclick="deleteCustomer('${email}')">Delete</button></li>
-                          <li><button class="dropdown-item" type="button" onclick="aTab()">A Tab</button></li>
+                          <li><button class="dropdown-item" type="button" onclick="addOrder(${customerShpDetailId},'${Name}')">Add Order</button></li>
                          <li><button class="dropdown-item" type="button" onclick="bTab()">B Tab</button></li>
                         
                   </ul>
@@ -101,21 +101,112 @@ function getAllCustomersOfShop() {
 
 }
 
-function aTab() {
-	$('#addCustomerButn').addClass('d-lg-none');
-	$('#showAllUsersOfThisShop').addClass('d-lg-none');
-	$('#bTab').addClass('d-lg-none');
-	$('#aTab').removeClass('d-lg-none');
-	$('#hiddenDiv').removeClass('d-lg-none');
+function getMeDateAndTime() {
+	const currentDate = new Date();
+	const dayOfWeek = currentDate.getDay();
+	const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+	const dayName = dayNames[dayOfWeek];
+	const dayOfMonth = currentDate.getDate();
+	const month = currentDate.getMonth();
+	const year = currentDate.getFullYear();
+	const formattedDate = `${dayName}, ${month + 1}/${dayOfMonth}/${year}`;
+	console.log(formattedDate);
+	return formattedDate;
 
-	var boiler = ` <h4>Hii, You can do anything here. </h4> `;
-	$('#hiddenDiv').html(boiler);
+}
 
-	var bakcButton = `<button type="button" class="btn btn-secondary btn-sm" id="backBtn" onclick="backOnPurchase()">Back</button>`;
-	$('#AddProductDiveBackButton').html(bakcButton);
+function addOrder(cutomerShopDetailId,custName) {
+	
+	$('#addOrderTab').removeClass("d-lg-none");
+	$('#addOrderTab').tab('show');
+	
+	var ordername=`${custName}-`+getMeDateAndTime();
+	
+	
 
-	// getAllProductMasterToAddProductToPurchaseOrder();
-
+	var hiddenValue=`<div id='customerShopDetailIdHD' value='${cutomerShopDetailId}'></div>
+	                 <div id='custNameHD' value='${custName}'></div>`;
+	
+	$('#hiddenInfo').html(hiddenValue);
+	
+	var bakcButton = `<button type="button" class="btn btn-secondary btn-sm" style="padding: 0px; width: 40px;" id="backBtn" onclick="backOnAddOrder()">  Back</button>`;
+	// $('#backBtn').html(bakcButton);
+	
+	var infoBoiler=`<div class="card border-primary mb-3 mt-1" style="max-width: 20rem;">
+                   <div class="card-body text-primary" style="padding: 0px;">
+                     <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-action list-group-item-primary">
+                      <b>Order Name :-</b> <input type="text" class="form-control" id="orderName" value="${ordername}" style="padding: 1px;">
+                         </a>
+                    </div>
+                   </div>
+                   </div>`;
+                   
+    //   $('#infoDive').html(infoBoiler);
+    
+    
+    // for search 
+    
+    
+  var serachBoiler=`<div class="card">
+                    <div class="card-body">
+                      <form class="d-flex">
+                       <span style="width: 37%;display: inherit;">
+                       <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                       <button class="btn btn-outline-success" type="submit">Search</button>
+                       </span>
+                       <span>
+                       <button style="margin-left: 20px;" class="btn btn-outline-success" type="submit">Add Manually</button>
+                       </span>
+                       </form>
+                    </div>
+                </div>`;
+                
+var productTable=`<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Handle</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td colspan="2">Larry the Bird</td>
+      <td>@twitter</td>
+    </tr>
+  </tbody>
+</table>`;
+    
+       
+       
+   
+var boiler=   `<div class="card border-secondary text-secondary mt-2">
+               <div class="card-header"><span style="margin-right: 46%;">${bakcButton}</span>  <span class="text-center"><h4 style="display: inline;color: #3aa5b7;">${custName} Order</h4></span></div>
+                 <div class="card-body text-secondary">
+                  ${infoBoiler}
+                  ${serachBoiler}
+                 <div>${productTable}</div>
+             </div>
+            </div>`;
+              
+ $('#orderDetail').html(boiler);
+	
+	
 }
 
 function bTab() {
@@ -267,5 +358,12 @@ function deleteCustomer(email) {
 
 }
 
+
+function backOnAddOrder()
+{
+	$('#addOrderTab').addClass('d-lg-none');
+	$('#nav-home-tab').tab('show');
+	// getAllCustomersOfShop();	
+}
 
 

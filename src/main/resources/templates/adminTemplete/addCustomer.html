@@ -14,12 +14,9 @@
 
 		<script>
 			function hideShow() {
-				$('#showAllUsersOfThisShop').removeClass('d-lg-none');
-				$('#addCustomerButn').removeClass('d-lg-none');
-				$('#aTab').addClass('d-lg-none');
-				$('#bTab').addClass('d-lg-none');
-				$('#hiddenDiv').addClass('d-lg-none');
-			}
+					$('#addOrderTab').addClass('d-lg-none');
+					getAllCustomersOfShop();
+				}
 		</script>
 
 		<div class="container-fluid">
@@ -44,22 +41,39 @@
 			<nav>
 				<div class="nav nav-tabs" id="nav-tab" role="tablist" style="background-color:rgb(192, 192, 192);">
 
-					<button class="btn btn-primary" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
+					<button class="btn btn-primary" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#allCustomer"
 						type="button" role="tab" aria-controls="nav-home" aria-selected="true"
-						onclick="hideShow()">Current</button>
+						onclick="hideShow()">Customers</button>
 
-					<button class="d-lg-none btn btn-success" id="aTab" data-bs-toggle="tab" data-bs-target="#AddProduct-contact"
-						type="button" role="tab" aria-controls="nav-contact" aria-selected="false">A Tab</button>
+					<button class="d-lg-none btn btn-success" id="addOrderTab" data-bs-toggle="tab" data-bs-target="#AddOrder-contact"
+						type="button" role="tab" aria-controls="nav-contact" aria-selected="false">addOrder</button>
 
-					<button class="d-lg-none btn btn-info" id="bTab" data-bs-toggle="tab" data-bs-target="#ViewProduct-content"
-						type="button" role="tab" aria-controls="nav-contact" aria-selected="false">B Tab</button>
 				</div>
 			</nav>
 
-			<div id="addCustomerButn"></div>
+
+<div class="tab-content" id="nav-tabContent">
+	
+	<!-- after click on  Customers tab we will get this div  d-lg-none-->
+	<div class="tab-pane fade show active" id="allCustomer" role="tabpanel" aria-labelledby="nav-home-tab">
+	<div id="addCustomerButn"></div>
+	<div id="showAllUsersOfThisShop"></div>
+	</div>
+	
+	<!-- after click on  AddOrder tab we will get this div  -->
+	<div class="tab-pane fade" id="AddOrder-contact" role="tabpanel" aria-labelledby="nav-profile-tab">
+	 <div id="backBtn"></div>
+	 <div id="infoDive"></div>
+	 <div id="orderDetail"></div>
+	
+</div>
+ <div id="hiddenInfo"></div>
+	
+			
+			<!-- <div id="addCustomerButn"></div>
 			<div id="showAllUsersOfThisShop"></div>
 			<div id="hiddenDiv"></div>
-			<div id="wonersTable"></div>
+			<div id="wonersTable"></div> -->
 
 			<!-- Modal -->
 			<div class="modal fade" id="addNewCustomer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"

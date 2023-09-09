@@ -764,6 +764,9 @@ public class AdminController {
 		
 		
 		for (Object[] customers : allCustomers) {
+			Integer customerId =customers[1] != null ?Integer.parseInt(customers[1].toString()): 0;
+			Integer customerShpDetailId =customers[10] != null ?Integer.parseInt(customers[10].toString()): 0;
+			
 			String Name = customers[3] != null ? (customers[3].toString()) : "";
 			// Integer role=customers[6]!=null?Integer.parseInt(customers[9].toString()) :0;
 			String role = customers[7] != null ? (customers[7].toString()) : "";
@@ -780,6 +783,8 @@ public class AdminController {
 			jObje.addProperty("address", address.toString());
 			jObje.addProperty("mobileNo", mobileNo.toString());
 			jObje.addProperty("email", email.toString());
+			jObje.addProperty("customerId", customerId.toString());
+			jObje.addProperty("customerShpDetailId",customerShpDetailId.toString());
 			//jObje.addProperty("about", about.toString());
 
 			jMainArray.add(jObje);
