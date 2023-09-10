@@ -37,6 +37,7 @@ import TechHub.ShopErp.service.UserService;
 import TechHub.ShopErp.tables.Customer;
 import TechHub.ShopErp.tables.CustomerShopDetail;
 import TechHub.ShopErp.tables.PurchaseOrder;
+import TechHub.ShopErp.tables.PurchaseOrderDetail;
 
 @Controller
 @RequestMapping("/admin")
@@ -798,5 +799,30 @@ public class AdminController {
 		customerService.deleteCustomer(email);
 		return ResponseEntity.ok("User deleted successfully");
 	}
+	
+	
+	@GetMapping("/getAllItomToSell.json")
+	@ResponseBody
+	public String getAllItomToSell(HttpServletRequest req, Principal principal) {
+		String itomName = req.getParameter("itomName") != null ? (req.getParameter("itomName")) : "";
+		List<Object[]> itomNameList= purchaseOrderDetaiManager.findByProductNameContaining(itomName);
+		
+		JsonArray jMainArray = new JsonArray();
+		for(Object[] objArr : itomNameList)
+		{
+			JsonObject jObje = new JsonObject();
+			jObje.addProperty("Name", objArr[5]!=null?objArr[5].toString():"");
+			jObje.addProperty("soldType", "PER_ITOM");
+			jObje.addProperty("soldPrice",  objArr[4]!=null?objArr[4].toString():"");
+			jObje.addProperty("purchasedPrice",  objArr[3]!=null?objArr[3].toString():"");
+		
+			jMainArray.add(jObje);	
+		}
+
+		return new Gson().toJson(jMainArray);
+	}
+	
+	
+	
 
 }

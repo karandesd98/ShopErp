@@ -13,4 +13,6 @@ public interface PurchaseOrderDetaiManager {
 	 void deleteById(Integer purchaseOrderDetailId);
 	 List<Object[]> savePurchaseOrderDetail(StringBuilder productTypeMaseterDetailStr);	
 	 List<Object[]> getPurchaseOrderDetail(Integer purchaseOrderId,Integer shopId);
+	 
+	 public List<Object[]> findByProductNameContaining(String pName);
 }

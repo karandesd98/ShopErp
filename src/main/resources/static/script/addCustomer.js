@@ -1,8 +1,6 @@
 $(document).ready(function() {
 	 itomCount=0;
 	getAllMyShopToAddPurchaseOrder();
-
-
 });
 
 function getAllMyShopToAddPurchaseOrder() {
@@ -151,15 +149,19 @@ function addOrder(cutomerShopDetailId,custName) {
     
   var serachBoiler=`<div class="card stickyTop">
                     <div class="card-body">
-                      <form class="d-flex">
-                       <span style="width: 37%;display: inherit;">
-                       <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    
+                      <div   class="search-container"  style="display: inline-block;width: 35%;">
+                       <input class="form-control me-2" type="text" onblur="hideSerchText()" onkeyup="serchTextHere(this)" id="searchInput" placeholder="Search..." aria-label="Search" style="width: 90%;">
+                       <div class="search-result">
+                       
+                       </div>
+                     </div>
+                     
+                     <div style="display: inline-block;">
                        <button class="btn btn-outline-success" type="button">Search</button>
-                       </span>
-                       <span>
                        <button style="margin-left: 20px;" class="btn btn-outline-success" type="button" onclick="addEmptyItomRow()">Add Manually</button>
-                       </span>
-                       </form>
+                      </div> 
+                      
                     </div>
                 </div>`;
                 
@@ -224,6 +226,8 @@ function removeTR(itomCount)
 {
 	$(`#${itomCount}_trId`).remove();
 }
+
+
 
 function bTab() {
 	$('#addCustomerButn').addClass('d-lg-none');
@@ -381,6 +385,62 @@ function backOnAddOrder()
 	$('#addOrderTab').addClass('d-lg-none');
 	$('#nav-home-tab').tab('show');
 	// getAllCustomersOfShop();	
+}
+
+
+function serchTextHere(src){
+
+
+	var query = $(src).val();
+	if (query.length >= 2) {
+
+		$.ajax({
+			url: 'getAllItomToSell.json',
+			type: 'GET',
+			data: {
+				itomName: query
+			},
+			dataType: 'json',
+			success: function(jMainArray) {
+
+				$('.search-result').show();
+				
+				var tdBoiler=``;
+				jMainArray.forEach(function(itom, index) {
+					const { Name = '', soldType = '', soldPrice = '', purchasedPrice = '' } = itom;
+
+					tdBoiler += `<tr>
+				              <th scope="row">${++index}</th>    
+				              <td>${Name}</td>
+                              <td>${soldType}</td>
+                              <td>${soldPrice}</td>
+                              <td><button  class="btn btn-outline-success" type="button" onclick="addEmptyItomRow()">Add</button></td>
+                              </tr>`;
+
+				});
+				
+			var serchBoiler = `<table class="table">
+                                   <tbody>
+                                    ${tdBoiler}
+                                   </tbody>
+                                 </table>`;
+                                 
+                $('.search-result').html(serchBoiler);                 
+
+
+			}
+		});
+
+	} else {
+		$('.search-result').hide();
+
+	}
+
+}
+
+function hideSerchText()
+{
+//	$('.search-result').hide();
 }
 
 

@@ -87,6 +87,12 @@ public class PurchaseOrderDetaiManagerImpl implements PurchaseOrderDetaiManager 
         return resultList;
         
         }
+
+	@Override
+	public List<Object[]> findByProductNameContaining(String pName) {
+		
+		return purchaseOrderDetailRepo.findByProductNameContaining(pName);
+	}
 	 
 	 
 	
