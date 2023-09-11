@@ -35,6 +35,10 @@ public class Shop {
     //one to many  relationsheep
   	@OneToMany(mappedBy = "shopObj", cascade = CascadeType.ALL)
     private List<CustomerOrder> customerOrder;
+  	
+  	
+  	@OneToMany(mappedBy = "shopObj", cascade = CascadeType.ALL)
+    private List<OverAllShop> overAllShopList;
 
 	
 
