@@ -72,6 +72,9 @@ public class PurchaseOrder {
 	@Column(name = "SHOP_ID")
 	private int shop_id;
 	
+	@Column(name = "IS_ADDED_TO_SHOP", nullable = true, columnDefinition = "boolean default false")
+	private boolean isAddedToShop;
+	
 	/*
 	// one to many relationSheep
     @OneToMany(mappedBy="purchaseOrderObj")
@@ -230,6 +233,14 @@ public class PurchaseOrder {
 
 	public Integer getPurchaseOrderId() {
 		return purchaseOrderId;
+	}
+
+	public boolean isAddedToShop() {
+		return isAddedToShop;
+	}
+
+	public void setAddedToShop(boolean isAddedToShop) {
+		this.isAddedToShop = isAddedToShop;
 	}
 
 

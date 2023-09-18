@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.com" th:replace="adminBase::layout(~{::section})">
+  <head>
+    
+  </head>
+  <body>
+   <section>
+    <!-- write your code here -->
+    <script th:src="@{/script/overAllShop.js}"></script>
+    
+    <div class="container-fluid">
+    
+		<table class="table table-responsive table-bordered border-primary" style="margin-top: 2%;">
+			<thead>
+			</thead>
+			<tbody>
+				<tr>
+					<th style="width: 30%;">Select Shop :</th>
+					<td>
+						<select style="width: 50%;" id="myShop" onchange="getMyOverAllShop()">
+							<option lue="option1">select</option>
+						</select>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+    
+    </div>
+    
+   </section>
+  </body>
+</html>

@@ -67,9 +67,16 @@ return false;
     </tr>
   </thead><tbody>`;
   
+  var bgColorClss="";
   data.forEach(function(purchaseOrder,index){
-	  const{purchaseOrderId='',purchaseOrderName='',purchaseOrderTotalAmount='', PurchaseBy='',date='',goodsAmount='',otherAmount='',billUploadPath=''}=purchaseOrder;
-	   boiler +=`<tr>
+	  const{purchaseOrderId='',purchaseOrderName='',purchaseOrderTotalAmount='', PurchaseBy='',date='',goodsAmount='',otherAmount='',billUploadPath='',is_added_to_shop=''}=purchaseOrder;
+	   
+	   if(is_added_to_shop=="true")
+	   bgColorClss="table-success";
+	   else
+	   bgColorClss="";
+	   
+	   boiler +=`<tr class="${bgColorClss}">
 	             <td scope="row">${++index}</td>
 	             <td scope="row">${purchaseOrderName}</td>
 	             <td scope="row">${PurchaseBy}</td>
@@ -94,11 +101,18 @@ return false;
 	             <div class="dropdown">
                       <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"> Action</button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                         <li><button class="dropdown-item" type="button">Edit</button></li>
-                         <li><button class="dropdown-item" type="button" onclick="deletePurchaseOrder(${purchaseOrderId})">Delete</button></li>
+                         <li><button class="dropdown-item" type="button">Edit</button></li>`;
+                          
+                          if(is_added_to_shop=="true")
+	                     {
+						boiler += `<li><button class="dropdown-item" type="button" onclick="viewProductToPurchaseOrder(${purchaseOrderId},'${is_added_to_shop}')">View Product</button></li>`;
+					     }
+	                    else{
+                      boiler += `<li><button class="dropdown-item" type="button" onclick="deletePurchaseOrder(${purchaseOrderId})">Delete</button></li>
                          <li><button class="dropdown-item" type="button" onclick="addProductToPurchaseOrder(${purchaseOrderId})">Add Product</button></li>
-                         <li><button class="dropdown-item" type="button" onclick="viewProductToPurchaseOrder(${purchaseOrderId})">View Product</button></li>
-                  </ul>
+                         <li><button class="dropdown-item" type="button" onclick="viewProductToPurchaseOrder(${purchaseOrderId},'${is_added_to_shop}')">View Product</button></li>`;
+                        }
+                boiler += `</ul>
                  </div>
 	             </td>
 	             </tr>`;
@@ -454,7 +468,7 @@ $.ajax({
 
 
 
-function viewProductToPurchaseOrder(purchaseOrderId)
+function viewProductToPurchaseOrder(purchaseOrderId,is_added_to_shop)	 
 {
 	$('#ViewProductTab').removeClass("hiddenClass");
 	$('#ViewProductTab').tab('show');
@@ -463,7 +477,7 @@ function viewProductToPurchaseOrder(purchaseOrderId)
 	var boiler=`
 	        <input type="hidden" id="hdpurchaseOrderId" value="${purchaseOrderId}"/>
 	        <input type="hidden" id="hdshopId" value="${shopId}"/>
-	        
+	        <input type="hidden" id="hd_is_added_to_shop" value="${is_added_to_shop}"/>
 	         `;   
 	  $('#hiddenDiv').html(boiler); 
 	  
@@ -479,6 +493,7 @@ function getAllProductMasterToViewProductToPurchaseOrder()
 {
 	var shopId=	$('#myShop option:selected').val();
 	var purchaseOrderId=$('#hdpurchaseOrderId').val();
+	var is_added_to_shop=$('#hd_is_added_to_shop').val();
 	
 	$.ajax({
 		url: 'getAllProductOfPurchaseOrder.json',
@@ -537,8 +552,20 @@ function getAllProductMasterToViewProductToPurchaseOrder()
    boiler +=` </tbody>
               </table>`;
               
+			if (is_added_to_shop != "true") {
+				boiler += `<div class="text-center"> 
+                     <div class="d-flex justify-content-center">
+                       <button class="btn btn-primary" onclick="addToShop(${shopId},${purchaseOrderId})" >Add To Shop</button>
+                     </div>
+                    </div>
+                  `;
+			}  
+              
          $('#ViewProductDive').html(boiler);  
-		 var table=	$('#purchaseOrderDetail').DataTable();    
+		 var table=	$('#purchaseOrderDetail').DataTable({
+			 "paging": false,
+             "bInfo": false 
+           });  
 			
        
 		},
@@ -546,6 +573,30 @@ function getAllProductMasterToViewProductToPurchaseOrder()
 			alert("Request 1: " + JSON.stringify(request));
 		}
 	});
+	
+}
+
+function addToShop(shopId,purchaseOrderId)
+{
+	   var confirmation = window.confirm("Are you sure you want to add to shop?");
+	if (confirmation) {
+		$.ajax({
+			url: 'addPurchaseOrderToShop.json',
+			type: 'GET',
+			data: {
+				shopId: shopId,
+				purchaseOrderId: purchaseOrderId
+			},
+			dataType: 'json',
+			success: function(data) {
+				swal("Good job!", "Added To Shop", "success");
+
+			}
+		});
+
+	} else {
+
+	}
 	
 }
 

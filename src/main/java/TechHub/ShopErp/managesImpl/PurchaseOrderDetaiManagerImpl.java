@@ -77,7 +77,24 @@ public class PurchaseOrderDetaiManagerImpl implements PurchaseOrderDetaiManager 
 	@Override
 	public List<Object[]> getPurchaseOrderDetail(Integer purchaseOrderId, Integer shopId) {
 		
-	    String nativeQuery="select * from purchase_order_detail pod where pod.purchase_order_id= ? and pod.shop_id= ?";
+		String nativeQuery="select \r\n"
+				+ "purchase_order_detail_id,\r\n"
+				+ "product_name,\r\n"
+				+ "sold_type,\r\n"
+				+ "itom_quantity,\r\n"
+				+ "per_itom_purchased_price,\r\n"
+				+ "per_itom_sold_price,\r\n"
+				+ "per_itom_negotiable_price,\r\n"
+				+ "total_itom_purchased_price,\r\n"
+				+ " total_sold_price,\r\n"
+				+ " total_negotiable_price\r\n"
+				+ " \r\n"
+				+ "from \r\n"
+				+ "purchase_order_detail pod \r\n"
+				+ "where pod.purchase_order_id= ?\r\n"
+				+ "and pod.shop_id= ?\r\n"
+				+ "";
+	   //  String nativeQuery="select * from purchase_order_detail pod where pod.purchase_order_id= ? and pod.shop_id= ?";
         Query query = entityManager.createNativeQuery(nativeQuery);
         query.setParameter(1, purchaseOrderId);
         query.setParameter(2, shopId);

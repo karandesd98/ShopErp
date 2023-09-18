@@ -88,5 +88,15 @@ public class AdminUIMappingController {
 		model.addAttribute("title", "home page");
 	return "adminTemplete/addCustomer";
 	}
+	
+	@GetMapping("/overAllShop")
+	public String overAllShop(Model model,Principal principal)
+	{
+		String userName= principal.getName();
+		User user = userManager.getUserByUserName(userName);
+		model.addAttribute("user", user);
+		model.addAttribute("title", "OverAll Shop");
+	return "adminTemplete/overAllShop";
+	}
 
 }

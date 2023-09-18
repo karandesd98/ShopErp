@@ -41,8 +41,8 @@ public class OverAllShop {
 	@Column(name="PER_ITOM_SOLD_PRICE")
     private Double  perItomSoldPrice;
 	
-	@Column(name="ACTIVE_PURCHASE_ORDER_DETAIL_ID")
-    private Integer  activePurchaseOrderDetailId;
+	@Column(name="ACTIVE_PURCHASE_ORDER_ID")
+    private Integer  activePurchaseOrderId;
 	
 	@Column(name = "IS_DELETED", nullable = true, columnDefinition = "boolean default false")
 	private Boolean isDeleted;
@@ -117,13 +117,7 @@ public class OverAllShop {
 		this.perItomSoldPrice = perItomSoldPrice;
 	}
 
-	public Integer getActivePurchaseOrderDetailId() {
-		return activePurchaseOrderDetailId;
-	}
 
-	public void setActivePurchaseOrderDetailId(Integer activePurchaseOrderDetailId) {
-		this.activePurchaseOrderDetailId = activePurchaseOrderDetailId;
-	}
 
 	public Boolean getIsDeleted() {
 		return isDeleted;
@@ -155,6 +149,14 @@ public class OverAllShop {
 
 	public void setShopObj(Shop shopObj) {
 		this.shopObj = shopObj;
+	}
+
+	public Integer getActivePurchaseOrderId() {
+		return activePurchaseOrderId;
+	}
+
+	public void setActivePurchaseOrderId(Integer activePurchaseOrderId) {
+		this.activePurchaseOrderId = activePurchaseOrderId;
 	}
 	
 	

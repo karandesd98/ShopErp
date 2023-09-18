@@ -19,8 +19,21 @@ public class PurchaseOrderDaoImpl implements PurchaseOrderDao {
 	@Override
 	public List<Object[]> getAllPurchaseOrderOfShop(Integer shopId) {
 		
+		String sqlQuery="select \r\n"
+				+ "purchase_order_id,\r\n"
+				+ "purchase_order_name,\r\n"
+				+ "purchase_order_total_amount,\r\n"
+				+ "purchase_by,\r\n"
+				+ "purchase_at,\r\n"
+				+ "purchase_order_amount,\r\n"
+				+ "purchase_other_amount,\r\n"
+				+ "uploaded_bill_path,\r\n"
+				+ "is_added_to_shop\r\n"
+				+ " from purchase_order where shop_id= :shopId\r\n"
+				+ " and IS_DELETED is not true;";
+		
 		Session session = HibernateUtility.getSessionFactory().openSession();
-		String sqlQuery = "select * from purchase_order where shop_id= :shopId and IS_DELETED is not true;";
+		// String sqlQuery = "select * from purchase_order where shop_id= :shopId and IS_DELETED is not true;";
 		Query query = session.createSQLQuery(sqlQuery);
 		query.setParameter("shopId", shopId);
 		List<Object[]> results = query.list();
