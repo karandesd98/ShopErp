@@ -67,13 +67,13 @@ public class AdminController {
 
 	@Autowired
 	private CustomerShopDetailManager customerShopDetailManager;
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private CustomerService customerService;
-	
+
 	@Autowired
 	OverAllShopManager overAllShopManager;
 
@@ -383,8 +383,7 @@ public class AdminController {
 			String goodsAmount = purchaseOrd[5] != null ? (purchaseOrd[5].toString()) : "";
 			String otherAmount = purchaseOrd[6] != null ? (purchaseOrd[6].toString()) : "";
 			String billUploadPath = purchaseOrd[7] != null ? (purchaseOrd[7].toString()) : "";
-			Boolean is_added_to_shop = purchaseOrd[8] != null ?Boolean.parseBoolean(purchaseOrd[8].toString()) : false;
-			
+			Boolean is_added_to_shop = purchaseOrd[8] != null ? Boolean.parseBoolean(purchaseOrd[8].toString()) : false;
 
 			JsonObject jObje = new JsonObject();
 			jObje.addProperty("purchaseOrderId", purchaseOrderId.toString());
@@ -549,22 +548,28 @@ public class AdminController {
 	public String getAllProductTypeOfShop(HttpServletRequest req) {
 
 		Integer shopId = req.getParameter("shopId") != null ? Integer.parseInt(req.getParameter("shopId")) : 0;
+		Integer purchaseOrderId = req.getParameter("purchaseOrderId") != null
+				? Integer.parseInt(req.getParameter("purchaseOrderId"))
+				: 0;
 
-		List<Object[]> productTypeParents = productTypeMasterManager.getAllProductofShop(shopId);
+		List<Object[]> productTypeParents = productTypeMasterManager.getAllProductofShop(shopId, purchaseOrderId);
 
 		JsonArray jMainArray = new JsonArray();
 		for (Object[] productTypeArr : productTypeParents) {
 			Integer productTypeMasterId = productTypeArr[0] != null ? Integer.parseInt(productTypeArr[0].toString())
 					: 0;
-			String productTypeMasterName = productTypeArr[6] != null ? (productTypeArr[6].toString()) : "";
-			String unique_no = productTypeArr[8] != null ? (productTypeArr[8].toString()) : "";
-			String soldType = productTypeArr[9] != null ? (productTypeArr[9].toString()) : "";
+			String productTypeMasterName = productTypeArr[1] != null ? (productTypeArr[1].toString()) : "";
+			String unique_no = productTypeArr[2] != null ? (productTypeArr[2].toString()) : "";
+			String soldType = productTypeArr[3] != null ? (productTypeArr[3].toString()) : "";
+			Integer purchaseOrderDetailId = productTypeArr[4] != null ? Integer.parseInt(productTypeArr[4].toString())
+					: 0;
 
 			JsonObject jobj = new JsonObject();
 			jobj.addProperty("productTypeMasterId", productTypeMasterId);
 			jobj.addProperty("productTypeMasterName", productTypeMasterName);
 			jobj.addProperty("unique_no", unique_no);
 			jobj.addProperty("soldType", soldType);
+			jobj.addProperty("purchaseOrderDetailId", purchaseOrderDetailId.toString());
 
 			jMainArray.add(jobj);
 		}
@@ -576,6 +581,7 @@ public class AdminController {
 	@ResponseBody
 	public String savePurchaseOrderDeail(HttpServletRequest req) {
 
+		Integer purchaseOrderDetailId = req.getParameter("purchaseOrderDetailId") != null? Integer.parseInt(req.getParameter("purchaseOrderDetailId")): 0;
 		Integer producttypemasterid = req.getParameter("producttypemasterid") != null
 				? Integer.parseInt(req.getParameter("producttypemasterid"))
 				: 0;
@@ -634,9 +640,10 @@ public class AdminController {
 		productTypeMaseterDetailStr.append("<NegotiableSoldPrice>" + NegotiableSoldPrice + "</NegotiableSoldPrice>");
 		productTypeMaseterDetailStr.append("<totalNigotiablePrice>" + totalNigotiablePrice + "</totalNigotiablePrice>");
 
-		productTypeMaseterDetailStr
-				.append("<productTypeMasterName>" + productTypeMasterName + "</productTypeMasterName>");
+		productTypeMaseterDetailStr.append("<productTypeMasterName>" + productTypeMasterName + "</productTypeMasterName>");
 		productTypeMaseterDetailStr.append("<soldType>" + soldType + "</soldType>");
+		
+		productTypeMaseterDetailStr.append("<purchaseOrderDetailId>" + purchaseOrderDetailId + "</purchaseOrderDetailId>");
 
 		productTypeMaseterDetailStr.append("</productMater>");
 		productTypeMaseterDetailStr.append("</productMaters>");
@@ -661,25 +668,41 @@ public class AdminController {
 	public String getAllProductOfPurchaseOrder(HttpServletRequest req) {
 
 		Integer shopId = req.getParameter("shopId") != null ? Integer.parseInt(req.getParameter("shopId")) : 0;
-		Integer purchaseOrderId = req.getParameter("purchaseOrderId") != null? Integer.parseInt(req.getParameter("purchaseOrderId")): 0;
+		Integer purchaseOrderId = req.getParameter("purchaseOrderId") != null
+				? Integer.parseInt(req.getParameter("purchaseOrderId"))
+				: 0;
 
-		List<Object[]> purchaseOrderDetailList = purchaseOrderDetaiManager.getPurchaseOrderDetail(purchaseOrderId,shopId);
+		List<Object[]> purchaseOrderDetailList = purchaseOrderDetaiManager.getPurchaseOrderDetail(purchaseOrderId,
+				shopId);
 
 		JsonArray jMainArray = new JsonArray();
 		for (Object[] purchaseOrderDArr : purchaseOrderDetailList) {
-			Integer purchaseOrderDetailId = purchaseOrderDArr[0] != null? Integer.parseInt(purchaseOrderDArr[0].toString()): 0;
+			Integer purchaseOrderDetailId = purchaseOrderDArr[0] != null
+					? Integer.parseInt(purchaseOrderDArr[0].toString())
+					: 0;
 			String productName = purchaseOrderDArr[1] != null ? (purchaseOrderDArr[1].toString()) : "";
 			String soldType = purchaseOrderDArr[2] != null ? (purchaseOrderDArr[2].toString()) : "";
 
-			Double itomQuantity = purchaseOrderDArr[3] != null ? Double.parseDouble(purchaseOrderDArr[3].toString()): 0.0;
+			Double itomQuantity = purchaseOrderDArr[3] != null ? Double.parseDouble(purchaseOrderDArr[3].toString())
+					: 0.0;
 
-			Double perItomPurchasedPrice = purchaseOrderDArr[4] != null? Double.parseDouble(purchaseOrderDArr[4].toString()): 0.0;
-			Double perItomSoldPrice = purchaseOrderDArr[5] != null ? Double.parseDouble(purchaseOrderDArr[5].toString()): 0.0;
-			Double perItomNegotiablePrice = purchaseOrderDArr[6] != null? Double.parseDouble(purchaseOrderDArr[6].toString()): 0.0;
+			Double perItomPurchasedPrice = purchaseOrderDArr[4] != null
+					? Double.parseDouble(purchaseOrderDArr[4].toString())
+					: 0.0;
+			Double perItomSoldPrice = purchaseOrderDArr[5] != null ? Double.parseDouble(purchaseOrderDArr[5].toString())
+					: 0.0;
+			Double perItomNegotiablePrice = purchaseOrderDArr[6] != null
+					? Double.parseDouble(purchaseOrderDArr[6].toString())
+					: 0.0;
 
-			Double totalItomPurchasedPrice = purchaseOrderDArr[7] != null? Double.parseDouble(purchaseOrderDArr[7].toString()): 0.0;
-			Double totalSoldPrice = purchaseOrderDArr[8] != null ? Double.parseDouble(purchaseOrderDArr[8].toString()): 0.0;
-			Double total_negotiable_price = purchaseOrderDArr[9] != null? Double.parseDouble(purchaseOrderDArr[9].toString()): 0.0;
+			Double totalItomPurchasedPrice = purchaseOrderDArr[7] != null
+					? Double.parseDouble(purchaseOrderDArr[7].toString())
+					: 0.0;
+			Double totalSoldPrice = purchaseOrderDArr[8] != null ? Double.parseDouble(purchaseOrderDArr[8].toString())
+					: 0.0;
+			Double total_negotiable_price = purchaseOrderDArr[9] != null
+					? Double.parseDouble(purchaseOrderDArr[9].toString())
+					: 0.0;
 
 			JsonObject jobj = new JsonObject();
 			jobj.addProperty("purchaseOrderDetailId", purchaseOrderDetailId);
@@ -753,19 +776,17 @@ public class AdminController {
 		List<Object[]> allCustomers = customerManager.getAllCustomerOfShop(shopId);
 		JsonArray jMainArray = new JsonArray();
 
-		
-		
 		for (Object[] customers : allCustomers) {
-			Integer customerId =customers[1] != null ?Integer.parseInt(customers[1].toString()): 0;
-			Integer customerShpDetailId =customers[10] != null ?Integer.parseInt(customers[10].toString()): 0;
-			
+			Integer customerId = customers[1] != null ? Integer.parseInt(customers[1].toString()) : 0;
+			Integer customerShpDetailId = customers[10] != null ? Integer.parseInt(customers[10].toString()) : 0;
+
 			String Name = customers[3] != null ? (customers[3].toString()) : "";
 			// Integer role=customers[6]!=null?Integer.parseInt(customers[9].toString()) :0;
 			String role = customers[7] != null ? (customers[7].toString()) : "";
 			String image = customers[8] != null ? (customers[8].toString()) : "";
 			String mobileNo = customers[6] != null ? (customers[6].toString()) : "";
 			String email = customers[4] != null ? (customers[4].toString()) : "";
-			//String about = customers[1] != null ? (customers[1].toString()) : "";
+			// String about = customers[1] != null ? (customers[1].toString()) : "";
 			String address = customers[2] != null ? (customers[2].toString()) : "";
 
 			JsonObject jObje = new JsonObject();
@@ -776,112 +797,151 @@ public class AdminController {
 			jObje.addProperty("mobileNo", mobileNo.toString());
 			jObje.addProperty("email", email.toString());
 			jObje.addProperty("customerId", customerId.toString());
-			jObje.addProperty("customerShpDetailId",customerShpDetailId.toString());
-			//jObje.addProperty("about", about.toString());
+			jObje.addProperty("customerShpDetailId", customerShpDetailId.toString());
+			// jObje.addProperty("about", about.toString());
 
 			jMainArray.add(jObje);
 		}
 		return new Gson().toJson(jMainArray);
 	}
-	
+
 	@DeleteMapping("/delete/{email}")
 	@ResponseBody
 	public ResponseEntity<String> deleteUser(@PathVariable String email) {
 		customerService.deleteCustomer(email);
 		return ResponseEntity.ok("User deleted successfully");
 	}
-	
-	
+
 	@GetMapping("/getAllItomToSell.json")
 	@ResponseBody
 	public String getAllItomToSell(HttpServletRequest req, Principal principal) {
 		String itomName = req.getParameter("itomName") != null ? (req.getParameter("itomName")) : "";
-		List<Object[]> itomNameList= purchaseOrderDetaiManager.findByProductNameContaining(itomName);
-		
+		List<Object[]> itomNameList = purchaseOrderDetaiManager.findByProductNameContaining(itomName);
+
 		JsonArray jMainArray = new JsonArray();
-		for(Object[] objArr : itomNameList)
-		{
+		for (Object[] objArr : itomNameList) {
 			JsonObject jObje = new JsonObject();
-			jObje.addProperty("Name", objArr[5]!=null?objArr[5].toString():"");
+			jObje.addProperty("Name", objArr[5] != null ? objArr[5].toString() : "");
 			jObje.addProperty("soldType", "PER_ITOM");
-			jObje.addProperty("soldPrice",  objArr[4]!=null?objArr[4].toString():"");
-			jObje.addProperty("purchasedPrice",  objArr[3]!=null?objArr[3].toString():"");
-		
-			jMainArray.add(jObje);	
-		}
-
-		return new Gson().toJson(jMainArray);
-	}
-	
-	@GetMapping("/addPurchaseOrderToShop.json")
-	@ResponseBody
-	public String addPurchaseOrderToShop(HttpServletRequest req) {
-		
-		Integer shopId = req.getParameter("shopId") != null ? Integer.parseInt(req.getParameter("shopId")) : 0;
-		Integer purchaseOrderId = req.getParameter("purchaseOrderId") != null? Integer.parseInt(req.getParameter("purchaseOrderId")): 0;
-		JsonObject jObje = new JsonObject();
-		
-		try {
-			Map<Integer, List<Object[]>> reslt = overAllShopManager.addPurchaseOrderToShop(shopId, purchaseOrderId);
-			jObje.addProperty("msg","Added to Shop Successfully");
-		} catch (Exception e) {
-			jObje.addProperty("msg","Not Added to Shop");
-		}
-
-		return new Gson().toJson(jObje);
-	}
-	
-	
-	@GetMapping("/getOverAllShop.json")
-	@ResponseBody
-	public String getOverAllShop(HttpServletRequest req, Principal principal) {
-		
-		Integer shopId = req.getParameter("shopId") != null ? Integer.parseInt(req.getParameter("shopId")) : 0;
-		
-		Map<Integer,List<Object[]>> overAllShopMap = overAllShopManager.getOverAllShop(shopId);
-		
-		
-		JsonArray jMainArray = new JsonArray();
-		if(overAllShopMap.size()>0)
-		{
-			List<Object[]> overAllShopArr=overAllShopMap.get(0);
-
-		for (Object[] shorArr : overAllShopArr) {
-			Integer shopId1 = shorArr[0] != null ? Integer.parseInt(shorArr[0].toString()) : 0;
-			String shopName = shorArr[1] != null ? (shorArr[1].toString()) : "";
-			Integer overAllShopId = shorArr[2] != null ? Integer.parseInt(shorArr[2].toString()) : 0;
-			Integer activePerChaseOrderId = shorArr[3] != null ? Integer.parseInt(shorArr[3].toString()) : 0;
-			Double perItomPurchasePrice = shorArr[4] != null ? Double.parseDouble(shorArr[4].toString()) : 0.0;
-			String perItomSoldPrice = shorArr[5] != null ? (shorArr[5].toString()) : "0.0";
-
-			String  productName= shorArr[6] != null ? (shorArr[6].toString()) : "";
-			String uniqueNo= shorArr[7] != null ? (shorArr[7].toString()) : "";
-			String totalItomQuantity = shorArr[8] != null ? (shorArr[8].toString()) : "0";
-			String	soldType	= shorArr[9] != null ? (shorArr[9].toString()) : "";
-			String purchaseOrderName=shorArr[10] != null ? (shorArr[10].toString()) : "";
-			
-
-			JsonObject jObje = new JsonObject();
-			jObje.addProperty("shopId1", shopId1.toString());
-			jObje.addProperty("shopName", shopName.toString());
-			jObje.addProperty("overAllShopId", overAllShopId.toString());
-			jObje.addProperty("purchaseOrderName", purchaseOrderName.toString());
-			jObje.addProperty("activePerChaseOrderId", activePerChaseOrderId.toString());
-			jObje.addProperty("perItomPurchasePrice",perItomPurchasePrice.toString());
-			jObje.addProperty("perItomSoldPrice",perItomSoldPrice.toString());
-			jObje.addProperty("productName", productName.toString());
-			jObje.addProperty("soldType",soldType);
-			jObje.addProperty("totalItomQuantity",totalItomQuantity);
-			jObje.addProperty("uniqueNo", uniqueNo.toString());
-			// jObje.addProperty("purchaseOrderName", purchaseOrderName);
+			jObje.addProperty("soldPrice", objArr[4] != null ? objArr[4].toString() : "");
+			jObje.addProperty("purchasedPrice", objArr[3] != null ? objArr[3].toString() : "");
 
 			jMainArray.add(jObje);
 		}
 
+		return new Gson().toJson(jMainArray);
+	}
+
+	@GetMapping("/addPurchaseOrderToShop.json")
+	@ResponseBody
+	public String addPurchaseOrderToShop(HttpServletRequest req) {
+
+		Integer shopId = req.getParameter("shopId") != null ? Integer.parseInt(req.getParameter("shopId")) : 0;
+		Integer purchaseOrderId = req.getParameter("purchaseOrderId") != null
+				? Integer.parseInt(req.getParameter("purchaseOrderId"))
+				: 0;
+		JsonObject jObje = new JsonObject();
+
+		try {
+			Map<Integer, List<Object[]>> reslt = overAllShopManager.addPurchaseOrderToShop(shopId, purchaseOrderId);
+			jObje.addProperty("msg", "Added to Shop Successfully");
+		} catch (Exception e) {
+			jObje.addProperty("msg", "Not Added to Shop");
+		}
+
+		return new Gson().toJson(jObje);
+	}
+
+	@GetMapping("/getOverAllShop.json")
+	@ResponseBody
+	public String getOverAllShop(HttpServletRequest req, Principal principal) {
+
+		Integer shopId = req.getParameter("shopId") != null ? Integer.parseInt(req.getParameter("shopId")) : 0;
+
+		Map<Integer, List<Object[]>> overAllShopMap = overAllShopManager.getOverAllShop(shopId);
+
+		JsonArray jMainArray = new JsonArray();
+		if (overAllShopMap.size() > 0) {
+			List<Object[]> overAllShopArr = overAllShopMap.get(0);
+
+			for (Object[] shorArr : overAllShopArr) {
+				Integer shopId1 = shorArr[0] != null ? Integer.parseInt(shorArr[0].toString()) : 0;
+				String shopName = shorArr[1] != null ? (shorArr[1].toString()) : "";
+				Integer overAllShopId = shorArr[2] != null ? Integer.parseInt(shorArr[2].toString()) : 0;
+				Integer activePerChaseOrderId = shorArr[3] != null ? Integer.parseInt(shorArr[3].toString()) : 0;
+				Double perItomPurchasePrice = shorArr[4] != null ? Double.parseDouble(shorArr[4].toString()) : 0.0;
+				String perItomSoldPrice = shorArr[5] != null ? (shorArr[5].toString()) : "0.0";
+
+				String productName = shorArr[6] != null ? (shorArr[6].toString()) : "";
+				String uniqueNo = shorArr[7] != null ? (shorArr[7].toString()) : "";
+				String totalItomQuantity = shorArr[8] != null ? (shorArr[8].toString()) : "0";
+				String soldType = shorArr[9] != null ? (shorArr[9].toString()) : "";
+				String purchaseOrderName = shorArr[10] != null ? (shorArr[10].toString()) : "";
+
+				JsonObject jObje = new JsonObject();
+				jObje.addProperty("shopId1", shopId1.toString());
+				jObje.addProperty("shopName", shopName.toString());
+				jObje.addProperty("overAllShopId", overAllShopId.toString());
+				jObje.addProperty("purchaseOrderName", purchaseOrderName.toString());
+				jObje.addProperty("activePerChaseOrderId", activePerChaseOrderId.toString());
+				jObje.addProperty("perItomPurchasePrice", perItomPurchasePrice.toString());
+				jObje.addProperty("perItomSoldPrice", perItomSoldPrice.toString());
+				jObje.addProperty("productName", productName.toString());
+				jObje.addProperty("soldType", soldType);
+				jObje.addProperty("totalItomQuantity", totalItomQuantity);
+				jObje.addProperty("uniqueNo", uniqueNo.toString());
+				// jObje.addProperty("purchaseOrderName", purchaseOrderName);
+
+				jMainArray.add(jObje);
+			}
+
 		}
 		return new Gson().toJson(jMainArray);
 	}
 
-	
+	@GetMapping("/getPurchaseOrderDetailToEdit.json")
+	@ResponseBody
+	public String getPurchaseOrderDetailToEdit(HttpServletRequest req) {
+
+		Integer purchaseOrderDetailId = req.getParameter("purchaseOrderDetailId") != null? Integer.parseInt(req.getParameter("purchaseOrderDetailId")): 0;
+		List<Object[]> purchaseOrderDetatilList=purchaseOrderDetaiManager.getPurchaseOrderDetailObj(purchaseOrderDetailId);
+		
+		JsonObject jobj = new JsonObject();
+		if(purchaseOrderDetatilList.size()>0)
+		{
+			Object[] objArr=purchaseOrderDetatilList.get(0);
+			
+			Integer purchaseOrderDetialId=objArr[0]!=null?Integer.parseInt(objArr[0].toString()) :0;
+			Double totalItom=objArr[1]!=null?Double.parseDouble(objArr[1].toString()) :0.0;
+			
+			Double perItomPrice=objArr[2]!=null?Double.parseDouble(objArr[2].toString()) :0.0;
+			Double totalPurchasedPrice=objArr[3]!=null?Double.parseDouble(objArr[3].toString()) :0.0;
+			
+			Double soldPrice=objArr[4]!=null?Double.parseDouble(objArr[4].toString()) :0.0;
+			Double totalsoldPrice=objArr[5]!=null?Double.parseDouble(objArr[5].toString()) :0.0;
+			
+			Double negotiablePrice=objArr[6]!=null?Double.parseDouble(objArr[6].toString()) :0.0;
+			Double totalnegotiablePrice=objArr[7]!=null?Double.parseDouble(objArr[7].toString()) :0.0;
+			
+			
+			jobj.addProperty("purchaseOrderDetialId", purchaseOrderDetialId);
+			jobj.addProperty("totalItom", totalItom);
+		
+			jobj.addProperty("perItomPrice", perItomPrice);
+			jobj.addProperty("totalPurchasedPrice", totalPurchasedPrice);
+			
+			jobj.addProperty("soldPrice", soldPrice);
+			jobj.addProperty("totalsoldPrice",totalsoldPrice);
+			
+			jobj.addProperty("negotiablePrice", negotiablePrice);
+			jobj.addProperty("totalnegotiablePrice",totalnegotiablePrice);
+		}
+		
+			
+		
+			
+
+		return new Gson().toJson(jobj);
+	}
 
 }

@@ -9,5 +9,5 @@ public interface ProductTypeMasterManager {
 	void saveSubProductType(Object...  objects);
 	List<Object[]> getAllSubProductTypeMaster(Integer producttypemasterid);
 	List<Object[]> getAllProductMasterType();
-	List<Object[]> getAllProductofShop(Integer shopId);
+	List<Object[]> getAllProductofShop(Integer shopId,Integer purchaseOrderId);
 }

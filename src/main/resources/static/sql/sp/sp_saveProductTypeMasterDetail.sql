@@ -19,11 +19,12 @@ DECLARE xpath9 TEXT;
 DECLARE xpath10 TEXT;
 DECLARE xpath11 TEXT;
 DECLARE xpath12 TEXT;
+DECLARE xpath13 TEXT;
 
 DROP TEMPORARY TABLE IF EXISTS tempPurchaseOrderDetail;
 CREATE TEMPORARY TABLE tempPurchaseOrderDetail(product_type_master_id int,  purchase_order_id int, shop_id int ,
  itom_quantity DOUBLE , per_itom_purchased_price DOUBLE, total_itom_purchased_price DOUBLE, per_itom_sold_price DOUBLE, total_sold_price DOUBLE, per_itom_negotiable_price DOUBLE, total_negotiable_price DOUBLE,        
- product_name VARCHAR(100), sold_type VARCHAR(50));
+ product_name VARCHAR(100), sold_type VARCHAR(50), purchase_order_detail_id int);
 
  --   select * from tempPurchaseOrderDetail;
 
@@ -47,10 +48,11 @@ SET xpath10 := concat('/productMaters/productMater/totalNigotiablePrice[', k, ']
 
 SET xpath11 := concat('/productMaters/productMater/productTypeMasterName[', k, ']');
 SET xpath12 := concat('/productMaters/productMater/soldType[', k, ']');
+SET xpath13 := concat('/productMaters/productMater/purchaseOrderDetailId[', k, ']');
 
 INSERT INTO  tempPurchaseOrderDetail(product_type_master_id ,  purchase_order_id , shop_id  ,
  itom_quantity  , per_itom_purchased_price , total_itom_purchased_price , per_itom_sold_price , total_sold_price , per_itom_negotiable_price , total_negotiable_price ,        
- product_name , sold_type ) VALUES (
+ product_name , sold_type,purchase_order_detail_id ) VALUES (
 		    ExtractValue(productTypeMasterData, xpath1),
             ExtractValue(productTypeMasterData, xpath2),
 			ExtractValue(productTypeMasterData, xpath3),
@@ -67,12 +69,16 @@ INSERT INTO  tempPurchaseOrderDetail(product_type_master_id ,  purchase_order_id
 			ExtractValue(productTypeMasterData, xpath10),
             
             ExtractValue(productTypeMasterData, xpath11),
-            ExtractValue(productTypeMasterData, xpath12)
+            ExtractValue(productTypeMasterData, xpath12),
+            
+              ExtractValue(productTypeMasterData, xpath13)
 	);
     
 END WHILE;
 
--- select * from tempPurchaseOrderDetail;
+ select * from tempPurchaseOrderDetail;
+
+
 
 INSERT INTO purchase_order_detail(
 product_type_master_id,
@@ -87,10 +93,38 @@ per_itom_negotiable_price,
 total_negotiable_price,
 product_name,
 sold_type
-)SELECT * FROM tempPurchaseOrderDetail;
+)SELECT 
+product_type_master_id,
+purchase_order_id,
+shop_id,
+itom_quantity,
+per_itom_purchased_price,
+total_itom_purchased_price,
+per_itom_sold_price,
+total_sold_price,
+per_itom_negotiable_price,
+total_negotiable_price,
+product_name,
+sold_type FROM tempPurchaseOrderDetail where purchase_order_detail_id =0;
 
- select * from tempPurchaseOrderDetail;
+ 
+ 
+ 
+ update
+purchase_order_detail pod
+inner join tempPurchaseOrderDetail temp on temp.purchase_order_detail_id=pod.purchase_order_detail_id
+set
+pod.itom_quantity=temp.itom_quantity,
+pod.per_itom_purchased_price=temp.per_itom_purchased_price,
+pod.total_itom_purchased_price=temp.total_itom_purchased_price,
+pod.per_itom_sold_price=temp.per_itom_sold_price,
+pod.total_sold_price=temp.total_sold_price,
+pod.per_itom_negotiable_price=temp.per_itom_negotiable_price,
+pod.total_negotiable_price=temp.total_negotiable_price
+;
+ 
+
 
 END;
 
- --     call sp_saveProductTypeMasterDetail('<productMaters><productMater><producttypemasterid>11</producttypemasterid><purchaseOrderId>1</purchaseOrderId><shopId>1</shopId><totalItomCount>50.0</totalItomCount><perItomPurchasedPrice>500.0</perItomPurchasedPrice><totalPrice>25000.0</totalPrice><soldPrice>550.0</soldPrice><totalSoldPrice>27500.0</totalSoldPrice><NegotiableSoldPrice>525.0</NegotiableSoldPrice><totalNigotiablePrice>26250.0</totalNigotiablePrice><productTypeMasterName>khat 26-26(10kg)</productTypeMasterName><soldType>PER_ITOM</soldType></productMater></productMaters>');
+ --    call sp_saveProductTypeMasterDetail('<productMaters><productMater><producttypemasterid>1</producttypemasterid><purchaseOrderId>6</purchaseOrderId><shopId>1</shopId><totalItomCount>5.0</totalItomCount><perItomPurchasedPrice>500.0</perItomPurchasedPrice><totalPrice>2500.0</totalPrice><soldPrice>600.0</soldPrice><totalSoldPrice>3000.0</totalSoldPrice><NegotiableSoldPrice>550.0</NegotiableSoldPrice><totalNigotiablePrice>2750.0</totalNigotiablePrice><productTypeMasterName>khat 15-15</productTypeMasterName><soldType>PER_ITOM</soldType><purchaseOrderDetailId>0</purchaseOrderDetailId></productMater></productMaters>');

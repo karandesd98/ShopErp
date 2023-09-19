@@ -145,12 +145,27 @@ public class ProductTypeMasterDaoImple implements ProductTypeMasterDao {
 	}
 
 	@Override
-	public List<Object[]> getAllProductofShop(Integer shopId) {
+	public List<Object[]> getAllProductofShop(Integer shopId,Integer purchaseOrderId) {
 	
 		Session session = HibernateUtility.getSessionFactory().openSession();
-		String sqlQuery = "select * from product_type_master where shop_id= :shopId";
+		// String sqlQuery = "select * from product_type_master where shop_id= :shopId";
+		
+		String sqlQuery ="select \r\n"
+				+ "ptm.product_type_master_id,\r\n"
+				+ "ptm.product_type_master_name,\r\n"
+				+ "ptm.unique_no,\r\n"
+				+ "ptm.sold_type,\r\n"
+				+ "pod.purchase_order_detail_id\r\n"
+				+ "from \r\n"
+				+ "product_type_master ptm\r\n"
+				+ "left outer join purchase_order_detail pod on pod.product_type_master_id=ptm.product_type_master_id \r\n"
+				+ "and pod.purchase_order_id= :purchaseOrderId \r\n"
+				+ "where ptm.shop_id= :shopId ;";
+		
+		
 		Query query = session.createSQLQuery(sqlQuery);
 		query.setParameter("shopId", shopId);
+		query.setParameter("purchaseOrderId", purchaseOrderId);
 		List<Object[]> results = query.list();
 
 		return results;

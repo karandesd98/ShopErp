@@ -110,6 +110,30 @@ public class PurchaseOrderDetaiManagerImpl implements PurchaseOrderDetaiManager 
 		
 		return purchaseOrderDetailRepo.findByProductNameContaining(pName);
 	}
+	
+	@Override
+	public List<Object[]> getPurchaseOrderDetailObj(Integer purchaseOrderDetailId) {
+		
+		String nativeQuery="select \r\n"
+				+ "pod.purchase_order_detail_id,\r\n"
+				+ "pod.itom_quantity,\r\n"
+				+ "pod.per_itom_purchased_price,\r\n"
+				+ "pod.total_itom_purchased_price,\r\n"
+				+ "pod.per_itom_sold_price,\r\n"
+				+ "pod.total_sold_price,\r\n"
+				+ "pod.per_itom_negotiable_price,\r\n"
+				+ "pod.total_negotiable_price\r\n"
+				+ "from purchase_order_detail pod\r\n"
+				+ "where pod.purchase_order_detail_id= ?;";
+		
+        Query query = entityManager.createNativeQuery(nativeQuery);
+        query.setParameter(1, purchaseOrderDetailId);
+      
+        @SuppressWarnings("unchecked")
+        List<Object[]> resultList = query.getResultList();
+        return resultList;
+        
+        }
 	 
 	 
 	

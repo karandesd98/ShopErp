@@ -16,4 +16,5 @@ public interface PurchaseOrderDetaiManager {
 	 List<Object[]> getPurchaseOrderDetail(Integer purchaseOrderId,Integer shopId);
 	 
 	 public List<Object[]> findByProductNameContaining(String pName);
+	List<Object[]> getPurchaseOrderDetailObj(Integer purchaseOrderDetailId);
 }
