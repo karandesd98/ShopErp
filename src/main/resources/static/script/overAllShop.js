@@ -45,90 +45,57 @@ function getMyOverAllShop()
 		success: function(data) {
 
 			var boiler = `<div>
-				<button type="button" class="btn btn-dark btn-sm m-2" onclick="addPurchaseOrderModel()">New Purchase</button>
+				<button type="button" class="btn btn-dark btn-sm m-2">New Purchase</button>
 			    </div>`;
 			boiler += `
  <table class="table table-bordered border-primary">
   <thead>
     <tr>
       <th scope="col">Sr. No</th>
-      <th scope="col">Purchase Name</th>
-      <th scope="col">Purchase By</th>
-      <th scope="col">Date</th>
-      <th scope="col">Goods Amount</th>
-      <th scope="col">Other Amount</th>
-      <th scope="col">Total Amount</th>
-      <th scope="col">Upload Bill</th>
-      <th scope="col">View Bill</th>
+      <th scope="col">ProductName Name</th>
+      <th scope="col">Sold Type</th>
+      <th scope="col">Total Quantity</th>
+      <th scope="col">Unique No</th>
+      <th scope="col">Purchased Price</th>
+      <th scope="col">Sold Price</th>
       <th scope="col">Action</th>
     </tr>
   </thead><tbody>`;
+  
 
-			var bgColorClss = "";
-			data.forEach(function(purchaseOrder, index) {
-				const { purchaseOrderId = '', purchaseOrderName = '', purchaseOrderTotalAmount = '', PurchaseBy = '', date = '', goodsAmount = '', otherAmount = '', billUploadPath = '', is_added_to_shop = '' } = purchaseOrder;
 
-				if (is_added_to_shop == "true")
-					bgColorClss = "table-success";
-				else
-					bgColorClss = "";
+			data.forEach(function(itom, index) {
+		const { shopId1 = '', shopName = '', overAllShopId = '', purchaseOrderName = '', activePerChaseOrderId = '',
+				 perItomPurchasePrice = '', perItomSoldPrice = '', productName = '', soldType = '',
+				  totalItomQuantity='',uniqueNo=''  } = itom;
 
-				boiler += `<tr class="${bgColorClss}">
+				boiler += `<tr>
 	             <td scope="row">${++index}</td>
-	             <td scope="row">${purchaseOrderName}</td>
-	             <td scope="row">${PurchaseBy}</td>
-	             <td scope="row">${date}</td>
-	               <td scope="row">${goodsAmount}</td>
-	             <td scope="row">${otherAmount}</td>
-	             <td scope="row">${purchaseOrderTotalAmount}</td>
-	             <td scope="row">
-	             <div id="uploadBill_${purchaseOrderId}" class="dropzone"></div>
-                 </td>
-                <td>
+	             <td scope="row">${productName}</td>
+	             <td scope="row">${soldType}</td>
+	             <td scope="row">${totalItomQuantity}</td>
+	               <td scope="row">${uniqueNo}</td>
+	             <td scope="row">${perItomPurchasePrice}</td>
+	             <td scope="row">${perItomSoldPrice}</td>
+	             
                 
-                <div class="my-gallery">
-                  <a href="/uploadedFiles/${billUploadPath}" data-lightbox="gallery">
-                  <img class="myProfile" src="/uploadedFiles/${billUploadPath}" alt="Image 1">
-                 </a>
-                </div>
-                
-                </td>
                 
 	             <td scope="row">
 	             <div class="dropdown">
                       <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"> Action</button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                          <li><button class="dropdown-item" type="button">Edit</button></li>`;
-
-				if (is_added_to_shop == "true") {
-					boiler += `<li><button class="dropdown-item" type="button" onclick="viewProductToPurchaseOrder(${purchaseOrderId},'${is_added_to_shop}')">View Product</button></li>`;
-				}
-				else {
-					boiler += `<li><button class="dropdown-item" type="button" onclick="deletePurchaseOrder(${purchaseOrderId})">Delete</button></li>
-                         <li><button class="dropdown-item" type="button" onclick="addProductToPurchaseOrder(${purchaseOrderId})">Add Product</button></li>
-                         <li><button class="dropdown-item" type="button" onclick="viewProductToPurchaseOrder(${purchaseOrderId},'${is_added_to_shop}')">View Product</button></li>`;
-				}
 				boiler += `</ul>
                  </div>
 	             </td>
 	             </tr>`;
-
-				// <img class="myProfile"  src="/uploadedFiles/${billUploadPath}" />
 
 			});
 
 			boiler += ` </tbody>
               </table>`;
 
-			$('#purchaseTable').html(boiler);
-
-			data.forEach(function(purchaseOrder, index) {
-				const { purchaseOrderId = '', purchaseOrderName = '', purchaseOrderTotalAmount = '', PurchaseBy = '', date = '', goodsAmount = '', otherAmount = '' } = purchaseOrder;
-				var buttonId = `uploadBill_${purchaseOrderId}`;
-				uploadBill(buttonId, purchaseOrderId);
-
-			});
-
+			$('#overAllShop').html(boiler);
 		},
 		error: function(request, error) {
 			alert("Request 1: " + JSON.stringify(request));

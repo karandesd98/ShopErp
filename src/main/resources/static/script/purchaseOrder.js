@@ -589,7 +589,9 @@ function addToShop(shopId,purchaseOrderId)
 			},
 			dataType: 'json',
 			success: function(data) {
-				swal("Good job!", "Added To Shop", "success");
+				swal("Good job!", data.msg, "success");
+				backOnPurchase();
+				getAllpurchase();
 
 			}
 		});

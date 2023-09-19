@@ -819,10 +819,16 @@ public class AdminController {
 		
 		Integer shopId = req.getParameter("shopId") != null ? Integer.parseInt(req.getParameter("shopId")) : 0;
 		Integer purchaseOrderId = req.getParameter("purchaseOrderId") != null? Integer.parseInt(req.getParameter("purchaseOrderId")): 0;
-
-	Map<Integer,List<Object[]>> reslt=	overAllShopManager.addPurchaseOrderToShop(shopId,purchaseOrderId);
+		JsonObject jObje = new JsonObject();
 		
-		return "Added to Shop Successfully";
+		try {
+			Map<Integer, List<Object[]>> reslt = overAllShopManager.addPurchaseOrderToShop(shopId, purchaseOrderId);
+			jObje.addProperty("msg","Added to Shop Successfully");
+		} catch (Exception e) {
+			jObje.addProperty("msg","Not Added to Shop");
+		}
+
+		return new Gson().toJson(jObje);
 	}
 	
 	
@@ -845,12 +851,15 @@ public class AdminController {
 			String shopName = shorArr[1] != null ? (shorArr[1].toString()) : "";
 			Integer overAllShopId = shorArr[2] != null ? Integer.parseInt(shorArr[2].toString()) : 0;
 			Integer activePerChaseOrderId = shorArr[3] != null ? Integer.parseInt(shorArr[3].toString()) : 0;
-			Double perItomPurchasePrice = shorArr[4] != null ? Double.parseDouble(shorArr[42].toString()) : 0;
-			String productName = shorArr[5] != null ? (shorArr[5].toString()) : "";
-			String soldType= shorArr[6] != null ? (shorArr[6].toString()) : "";
-			Integer totalItomQuantity = shorArr[7] != null ? Integer.parseInt(shorArr[7].toString()) : 0;
-			String uniqueNo= shorArr[8] != null ? (shorArr[8].toString()) : "";
-			String purchaseOrderName= shorArr[9] != null ? (shorArr[9].toString()) : "";
+			Double perItomPurchasePrice = shorArr[4] != null ? Double.parseDouble(shorArr[4].toString()) : 0.0;
+			String perItomSoldPrice = shorArr[5] != null ? (shorArr[5].toString()) : "0.0";
+
+			String  productName= shorArr[6] != null ? (shorArr[6].toString()) : "";
+			String uniqueNo= shorArr[7] != null ? (shorArr[7].toString()) : "";
+			String totalItomQuantity = shorArr[8] != null ? (shorArr[8].toString()) : "0";
+			String	soldType	= shorArr[9] != null ? (shorArr[9].toString()) : "";
+			String purchaseOrderName=shorArr[10] != null ? (shorArr[10].toString()) : "";
+			
 
 			JsonObject jObje = new JsonObject();
 			jObje.addProperty("shopId1", shopId1.toString());
@@ -859,11 +868,12 @@ public class AdminController {
 			jObje.addProperty("purchaseOrderName", purchaseOrderName.toString());
 			jObje.addProperty("activePerChaseOrderId", activePerChaseOrderId.toString());
 			jObje.addProperty("perItomPurchasePrice",perItomPurchasePrice.toString());
+			jObje.addProperty("perItomSoldPrice",perItomSoldPrice.toString());
 			jObje.addProperty("productName", productName.toString());
 			jObje.addProperty("soldType",soldType);
 			jObje.addProperty("totalItomQuantity",totalItomQuantity);
 			jObje.addProperty("uniqueNo", uniqueNo.toString());
-			jObje.addProperty("purchaseOrderName", purchaseOrderName);
+			// jObje.addProperty("purchaseOrderName", purchaseOrderName);
 
 			jMainArray.add(jObje);
 		}
