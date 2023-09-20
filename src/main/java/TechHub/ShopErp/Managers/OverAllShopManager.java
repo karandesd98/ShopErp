@@ -14,4 +14,5 @@ public interface OverAllShopManager {
 	 void deleteById(Integer OverAllShopId);
 	Map<Integer, List<Object[]>> addPurchaseOrderToShop(Integer shopId, Integer purchaseOrderId);
 	Map<Integer, List<Object[]>> getOverAllShop(Integer shopId);
+	List<Object[]> findByProductNameContaining(String itomName);
 }

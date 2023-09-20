@@ -104,5 +104,11 @@ public class OverAllShopManagerImpl implements OverAllShopManager {
 			return mapObj;
 		}
 
+		@Override
+		public List<Object[]> findByProductNameContaining(String itomName) {
+			
+			return overAllShopRepository.findByProductNameContaining(itomName);
+		}
+
 
 }

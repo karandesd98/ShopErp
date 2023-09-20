@@ -150,20 +150,22 @@ function addOrder(cutomerShopDetailId,custName) {
   var serachBoiler=`<div class="card stickyTop">
                     <div class="card-body">
                     
-                      <div   class="search-container"  style="display: inline-block;width: 35%;">
-                       <input class="form-control me-2" type="text" onblur="hideSerchText()" onkeyup="serchTextHere(this)" id="searchInput" placeholder="Search..." aria-label="Search" style="width: 90%;">
+                      <div   class="search-container"  style="display: inline-block;width: 40%;">
+                       <input class="form-control me-2" type="text"  onkeyup="serchTextHere(this)" id="searchInput" placeholder="Search..." aria-label="Search" style="width: 90%;">
                        <div class="search-result">
                        
                        </div>
                      </div>
                      
-                     <div style="display: inline-block;">
-                       <button class="btn btn-outline-success" type="button">Search</button>
+                     <div style="display: inline-block;width: 59%;">
                        <button style="margin-left: 20px;" class="btn btn-outline-success" type="button" onclick="addEmptyItomRow()">Add Manually</button>
+                       <input class="form-control me-2" type="text"  id="TotalBillPrice" placeholder="Total..." aria-label="Search" style="width: 22%;display: inline-block;margin-left: 233px;">
                       </div> 
                       
                     </div>
                 </div>`;
+                
+                // <button class="btn btn-outline-success" type="button">Search</button>
                 
 var productTable=`<table class="table">
   <thead>
@@ -202,7 +204,7 @@ var itomCount=0;
 function addEmptyItomRow()
 {
 	itomCount =itomCount +1;
-	var boiler=`<tr id="${itomCount}_trId">
+	var boiler=`<tr id="${itomCount}_trId" counter="${itomCount}">
       <td scope="col">${itomCount}</td>
       <td scope="col"><input style="width: 161px;" type="text" class="form-control" id="${itomCount}_itomName" aria-describedby="emailHelp"></td>
      <td scope="col">
@@ -220,11 +222,14 @@ function addEmptyItomRow()
     </tr>`;
     
 	$('#itomBody').append(boiler)
+	
+	$(`#${itomCount}_Price`).val(0);
 }
 
 function removeTR(itomCount)
 {
 	$(`#${itomCount}_trId`).remove();
+	calculateTotalPriceToPay();
 }
 
 
@@ -414,7 +419,7 @@ function serchTextHere(src){
 				              <td>${Name}</td>
                               <td>${soldType}</td>
                               <td>${soldPrice}</td>
-                              <td><button  class="btn btn-outline-success" type="button" onclick="addEmptyItomRow()">Add</button></td>
+                              <td><button  class="btn btn-outline-success" type="button"  onclick="addEmptyItomRowWithProductInfo(this,'${Name}','${soldType}','${soldPrice}','${purchasedPrice}')">Add</button></td>
                               </tr>`;
 
 				});
@@ -440,7 +445,57 @@ function serchTextHere(src){
 
 function hideSerchText()
 {
-//	$('.search-result').hide();
+$('.search-result').hide();
 }
 
+
+function addEmptyItomRowWithProductInfo(src,Name,soldType,soldPrice,purchasedPrice)
+{
+	hideSerchText();
+	
+	itomCount =itomCount +1;
+	var boiler=`<tr id="${itomCount}_trId" counter="${itomCount}">
+      <td scope="col">${itomCount}</td>
+      <td scope="col"><input style="width: 161px;" type="text" class="form-control" id="${itomCount}_itomName" aria-describedby="emailHelp"></td>
+     <td scope="col">
+      <select class="form-select" aria-label="Default select example" id="${itomCount}_soldType" style="width: 161px;">
+					<option selected value="PER_ITOM">Per Itom</option>
+					<option value="PER_KG">Per Kg</option>
+					<option value="PER_LITER">Per Liter</option>
+	 </select>
+	 </td>
+      <td scope="col"><input style="width: 161px;" type="text" class="form-control" id="${itomCount}_quantity" aria-describedby="emailHelp"></td>
+      <td scope="col"><input style="width: 161px;" type="text" class="form-control" id="${itomCount}_Price" aria-describedby="emailHelp"></td>
+      <td scope="col">
+      <lord-icon src="https://cdn.lordicon.com/kfzfxczd.json" onclick="removeTR(${itomCount})" trigger="hover" colors="primary:#c76f16"  style="width:37;height:37px"></lord-icon>
+      </td>
+    </tr>`;
+
+	$('#itomBody').append(boiler);
+	
+	$(`#${itomCount}_itomName`).val(Name);
+	$(`#${itomCount}_quantity`).val(1);
+	$(`#${itomCount}_Price`).val(soldPrice);
+	
+	calculateTotalPriceToPay();
+	
+}
+
+function calculateTotalPriceToPay()
+{
+	var totalPrice=0;
+	$("#itomBody tr").each(function(index) {
+		var itomCount = $(this).attr("counter");
+		var soldPrice = $(`#${itomCount}_Price`).val();
+		soldPrice= parseInt(soldPrice);
+		if (!isNaN(soldPrice)) {
+          totalPrice = totalPrice + soldPrice;
+        }
+		
+		
+	});
+	
+	$(`#TotalBillPrice`).val(totalPrice);
+	
+}
 
