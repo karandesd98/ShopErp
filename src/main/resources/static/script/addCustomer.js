@@ -128,8 +128,8 @@ function addOrder(cutomerShopDetailId,custName) {
 	
 	$('#hiddenInfo').html(hiddenValue);
 	
-	var bakcButton = `<button type="button" class="btn btn-secondary btn-sm" style="padding: 0px; width: 40px;" id="backBtn" onclick="backOnAddOrder()">  Back</button>`;
-	// $('#backBtn').html(bakcButton);
+	 var bakcButton = `<button type="button" class="btn btn-secondary btn-sm" style="padding: 0px; width: 40px;" id="backBtn" onclick="backOnAddOrder()">  Back</button>`;
+	//   $('#backBtn').html(bakcButton);
 	
 	var infoBoiler=`<div class="card border-primary mb-3 mt-1" style="max-width: 20rem;">
                    <div class="card-body text-primary" style="padding: 0px;">
@@ -148,19 +148,18 @@ function addOrder(cutomerShopDetailId,custName) {
     
     
   var serachBoiler=`<div class="card stickyTop">
-                    <div class="card-body">
+                    <div class="card-body" style="display: flex;">
                     
                       <div   class="search-container"  style="display: inline-block;width: 40%;">
-                       <input class="form-control me-2" type="text"  onkeyup="serchTextHere(this)" id="searchInput" placeholder="Search..." aria-label="Search" style="width: 90%;">
-                       <div class="search-result">
-                       
-                       </div>
+                        <input class="form-control me-2" type="text"  onkeyup="serchTextHere(this)" id="searchInput" placeholder="Search..." aria-label="Search" style="width: 90%;">
+                        <div class="search-result"></div>
                      </div>
                      
                      <div style="display: inline-block;width: 59%;">
-                       <button style="margin-left: 20px;" class="btn btn-outline-success" type="button" onclick="addEmptyItomRow()">Add Manually</button>
-                       <input class="form-control me-2" type="text"  id="TotalBillPrice" placeholder="Total..." aria-label="Search" style="width: 22%;display: inline-block;margin-left: 233px;">
-                      </div> 
+                         <button style="margin-left: 20px;" class="btn btn-outline-success" type="button" onclick="addEmptyItomRow()">Add Manually</button>
+                         <input class="form-control me-2" type="text"  id="TotalBillPrice" placeholder="Total..." aria-label="Search" style="width: 22%;display: inline-block;">
+                         <button style="margin-left: 28%;" type="button" onclick="orderFinalization()" class="btn btn-info">Proceed..</button>
+                    </div> 
                       
                     </div>
                 </div>`;
@@ -497,5 +496,30 @@ function calculateTotalPriceToPay()
 	
 	$(`#TotalBillPrice`).val(totalPrice);
 	
+}
+
+function orderFinalization() {
+	
+	$('#OrderFinalizationTab').removeClass("d-lg-none");
+	$('#OrderFinalizationTab').tab('show');
+	
+	 var bakcButton = `<button type="button" class="btn btn-secondary btn-sm" style="padding: 0px; width: 40px;margin-top: -11px;margin-right: -43px;margin-left: 5px;" id="backBtn" onclick="backOnCustomerOrder()">  Back</button>`;
+	
+	
+	var boiler=   `<div class="card border-secondary text-secondary mt-2">
+               <div class="card-header" style="padding: 0px;"><span style="margin-right: 46%;">${bakcButton}</span>  <span class="text-center"><h4 style="display: inline;color: #3aa5b7;">Order Finalization</h4></span></div>
+                 <div class="card-body text-secondary">
+                   hii
+                 </div>
+            </div>`;
+              
+   $('#orderFinalizationDetail').html(boiler);
+	
+	}
+	
+	
+function backOnCustomerOrder() {
+	$('#OrderFinalizationTab').addClass('d-lg-none');
+	$('#addOrderTab').tab('show');
 }
 
