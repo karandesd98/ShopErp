@@ -502,21 +502,104 @@ function orderFinalization() {
 	
 	$('#OrderFinalizationTab').removeClass("d-lg-none");
 	$('#OrderFinalizationTab').tab('show');
-	
+	 var orderName = $(`#orderName`).val();
+	 
 	 var bakcButton = `<button type="button" class="btn btn-secondary btn-sm" style="padding: 0px; width: 40px;margin-top: -11px;margin-right: -43px;margin-left: 5px;" id="backBtn" onclick="backOnCustomerOrder()">  Back</button>`;
 	
 	
 	var boiler=   `<div class="card border-secondary text-secondary mt-2">
-               <div class="card-header" style="padding: 0px;"><span style="margin-right: 46%;">${bakcButton}</span>  <span class="text-center"><h4 style="display: inline;color: #3aa5b7;">Order Finalization</h4></span></div>
+               <div class="card-header" style="padding: 0px;"><span style="margin-right: 46%;">${bakcButton}</span>  <span class="text-center"><h4 style="display: inline;color: #3aa5b7;">${orderName}</h4></span></div>
                  <div class="card-body text-secondary">
-                   hii
+                   <div id="finalOrder"></div>
                  </div>
             </div>`;
               
    $('#orderFinalizationDetail').html(boiler);
-	
+   
+   
+ 
+   var totalPrice=0;
+   var jsonMainObject = {};
+   var jsonArray = [];
+	$("#itomBody tr").each(function(index) {
+		var jsonObject = {};
+		var itomCount = $(this).attr("counter");
+	    
+	    var itomName= $(`#${itomCount}_itomName`).val();
+	    var soldType= $(`#${itomCount}_soldType option:selected`).val();
+	    var quantity= $(`#${itomCount}_quantity`).val();
+		var soldPrice = $(`#${itomCount}_Price`).val();
+		
+		jsonObject.itomName=itomName;
+		jsonObject.soldType=soldType;
+		jsonObject.quantity=quantity;
+		jsonObject.soldPrice=soldPrice;
+		
+		jsonArray.push(jsonObject);
+		
+		soldPrice= parseInt(soldPrice);
+		if (!isNaN(soldPrice)) {
+          totalPrice = totalPrice + soldPrice;
+        }
+	   });
+	   
+	   jsonMainObject.itomes=jsonArray;
+       jsonMainObject.totalPrice=totalPrice;
+       jsonMainObject.orderName=orderName;
+       
+       finalOrderSubmission(jsonMainObject);
+       
 	}
 	
+	
+	function finalOrderSubmission(jsonMainObject)
+	{
+		var boiler =`<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Itom Name</th>
+      <th scope="col">Sold Type</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Price</th>
+    </tr>
+  </thead>
+  <tbody id="orderFinalizationBody">
+    
+  </tbody>
+</table>`;
+
+$('#finalOrder').html(boiler);
+
+var jsonArray= jsonMainObject.itomes;
+var tBody=``;
+jsonArray.forEach(function(item,index) {
+
+  const{itomName='',soldType='',quantity='',soldPrice=''}=item;
+	
+   tBody += `<tr>
+      <th scope="row">${++index}</th>
+      <td>${itomName}</td>
+      <td>${soldType}</td>
+      <td>${quantity}</td>
+      <td>${soldPrice}</td>
+    </tr>`;
+});
+
+  tBody += `<tr>
+      <th scope="row" colspan="4" style="text-align: right;">Total :-</th>
+      <td>${jsonMainObject.totalPrice}</td>
+    </tr>`;
+    
+     tBody += `<tr>
+      <th scope="row" colspan="5" style="text-align: center;">
+      <button type="button" class="btn btn-success btn-sm">Save</button>
+      </th>
+    </tr>`;
+    
+  $('#orderFinalizationBody').html(tBody);
+
+}
 	
 function backOnCustomerOrder() {
 	$('#OrderFinalizationTab').addClass('d-lg-none');
